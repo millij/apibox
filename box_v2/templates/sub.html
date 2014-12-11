@@ -1,0 +1,28 @@
+{% extends "index.html" %}
+{% block data %}
+
+
+
+        <div class="col-sm-8 col-sm-offset-0">
+	
+          {% if post %}
+            <h2>Here are the Projects and respective Endpoints</h2>
+            {% for pos in post %}
+            	 <div class="box">
+            	<h2>{{pos}}</h2>
+            	{% for data in post[pos] %}
+            		<h3>{{data}}</h3>
+        		{%endfor%}
+            	</div>
+
+            	<h3>{{k}}</h3>
+            {% endfor %}
+            <br>
+            {% else %}
+        <h1>Nothing is Created Yet!!!</h1>
+	{% endif %} 	
+        </div>
+       
+	
+
+{% endblock %}

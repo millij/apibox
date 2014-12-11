@@ -27,8 +27,12 @@ input.input{
             Authentication
         </p>
         <p>
-            Welcome to Haywire Box section. Get ready to create a box. Enter the blow Details and submit. 
+            Welcome to Haywire Box section. Get ready to create a box. Enter the below Details and submit. 
         </p>
+        {{k}}
+        {% for kk in k %}
+        <p>{{kk}}</p>
+        {% endfor %}
         <form method="post" action="/boxit" class="col-md-12">
             <div class="section-1 col-md-12">
                 <input type="text" name="cname" placeholder="Company Name" class="col-md-3 input" >

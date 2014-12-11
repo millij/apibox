@@ -130,8 +130,6 @@ def parse_enp(d):
         enp_path.append(i["path"])
     return enp_path
 
-
-
 # Initialize flask-login
 def init_login():
     login_manager = login.LoginManager()
@@ -156,7 +154,10 @@ class MyAdminIndexView(admin.AdminIndexView):
     @expose('/')
     def index(self):
         if not login.current_user.is_authenticated():
+
             return redirect(url_for('.login_view'))
+        k = Data.query.filter_by(user_id = login.current_user.id).all()
+        
         return super(MyAdminIndexView, self).index()
 
     @expose('/login/', methods=('GET', 'POST'))
@@ -169,6 +170,7 @@ class MyAdminIndexView(admin.AdminIndexView):
 
         if login.current_user.is_authenticated():
             return redirect(url_for('.index'))
+
         link = '<p>Don\'t have an account? <a href="' + url_for('.register_view') + '">Click here to register.</a></p>'
         self._template_args['form'] = form
         self._template_args['link'] = link
@@ -231,8 +233,8 @@ def boxit():
         epsps = Data(datapoints=str(d), timestamp=datetime.datetime.utcnow(), author=login.current_user)
         db.session.add(epsps)
         db.session.commit()
-        k= ['<a>'+k+'</a>' for k in parse_enp(str(d))]
-        return  '<p>'+ str(k) +'</p>' # request.data #redirect(url_for('boxit')))
+        k= [k for k in parse_enp(str(d))]
+        return   render_template('admin/ep.html', enpts = k ) #'<p>'+ str(k) +'</p>' # request.data #redirect(url_for('boxit')))
     # if len(d)>5:
     #     return str(d)
     # return "got the message",str(d
@@ -258,7 +260,7 @@ def catch_all(path):
             existing_data = list(str(dfp[k]['success']))
             print existing_data
             if len(existing_data)>1:
-                existing_data.append(str(requestself.data))
+                existing_data.append(str(request.data))
                 dfp[k]['success'] = existing_data
                 ud.datapoints = dfp
                 return str(dfp)
@@ -356,6 +358,7 @@ if __name__ == '__main__':
     database_path = os.path.join(app_dir, app.config['DATABASE_FILE'])
     if not os.path.exists(database_path):
         build_sample_db()
+    print dir(app.run)
 
     # Start app
-    app.run(debug=True)
+    app.run(host='0.0.0.0')
