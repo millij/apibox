@@ -3,6 +3,7 @@ import ast
 import json
 import collections
 from datetime import datetime
+import os
 
 from flask.ext.wtf import Form
 from wtforms.fields import TextField, BooleanField
@@ -11,6 +12,9 @@ from wtforms.ext.appengine.db import model_form
 from flask.ext.sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
+dfp = {}
+#temp = {}
+#count = 0
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
 db = SQLAlchemy(app)
 app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
@@ -20,8 +24,8 @@ class Post(db.Model):
     We are trying to map all the endpoint details and store them as is
     '''
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(80))
-    body = db.Column(db.Text)
+    title = db.Column(db.String(80)) #
+    body = db.Column(db.Text) #json data will be stored here
     pub_date = db.Column(db.DateTime)
 
     category_id = db.Column(db.Integer, db.ForeignKey('category.id'))
@@ -73,13 +77,9 @@ def tract(file_name, title, project):
         d = convert(obj)
         endpoints_list = d["endpoints"]
         enp_path = []
-        dfp = {}
-        methods = {}
+        #dfp = {}
         for i in endpoints_list:
             enp_path.append(str(project)+'/'+title+'/'+d['api']['prefix']+i["path"])
-            # try:
-            #     dfp[i["path"]]=i['method']
-            # except: pass
         print enp_path
         return enp_path
     except Exception,e: 
@@ -109,14 +109,12 @@ def home():
             print "Unable to add the data provided ... " +str(request.data) 
             print e
 
-    form = PostForm()
-    results = Category.query.all()
-    endpoints = Post.query.all()
-    print "getting data from category" , str(results)
-    return render_template('index.html', results=results,endpoints=endpoints, form=form)
+    forms = PostForm()
+    result = Category.query.all()
+    endpoint = Post.query.all()
+    return render_template('index.html', results=result,endpoints=endpoint, form=forms)
 
 
-# @app.route('/new/project')
 
 @app.route('/subprojects', methods= ['POST','GET'])
 def create_post():
@@ -146,7 +144,6 @@ def sub_post(sname):
             for ep in enp:
                 k.append(ep)
         if len(k) >1:
-        # k.append("")
             kk[p.title] = k
         else: 
             kk[p.title] = ["We couldn't Understand what you have submitted",]
@@ -155,14 +152,17 @@ def sub_post(sname):
     return render_template('sub.html', post=kk,form= form, results=results)
 
 
-
-
 '''
 converts json object to dictionary
+
 Input:
-- data: json onject
-Return:
+
+- data: json object
+
+Return: dictionary
+
 '''
+
 def convert(data):
     if isinstance(data, basestring):
         return str(data)
@@ -174,15 +174,19 @@ def convert(data):
         return data
 
 
-
-
-
 '''
 takes path as url and method as one of the  methods and return the appropriate value
-Inputs: 
+
+Inputs:
+ 
 - path: endpoint path
-- method: enum value ["GET","POST","DELETE","PUT"]
+
+- method: enum value ["GET","POST","DELETE","PUT"], here this method is mostly for GET
+
+Return: appropriate value
+
 '''
+
 def url_methods(path,method,dfp):
 
     if method in dfp[path][0]:
@@ -191,9 +195,40 @@ def url_methods(path,method,dfp):
         return "This method is not supported"
 
 
+'''
+method for getting data filed in method ["POST","PUT","DELETE"]
+
+Input:
+
+- path : endpoint path
+
+- method : ["POST","PUT","DELETE"]
+
+- def : json stored in the form of dictionary
+
+Return: data field
+
+'''
 def get_datafield_in_method(path,method,dfp):
     data = dfp[path][0][method]["data"]
     return data
+
+'''
+This method is mainly for post method
+
+compares data field and key to be added
+
+Input:
+
+- data: data field in post method
+
+- dict2: key value to be added
+
+Output:
+
+- True or False
+
+'''
 
 def compare_dictionaries(data,dict2):
     keys_of_data = data.keys()
@@ -211,20 +246,108 @@ def compare_dictionaries(data,dict2):
         return False
 
 
+session_data = {}
 
-def post_method(data,path, dfp):
-    key = ast.literal_eval(data)
+'''
+
+Adds new key value 
+
+Input:
+
+- key: key value to be added
+
+- path: respective path in which key value to be added
+
+- dfp: json stored in the form of dictionary
+
+Return: Appropriate message in success field
+
+'''
+
+def post_method(key,path, dfp):
+    global session_data
     existing_data = dfp[path][0]["GET"]["success"]
-    #if len(existing_data)>1:
     existing_data.append(key)
-    dfp[path][0]["GET"]["success"] = existing_data
-    return str(dfp)
-    #else:
-       # modified_data.append(existing_data)
-        #modified_data.append(key)
-       # dfp["/benchmark"][0]["GET"]["success"] = modified_data
-       # return dfp["/benchmark"][0]["GET"]["success"]
+    session_data[path] = existing_data
+    return str(dfp[path][0]["POST"]["success"])
 
+'''
+
+Modifies key value 
+
+Input:
+
+- key: key value to be modified
+
+- path: respective path in which key value to be modified
+
+- dfp: json stored in the form of dictionary
+
+Return: Appropriate message in success field
+
+'''
+
+def put_method(key,path,dfp):
+    global session_data
+    count = 0
+    try:
+        key =  ast.literal_eval(key)
+        keys = key.keys()
+        if len(session_data) == 0:
+            list_success = dfp[path][0]["GET"]["success"]
+        else:
+            list_success = session_data[path]  
+        for i in range(len(list_success)):
+            if keys[0] in list_success[i]:
+                list_success[i][keys[0]] = key[keys[0]]
+                session_data[path] = list_success
+                count = count +1
+                return str(dfp[path][0]["PUT"]["success"])
+        if count == 0:
+            return "The key you want to modifty does not exit" 
+    except:
+        return "Invalid Key Value Pair"
+
+'''
+
+Deletes key value 
+
+Input:
+
+- key: key value to be deleted
+
+- path: respective path in which key value to be deleted
+
+- dfp: json stored in the form of dictionary
+
+Return: Appropriate message in success field
+
+'''
+
+def delete_method(key,path,dfp):
+    global session_data
+    count = 0
+    try:
+        key =  ast.literal_eval(key)
+        keys = key.keys()
+        if len(session_data) == 0:
+            list_success = dfp[path][0]["GET"]["success"]
+        else:
+            list_success = session_data[path]
+        for i in range(len(list_success)):
+            if keys[0] in list_success[i]:
+                del list_success[i]
+                session_data[path] = list_success
+                count  =count +1
+                return str(dfp[path][0]["DELETE"]["success"])
+        if count == 0:
+            return "The key you want to delete does not exit"
+       
+            
+    except:
+        return "invalid key value pair"
+
+   
 def extract_enp(cat_id, prj_name):
     po = Post.query.filter_by(title= prj_name, category_id=cat_id).first()
     file_name= po.body
@@ -234,41 +357,17 @@ def extract_enp(cat_id, prj_name):
         endpoints_list = d["endpoints"]
         enp_path = []
         original = []
-        dfp = {}
         methods = {}
         for i in endpoints_list:
             original.append(i["path"])
             enp_path.append('box'+'/'+str(cat_id)+'/'+str(prj_name)+'/'+d["api"]["prefix"]+i["path"])
-            # print enp_path, "i'm printingthis"
             try:
                 dfp[i["path"]]=i['method']
             except: pass
-        
         return (enp_path, dfp, original)
     except Exception,e: 
         print e
         return "something went really wrong"
-
-
-# def extract_enp():
-#     try:
-#         obj = json.loads(file_name.strip()) 
-#         d = convert(obj)
-#         endpoints_list = d["endpoints"]
-#         enp_path = []
-#         dfp = {}
-#         methods = {}
-#         for i in endpoints_list:
-#             enp_path.append(i["path"])
-#             try:
-#                 dfp[i["path"]]=i['method']
-#             except: pass
-        
-#         return dfp
-#     except Exception,e: 
-#         print e
-#         return "something went really wrong"
-
 def check(ori, enp_path):
     for path in enp_path:
         if ori in path:
@@ -282,29 +381,35 @@ def catch_all(path):
     proj_name = path.split('/')[1]
     enp_path  = extract_enp(cat_id,proj_name)[0]
     ori = [a for a in extract_enp(cat_id,proj_name)[2] if a in path][0]
-    print ori,"this is original"
-
-    # print enp_path , "this is enp_path"
     dfp  = extract_enp(cat_id,proj_name)[1]
-    print enp_path,"this is dfp"
-    # return str(cat_id)
-    k = "/" + path
+
     if request.method == "POST":
-        print type(request.data)
-        key = ast.literal_eval(request.data)
-        data = get_datafield_in_method(ori,request.method,dfp)
-        print data
-        if compare_dictionaries(data,key):
-            post_method(request.data,ori,dfp)
-        else:
-            return "Invalid Key pair" +str(request.data)
+        try:
+            key = ast.literal_eval(request.data)
+            data = get_datafield_in_method(ori,request.method,dfp)
+            if compare_dictionaries(data,key):
+                p_data = post_method(key,ori,dfp)
+                return str(p_data)
+            else:
+                return str(request.data)+" does not match with  "+str(data)+ " Field" 
+        except:
+            return " Not a proper input"
+    if request.method == "PUT":
+        p_data = put_method(request.data,ori,dfp)
+        return p_data
+    if request.method == "DELETE":
+        p_data = delete_method(request.data,ori,dfp)
+        return p_data
+        
+        
     if check(ori, enp_path):
-        print str(request.method),"thjis is the menthod"
-        return str(url_methods(ori,request.method,dfp))
+        if session_data.has_key(ori):
+            return str(session_data[ori])
+        else:
+            return str(url_methods(ori,request.method,dfp))
     else:
         return "Invalid end point"
   
-import os
         		
 if __name__ == '__main__':
     if not os.path.exists('test.db'):
