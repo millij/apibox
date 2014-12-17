@@ -16,7 +16,7 @@ Command line interface:
 </code>
 <br>
 <code>
-    python final.py runserver -c <conf_filename>  -t <host  (0.0.0.0)> -p <port number (9823)>\
+    python final.py runserver -c \<conf_filename>  -t \<host  (0.0.0.0)> -p \<port number (9823)>
 </code>
  <br>
 A simple utility to mock RESTful APIs
