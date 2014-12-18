@@ -13,7 +13,6 @@ Command line interface:
 <br>
 <code>
     make install 
-<<<<<<< HEAD
     python final.py runserver -c <conf_filename>  -t <host  (0.0.0.0)> -p <port number (9823)>
 
 
@@ -24,5 +23,4 @@ Command line interface:
     python final.py runserver -c \<conf_filename>  -t \<host  (0.0.0.0)> -p \<port number (9823)>
 </code>
  <br>
->>>>>>> 67d72ff1b8732dacfc168e5fc385928edcb1f682
 A simple utility to mock RESTful APIs
