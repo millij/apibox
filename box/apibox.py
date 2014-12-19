@@ -1,5 +1,5 @@
 from flask.ext.script import Server, Manager
-from app22 import create_app
+from main import create_app
 
 manager = Manager(create_app)
 manager.add_command("runserver", Server())
