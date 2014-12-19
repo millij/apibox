@@ -1,9 +1,6 @@
 						{
-							"name": "OCR engine",
-							"api": {
-								"version": "0.1",
-								"prefix": "api/v0.1"
-							},
+							"name": "ocrengine",
+							"version": "ver_1",
 							"endpoints":[{
 							  "path":"/login",
 							  "method":[{
