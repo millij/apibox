@@ -11,8 +11,8 @@ def convert(data):
     - data: json object
 
     Return: dictionary
-
     '''
+    
     if isinstance(data, basestring):
         return str(data)
     elif isinstance(data, collections.Mapping):
@@ -22,27 +22,33 @@ def convert(data):
     else:
         return data
 
-
-def validator(ob):
+check_list=[]
+def validator(file_name):
 	''' validates and return whether the given json file is valid one are not
 
 	input:json file path
 
 	returns json file if valid, else error message .'''
-	data=parse(ob)
-	con=convert(data)
-	if type(con.get("endpoints"))==list:
-   		for end_p in con.get("endpoints"):
-			if type(end_p.get("path"))==str and type(end_p.get("method"))==list:	
-				for method in end_p.get("method"):
-					for key in method:
-						print type(method.get(key))
-						print key
+	data=parse(file_name)
+	if type(data.get("endpoints"))==list:
+		print len(data.get("endpoints"))
+		#print data.get("endpoints")
+   		for end_p in data.get("endpoints"):
+			print end_p
+			if type(end_p.get("path"))==unicode and type(end_p.get("method"))==list:	
+				for methods in end_p.get("method"):
+					print "+++++++++++++++++" ,methods
+					print "#######################"
+					for method in methods.keys():
+						print method
 						print ".................."
-						if val_met(key,method.get(key)):
-							return con
+						check_list.append(val_met(method,methods.get(method)))
+	for check in check_list:
+		if check==False:
+			print check
+			return "not valid format"
 	else:
-		return "not valid format" 					
+		return  data					
 	
 
 def val_met(method,results):
@@ -51,19 +57,22 @@ def val_met(method,results):
 
 	input:method type (GET or PUT etc..) and value of the Method.
 	'''
+	list_results=[]
 	for result in results.keys():
-		print result
+		print results.keys()
 		if method=="PUT" or "GET" or "DELETE" and result=="success" or "failure":
-				if type(results.get(result))==str:
-					return True	
-		elif method=="POST"and result=="success" or "failure":
-			if type(result.get("success"))==str :
-					return True
+				if type(results.get(result))==unicode or list:
+					print results.get(result),"**************************"
+					check_list.append(True)	
+		elif method=="POST"and result=="success" or "failure" or "data":
+			if type(result.get(result))==unicode :
+					print results.get(result),"**************************"
+					check_list.append(True)	
 		else:
-			return False
+			check_list.append(False)	
 
 '''
-def key_type(key):
+def value_type(key):
 	if key=="name":
 		return str
         if key=="api":

@@ -5,7 +5,7 @@
 							  "path":"/login",
 							  "method":[{
 								"POST":{
-								  "data":{"username":"XXXX","password":"****"},
+								  "data":{"username":"person_name","password":"person_name123"},
 								  "success":"succesfully added new key value",
 									"failure":"some error in post method"
 								}
@@ -16,13 +16,13 @@
 							  "method":[{
 								"GET":{
 								  "success":[{"1":
-									{"u":"XXXX",
-									"p":"****",
-									"x":"11111"}}],
+									{"key1":"data",
+									"user":"name",
+									"pass_w":"name123"}}],
 									"failure":"some error in get method"
 								},
 								"POST":{
-								  "data":{"ID":{"u":"x","p":"*"}},
+								  "data":{"ID":{"roll_no":"ME17","class":"mech"}},
 								  "success":"succesfully added new key value",
 									"failure":"some error in post method"
 								},
