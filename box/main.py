@@ -1,5 +1,6 @@
 from flask import Flask, jsonify, request, render_template, redirect, url_for
 import json
+import collections
 
 def convert(data):
     ''' 
@@ -12,6 +13,7 @@ def convert(data):
     Output: dictionary
 
     '''
+    
     if isinstance(data, basestring):
         return str(data)
     elif isinstance(data, collections.Mapping):
@@ -58,9 +60,10 @@ def create(file_name):
     list_endpoints_path = []    # list of all the endpoints mentioned by the user
     prefix_list = []    #stores name and version of the project mentioned by the user
     json_obj = json.load(open(file_name))
-    prefix_list.append(json_obj.get("name"))
-    prefix_list.append(json_obj.get("version"))
-    endpoints_list = json_obj.get("endpoints")
+    temp = convert(json_obj)
+    prefix_list.append(temp.get("name"))
+    prefix_list.append(temp.get("version"))
+    endpoints_list = temp.get("endpoints")
     for i in endpoints_list:
         list_endpoints_path.append(i.get("path"))
         try:
@@ -79,7 +82,9 @@ def create_app(config):
         count  = 0
         list_of_tags = path.split("/")
         for i in range(len(temp[2])):
-            if list_of_tags[i] in temp[2]:
+            if i > len(list_of_tags)-1:
+                return "Invalid end point"
+            elif list_of_tags[i] in temp[2]:
                 count = count +1
         if count == len(temp[2]):
             list_of_tags = list_of_tags[count:]

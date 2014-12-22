@@ -53,7 +53,4 @@ def parse(text):
         	print('invalid json: %s' % e)
         	return None 
 
-print validator("ocr.json")
-
-#validate({"name":"def"},schema)
 
