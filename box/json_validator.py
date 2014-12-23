@@ -3,33 +3,36 @@ import collections
 
 
 check_list=[]
-def validator(file_name):
+def validate(file_name):
 	''' validates and return whether the given json file is valid one are not
 
 	input:json file path
 
-	returns True or False .'''
-	data=parse(file_name)
-	if type(data.get("endpoints"))==list:
-   		for end_p in data.get("endpoints"):
-			if type(end_p.get("path"))==unicode and type(end_p.get("method"))==list:	
-				for methods in end_p.get("method"):
-					for method in methods.keys():
-						check_list.append(val_met(method,methods.get(method)))
+	returns True or False or error message.'''
+	data=get_json(file_name)
+	if type(data.get("endpoints"))!=list:
+		return "endpoints are not of type list" 
+   	for end_p in data.get("endpoints"):
+		if type(end_p.get("path"))!=unicode and type(end_p.get("method"))!=list:	
+			return	"either method is not of type list or path is not of type string"		
+		for methods in end_p.get("method"):
+			for method in methods.keys():
+				check_list.append(validate_method(method,methods.get(method)))
 	for check in check_list:
 		if check==False:
 			return False
+		else:
+			return  True					
 	else:
-		return  True					
-	
+		return True
 
-def val_met(method,results):
+def validate_method(method,results):
 	'''
 	validates  whether the methods in the json file are in required format
 
 	input:method type (GET or PUT etc..) and value of the Method.
 	'''
-	list_results=[]
+
 	for result in results.keys():
 		if (method=="PUT" or "GET" or "DELETE") and ("failure" in results.keys()) and ("success" in results.keys()):
 				if type(results.get(result))==unicode or list:
@@ -40,17 +43,20 @@ def val_met(method,results):
 		else:
 			check_list.append(False)	
 
-def parse(text):
+def get_json(file_name):
 	'''validates given file is json or not
 
 	input:json file
 
 	return :if valid json, else error message .'''
 	try:
-		with open(text) as json_file:
+		with open(file_name) as json_file:
        	 		return json.load(json_file)
 	except ValueError as e:
         	print('invalid json: %s' % e)
         	return None 
 
+print validate("ocr.json")
+
+#validate({"name":"def"},schema)
 
