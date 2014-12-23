@@ -14,17 +14,14 @@ How to use it:
 <br>
 1) Clone ApiBox
 <br>
-2) Create your JSON referring to the required JSON(reference.json) and insert in box folder.
+2) Create your API configuration JSON. A sample for reference is located in examples folder.
 <br>
 <h4>
 3) And run these commands
 </h4>
 <code>
- <br>
- 1) make install    
- <br>
- 2) python final.py runserver -c <conf_filename>  -t <host  (0.0.0.0)> -p <port number (9823)>
-
+ make install    
+ python final.py runserver -c <conf_filename>  -t <host  (0.0.0.0)> -p <port number (9823)>
 </code>
 <br>
 -c <filename> is to configure user json
