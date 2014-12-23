@@ -23,7 +23,9 @@ How to use it:
  <br>
  1) make install    
  <br>
- 2) python final.py runserver -c <conf_filename>  -t <host  (0.0.0.0)> -p <port number (9823)>
+ 2). envi/bin/activate
+ <br>
+ 3) python final.py runserver -c <conf_filename>  -t <host  (0.0.0.0)> -p <port number (9823)>
 
 </code>
 <br>
