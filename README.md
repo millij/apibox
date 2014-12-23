@@ -1,44 +1,40 @@
-Introduction:
-======
+# Introduction
 ApiBox is a  minimal feature tool to decouple the backend and frontend teams working on service oriented applications(SOA) by minimizing the dependencies between them. The purpose of this ApiBox is to generate mock RESTful APIs from the developer provided static data with minimal effort. This helps the team to continue developing without having to wait till the backend team provides the needed API endpoint without making any changes in the signature of the respective APIs.
-<h2>
-How does it work:
-</h2>
-<br>
-1) Takes the user specified JSON and Validates with the required format of JSON
-<br>
-2) If user JSON satisfies with the required JSON then it extracts the endpoints mention in the json and mock them according to response provided by the user in its respective endpoint.
-<h2>
-How to use it:
-</h2>
-<br>
-1) Clone ApiBox
-<br>
-2) Create your API configuration JSON. A sample for reference is located in examples folder.
-<br>
-<h4>
-3) And run these commands
-</h4>
-<code>
- <br>
- make install
- <br>
- . envi/bin/activate
- <br>
- python final.py runserver -c <conf_filename>  -t <host  (0.0.0.0)> -p <port number (9823)>
 
-</code>
-<br>
--c <filename> is to configure user json
-<br>
--t <host number> is to configure user specified host
-<br>
--p <port number> is to configure user specified port
- <h5>
-Note:
-</h5>
-<br>
-1) while running the apibox should specify the json file and there is no default option 
-<br>
-2) By default host is users local host and port number is 5000
+#### Version
+0.1
+
+## Dependencies
+### System
+- python-2.7.x
+- python-virtualenv
+
+### Software
+- Flask
+- refer to requirements.txt
+
+## How does it work:
+- Takes the user specified JSON and Validates with the required format of JSON
+- If user JSON satisfies with the required JSON then it extracts the endpoints mention in the json and mock them according to response provided by the user in its respective endpoint.
+
+## How to use it:
+- Clone ApiBox
+- Create your API configuration JSON(A sample for reference is located in examples folder).
+
+And run the below commands
+
+```sh
+$ make install
+$ . envi/bin/activate
+$ python box/apibox.py runserver -c <conf_filepath>  -t <host> -p <port>
+```
+Options description:
+* -c : api config json filepath
+* -t : host IP address (default: 127.0.0.1 / localhost)
+* -p : port number (default: 5000)
+
+### Note
+- While running the apibox should specify the json file and there is no default option 
+- By default host is users local host and port number is 5000
+
 
