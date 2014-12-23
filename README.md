@@ -20,8 +20,18 @@ How to use it:
 3) And run these commands
 </h4>
 <code>
+<<<<<<< HEAD
  make install    
  python final.py runserver -c <conf_filename>  -t <host  (0.0.0.0)> -p <port number (9823)>
+=======
+ <br>
+ 1) make install    
+ <br>
+ 2). envi/bin/activate
+ <br>
+ 3) python final.py runserver -c <conf_filename>  -t <host  (0.0.0.0)> -p <port number (9823)>
+
+>>>>>>> 746a390f3b6815567ff15306cc209588bcc3817c
 </code>
 <br>
 -c <filename> is to configure user json
