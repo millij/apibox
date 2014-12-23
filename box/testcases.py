@@ -6,8 +6,8 @@ from JVal import validator
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 logger.info('Stated Running Test case ...')
-class TestCases(unittest.TestCase):
 
+class TestCases(unittest.TestCase):
 
     def test_JSON_validator(self):
         logger.info('Running Test case for JSON validator ...')

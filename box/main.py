@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request, render_template, redirect, url_for
+from flask import Flask,request
 import json
 import collections
 
@@ -24,7 +24,7 @@ def convert(data):
         return data
 
 
-def url_methods(path, method,dict_of_json):
+def url_methods(path, method,dict_json):
     '''
     takes path as url and method as one of the  methods and return the appropriate value
 
@@ -37,8 +37,8 @@ def url_methods(path, method,dict_of_json):
     Return: appropriate value
 
     '''
-    if method in dict_of_json[path][0]:
-        return dict_of_json[path][0][method]["success"]
+    if method in dict_json[path][0]:
+        return dict_json[path][0][method]["success"]
     else:
         return "This method is not supported"
 
@@ -56,21 +56,21 @@ def create(file_name):
     Returns: all the three variables.
     
     '''
-    dict_of_json = {}   # temprary variable to store the json as dictionary
-    list_endpoints_path = []    # list of all the endpoints mentioned by the user
-    prefix_list = []    #stores name and version of the project mentioned by the user
+    dict_json = {}   # temprary variable to store the json as dictionary
+    list_endpointsPath = []    # list of all the endpoints mentioned by the user
+    list_prefix = []    #stores name and version of the project mentioned by the user
     json_obj = json.load(open(file_name))
     temp = convert(json_obj)
-    prefix_list.append(temp.get("name"))
-    prefix_list.append(temp.get("version"))
-    endpoints_list = temp.get("endpoints")
-    for i in endpoints_list:
-        list_endpoints_path.append(i.get("path"))
+    list_prefix.append(temp.get("name"))
+    list_prefix.append(temp.get("version"))
+    list_endpoints = temp.get("endpoints")
+    for i in list_endpoints:
+        list_endpointsPath.append(i.get("path"))
         try:
-            dict_of_json[i.get("path")] = i.get('method')
+            dict_json[i.get("path")] = i.get('method')
         except:
             pass
-    return [dict_of_json,list_endpoints_path,prefix_list]
+    return [dict_json,list_endpointsPath,list_prefix]
 
     
 def create_app(config):
@@ -80,17 +80,17 @@ def create_app(config):
     @app.route('/<path:path>', methods=["GET", "POST", "DELETE", "PUT"])
     def catch_all(path):
         count  = 0
-        list_of_tags = path.split("/")
+        list_tags = path.split("/")
         for i in range(len(temp[2])):
-            if i > len(list_of_tags)-1:
+            if i > len(list_tags)-1:
                 return "Invalid end point"
-            elif list_of_tags[i] in temp[2]:
+            elif list_tags[i] in temp[2]:
                 count = count +1
         if count == len(temp[2]):
-            list_of_tags = list_of_tags[count:]
+            list_tags = list_tags[count:]
             k = ""
-            for i in range(len(list_of_tags)):
-                k = k+"/"+ list_of_tags[i]
+            for i in range(len(list_tags)):
+                k = k+"/"+ list_tags[i]
             if k in temp[1]:
                 return str(url_methods(k, request.method,temp[0]))
             else:
