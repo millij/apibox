@@ -17,13 +17,13 @@ How to use it:
 2) Create your JSON referring to the required JSON(reference.json) and insert in box folder.
 <br>
 <h4>
-3) And run these command
+3) And run these commands
 </h4>
 <code>
  <br>
- make install 
+ 1) make install    
  <br>
- python final.py runserver -c <conf_filename>  -t <host  (0.0.0.0)> -p <port number (9823)>
+ 2) python final.py runserver -c <conf_filename>  -t <host  (0.0.0.0)> -p <port number (9823)>
 
 </code>
 <br>
