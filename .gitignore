@@ -59,3 +59,8 @@ envi/
 # linux temp files
 *.*~
 
+# eclipse
+.project
+.pydevproject
+.eclipse
+
