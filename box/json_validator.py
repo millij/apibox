@@ -2,43 +2,45 @@ import json
 import collections
 
 
-check_list=[]
+check_list = []
 def validate(file_name):
-	''' validates and return whether the given json file is valid one are not
+    ''' 
+    validates and return whether the given json file is valid one are not
+    input:json file path
+    returns True or False or error message.
+    '''
 
-	input:json file path
+    data = get_json(file_name)
+    if type(data.get("endpoints")) != list:
+        return "endpoints are not of type list" 
 
-	returns True or False or error message.'''
-	data=get_json(file_name)
-	if type(data.get("endpoints"))!=list:
-		return "endpoints are not of type list" 
-   	for end_p in data.get("endpoints"):
-		if type(end_p.get("path"))!=unicode and type(end_p.get("method"))!=list:	
-			return	"either method is not of type list or path is not of type string"		
-		for methods in end_p.get("method"):
-			for method in methods.keys():
-				check_list.append(validate_method(method,methods.get(method)))
-	for check in check_list:
-		if check==False:
-			return False
-		else:
-			return  True					
-	else:
-		return True
+    for end_p in data.get("endpoints"):
+        if type(end_p.get("path")) != unicode and type(end_p.get("method")) != list:
+            return	"either method is not of type list or path is not of type string"
 
-def validate_method(method,results):
+        for methods in end_p.get("method"):
+            for method in methods.keys():
+                check_list.append(validate_method(method, methods.get(method)))
+
+    for check in check_list:
+        if check == False:
+            return False
+        else:
+            return  True
+
+
+def validate_method(method, results):
 	'''
 	validates  whether the methods in the json file are in required format
-
 	input:method type (GET or PUT etc..) and value of the Method.
 	'''
 
 	for result in results.keys():
-		if (method=="PUT" or "GET" or "DELETE") and ("failure" in results.keys()) and ("success" in results.keys()):
-				if type(results.get(result))==unicode or list:
+		if (method == "PUT" or "GET" or "DELETE") and ("failure" in results.keys()) and ("success" in results.keys()):
+    			if type(results.get(result)) == unicode or list:
 					check_list.append(True)	
-		elif (method=="POST") and ("failure" in results.keys()) and ("success" in results.keys()) and ("data" in results.keys()):
-			if type(result.get(result))==unicode :
+		elif (method == "POST") and ("failure" in results.keys()) and ("success" in results.keys()) and ("data" in results.keys()):
+			if type(result.get(result)) == unicode :
 					check_list.append(True)	
 		else:
 			check_list.append(False)	
@@ -56,7 +58,6 @@ def get_json(file_name):
         	print('invalid json: %s' % e)
         	return None 
 
-print validate("ocr.json")
 
-#validate({"name":"def"},schema)
+# validate({"name":"def"},schema)
 

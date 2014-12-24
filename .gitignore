@@ -52,3 +52,15 @@ docs/_build/
 
 # PyBuilder
 target/
+
+# virtulal-env
+envi/
+
+# linux temp files
+*.*~
+
+# eclipse
+.project
+.pydevproject
+.eclipse
+
