@@ -1,6 +1,6 @@
 import unittest
 import logging
-from JVal import validator
+from json_validator import validate
 from main import url_methods, create
 
 logging.basicConfig(level=logging.INFO)
@@ -14,7 +14,7 @@ class TestCases(unittest.TestCase):
 
     def test_JSON_validator(self):
         logger.info('Running Test case for JSON validator ...')
-        self.assertEquals(validator(file_name), True)
+        self.assertEquals(validate(file_name), True)
 
     def test_GET_Method(self):
         logger.info('Running Test case for GET Method ...')

@@ -2,11 +2,12 @@
 	"id" : "api-box json schema - reference",
 	"$schema" : "http://json-schema.org/schema#",
 	"description" : "api-box input json schema",
-	"schema_format":{
+	"schema_format": {
 	"type":"object",
 	"properties":{
 		"name":{"type":"string"},
-		"version":{"type":"String"},
+		"version":{"type":"string"},
+		"prefix" : {"type": "string"},
 		"endpoints":{
 		"type":"array",
 		"items":{"type":"objects",
