@@ -23,9 +23,11 @@ def convert(data):
 def url_methods(path, method, dict_json):
     '''
     takes path as url and method as one of the  methods and return the appropriate value
+    
     Inputs:
     - path: endpoint path
     - method: enum value ["GET","POST","DELETE","PUT"], here this method is mostly for GET
+    
     Return: appropriate value
     '''
     
@@ -34,40 +36,45 @@ def url_methods(path, method, dict_json):
     else:
         return "This method is not supported"
 
-# why try catch is expensive?
 
-
-def create(file_name):
+def read_config_file(file_path):
     '''
-    Used to create vaiables for storing endpoints, prefixes and list of end points
+    Used to create variables for storing endpoints, prefixes and list of end points
+    
     Inputs:
-    - file_name: filename
+    - file_path: endpoints configuration file path
+    
     Returns: all the three variables.
     '''
     
-    dict_json = {}  # temprary variable to store the json as dictionary
-    list_endpointsPath = []  # list of all the endpoints mentioned by the user
-    list_prefix = []  # stores name and version of the project mentioned by the user
-    json_obj = json.load(open(file_name))
+    json_dict = {}                          # temprary variable to store the json as dictionary
+    endpoints_list = []                     # list of all the endpoints mentioned by the user
+    prefix_list = []                        # stores name and version of the project mentioned by the user
+    json_obj = json.load(open(file_path))
     temp = convert(json_obj)
-    list_prefix.append(temp.get("name"))
-    list_prefix.append(temp.get("version"))
+    prefix_list.append(temp.get("name"))
+    prefix_list.append(temp.get("version"))
     list_endpoints = temp.get("endpoints")
+    
+    # iterate for end-points 
     for i in list_endpoints:
-        list_endpointsPath.append(i.get("path"))
+        endpoints_list.append(i.get("path"))
         try:
-            dict_json[i.get("path")] = i.get('method')
+            json_dict[i.get("path")] = i.get('method')
         except:
             pass
-    return [dict_json, list_endpointsPath, list_prefix]
+    
+    return [json_dict, endpoints_list, prefix_list]
 
     
 def create_app(config):
     app = Flask(__name__)
-    temp = create(config)
+    
     @app.route('/', defaults={'path': ''})
     @app.route('/<path:path>', methods=["GET", "POST", "DELETE", "PUT"])
     def catch_all(path):
+        temp = read_config_file(config)
+    
         count = 0
         list_tags = path.split("/")
         for i in range(len(temp[2])):
@@ -75,6 +82,7 @@ def create_app(config):
                 return "Invalid end point"
             elif list_tags[i] in temp[2]:
                 count = count + 1
+        
         if count == len(temp[2]):
             list_tags = list_tags[count:]
             k = ""
@@ -86,4 +94,5 @@ def create_app(config):
                 return "Invalid end point"
         else:
             return "invalid end point"
+        
     return app

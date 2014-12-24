@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<apibox xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="shiporder.xsd">
+	
+	<name>School Database</name>
+	<version>1</version>
+	<prefix>/api/v1</prefix>
+	<endpoints>
+		<endpoint path="/students">
+			<methods>
+				<method type="GET">
+					<input >
+					</input>
+					<result>
+						
+					</result>
+				</method>
+			</methods>
+		</endpoint>
+	</endpoints>
+	
+	<!-- Global Configuration -->
+	<global>
+		<errors>
+			<error code="404">
+				<message />
+			</error>
+		</errors>
+		
+	</global>
+	
+</apibox>
