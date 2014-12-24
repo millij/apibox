@@ -2,6 +2,69 @@
 	"id" : "api-box json schema - reference",
 	"$schema" : "http://json-schema.org/schema#",
 	"description" : "api-box input json schema",
-	
-	
+	"definition":{
+	"type":"object",
+	"properties":{
+		"name":{"type":"string"},
+		"version":{"type":"String"},
+		"endpoints":{
+		"type":"array",
+		"items":{"type":"objects",
+				"properties":{			
+					"path":{"type":"string"},
+					"method":{"type":"array",
+						"items":{"type":"object",
+						"properties":{
+						"PUT":{"type":"object",
+							"properties":{
+								"success":{"type":"string"},
+								"failure":{"type":"string"} },
+							"required":[
+								"success",
+								"failure"   ]
+								},
+						"DELETE":{"type":"object",
+							"properties":{
+								"success":{"type":"string"},
+								"failure":{"type":"string"} },
+							"required":[
+								"success",
+								"failure"	]
+								},
+						"GET":{"type":"object",
+							"properties":{
+								"success":{"type":"object"},
+								"failure":{"type":"string"}	},
+							"required":[
+								"success",
+								"failure"	]
+								},
+						"POST":{"type":"object",
+							"properties":{
+								"success":{"type":"object"},
+								"failure":{"type":"string"},
+								"data":{"type":"object"} },
+							"required":[
+								"success",
+								"failure",
+								"data"		]
+								}
+									 }
+								}
+							}
+							},
+					"required":[
+						"path",
+						"method"	]
+				}
+					}
+
+				},
+	"required":[
+				"name",
+				"version",
+				"endpoints"
+					]
+													
+			}	
 }

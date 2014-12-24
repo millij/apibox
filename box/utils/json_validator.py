@@ -34,16 +34,14 @@ def validate_method(method, results):
 	validates  whether the methods in the json file are in required format
 	input:method type (GET or PUT etc..) and value of the Method.
 	'''
-
-	for result in results.keys():
-		if (method == "PUT" or "GET" or "DELETE") and ("failure" in results.keys()) and ("success" in results.keys()):
-    			if type(results.get(result)) == unicode or list:
-					check_list.append(True)	
-		elif (method == "POST") and ("failure" in results.keys()) and ("success" in results.keys()) and ("data" in results.keys()):
-			if type(result.get(result)) == unicode :
-					check_list.append(True)	
-		else:
-			check_list.append(False)	
+	if (method == "PUT" or "GET" or "DELETE") and ("failure" in results.keys()) and ("success" in results.keys()):
+    	if type(results.get("success")) == unicode or list and type(results.get("failure"))==unicode:
+			check_list.append(True)	
+	elif (method == "POST") and ("failure" in results.keys()) and ("success" in results.keys()) and ("data" in results.keys()):
+		if type(results.get("success")) == unicode and type(results.get("failure"))==unicode and type(results.get("data"))==dict:
+			check_list.append(True)	
+	else:
+		check_list.append(False)
 
 def get_json(file_name):
 	'''validates given file is json or not
@@ -59,5 +57,5 @@ def get_json(file_name):
         	return None 
 
 
-# validate({"name":"def"},schema)
+
 
