@@ -1,0 +1,7 @@
+{
+	"id" : "api-box json schema - reference",
+	"$schema" : "http://json-schema.org/schema#",
+	"description" : "api-box input json schema",
+	
+	
+}

@@ -1,39 +1,39 @@
-						{
-							"name": "ocrengine",
-							"version": "ver_1",
-							"endpoints":[{
-							  "path":"/login",
-							  "method":[{
-								"POST":{
-								  "data":{"username":"person_name","password":"person_name123"},
-								  "success":"succesfully added new key value",
-									"failure":"some error in post method"
-								}
-							  }]
-							},
-							{
-							  "path":"/benchmark",
-							  "method":[{
-								"GET":{
-								  "success":[{"1":
-									{"key1":"data",
-									"user":"name",
-									"pass_w":"name123"}}],
-									"failure":"some error in get method"
-								},
-								"POST":{
-								  "data":{"ID":{"roll_no":"ME17","class":"mech"}},
-								  "success":"succesfully added new key value",
-									"failure":"some error in post method"
-								},
-								"PUT":{
-								  "success":"succesfully modified key value",
-									"failure":"some error in post method"
-								},
-								"DELETE":{
-								  "success":"succesfully deleted key value",
-									"failure":"some error in post method"
-								}
-							  }]
-							}]
-						}
+{
+	"name": "ocrengine",
+	"version": "ver_1",
+	"endpoints":[{
+	  "path":"/login",
+	  "method":[{
+		"POST":{
+		  "data":{"username":"person_name","password":"person_name123"},
+		  "success":"succesfully added new key value",
+			"failure":"some error in post method"
+		}
+	  }]
+	},
+	{
+	  "path":"/benchmark",
+	  "method":[{
+		"GET":{
+		  "success":[{"1":
+			{"key1":"data",
+			"user":"name",
+			"pass_w":"name123"}}],
+			"failure":"some error in get method"
+		},
+		"POST":{
+		  "data":{"ID":{"roll_no":"ME17","class":"mech"}},
+		  "success":"succesfully added new key value",
+			"failure":"some error in post method"
+		},
+		"PUT":{
+		  "success":"succesfully modified key value",
+			"failure":"some error in post method"
+		},
+		"DELETE":{
+		  "success":"succesfully deleted key value",
+			"failure":"some error in post method"
+		}
+	  }]
+	}]
+}
