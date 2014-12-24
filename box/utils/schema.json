@@ -2,7 +2,7 @@
 	"id" : "api-box json schema - reference",
 	"$schema" : "http://json-schema.org/schema#",
 	"description" : "api-box input json schema",
-	"definition":{
+	"schema_format":{
 	"type":"object",
 	"properties":{
 		"name":{"type":"string"},
@@ -41,7 +41,7 @@
 								},
 						"POST":{"type":"object",
 							"properties":{
-								"success":{"type":"object"},
+								"success":{"type":"string"},
 								"failure":{"type":"string"},
 								"data":{"type":"object"} },
 							"required":[
