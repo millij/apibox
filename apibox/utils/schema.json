@@ -1,0 +1,64 @@
+{
+    "id" : "api-box json schema - reference",
+    "$schema" : "http://json-schema.org/schema#",
+    "description" : "api-box input json schema",
+    "schema_format" : {
+        "type": "object",
+        "properties" : {
+            "name" : { "type" : "string" },
+            "version" : { "type" : "string" },
+            "prefix" : { "type" : "string" },
+            "endpoints" : {
+                "type" : "array",
+                "items" : {
+                    "type" : "objects",
+                    "properties" : {
+                        "path" : { "type" : "string" },
+                        "method" : {
+                            "type" : "array",
+                            "items" : {
+                                "type" : "object",
+                                "properties" : {  
+                                    "PUT" : {  
+                                        "type" : "object",
+                                        "properties" : {  
+                                            "success" : { "type" : "string" },
+                                            "failure" : { "type" : "string" }
+                                        },
+                                        "required" : [ "success" ]
+                                    },
+                                    "DELETE" : {  
+                                        "type" : "object",
+                                        "properties" : {  
+                                            "success" : { "type" : "string" },
+                                            "failure" : { "type" : "string" }
+                                        },
+                                        "required" : [ "success" ]
+                                    },
+                                    "GET" : {  
+                                        "type" : "object",
+                                        "properties" : {  
+                                            "success" : { "type" : "string" },
+                                            "failure" : { "type" : "string" }
+                                        },
+                                        "required" : [ "success" ]
+                                    },
+                                    "POST" : {  
+                                        "type" : "object",
+                                        "properties" : {  
+                                            "success" : { "type" : "string" },
+                                            "failure" : { "type" : "string" }
+                                        },
+                                        "required" : [ "success" ]
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "required" : [ "path", "methods" ]
+                }
+            }
+        },
+        "required" : [ "name", "endpoints" ]
+    }
+}
