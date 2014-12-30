@@ -2,63 +2,75 @@
     "id" : "api-box json schema - reference",
     "$schema" : "http://json-schema.org/schema#",
     "description" : "api-box input json schema",
-    "schema_format" : {
-        "type": "object",
-        "properties" : {
-            "name" : { "type" : "string" },
-            "version" : { "type" : "string" },
-            "prefix" : { "type" : "string" },
-            "endpoints" : {
-                "type" : "array",
-                "items" : {
-                    "type" : "objects",
-                    "properties" : {
-                        "path" : { "type" : "string" },
-                        "method" : {
-                            "type" : "array",
-                            "items" : {
-                                "type" : "object",
-                                "properties" : {  
-                                    "PUT" : {  
-                                        "type" : "object",
-                                        "properties" : {  
-                                            "success" : { "type" : "string" },
-                                            "failure" : { "type" : "string" }
-                                        },
-                                        "required" : [ "success" ]
-                                    },
-                                    "DELETE" : {  
-                                        "type" : "object",
-                                        "properties" : {  
-                                            "success" : { "type" : "string" },
-                                            "failure" : { "type" : "string" }
-                                        },
-                                        "required" : [ "success" ]
-                                    },
-                                    "GET" : {  
-                                        "type" : "object",
-                                        "properties" : {  
-                                            "success" : { "type" : "string" },
-                                            "failure" : { "type" : "string" }
-                                        },
-                                        "required" : [ "success" ]
-                                    },
-                                    "POST" : {  
-                                        "type" : "object",
-                                        "properties" : {  
-                                            "success" : { "type" : "string" },
-                                            "failure" : { "type" : "string" }
-                                        },
-                                        "required" : [ "success" ]
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    "required" : [ "path", "methods" ]
-                }
-            }
+    "type" : "object",
+    "properties" : {
+        "name" : { "type" : "string" },
+        "version" : { "type" : "string" },
+        "prefix" : { "type" : "string" },
+        "endpoints" : {
+            "type" : "array",
+            "items" : {
+                "type" : "object",
+                "properties" : {
+                    "path" : { "type" : "string" },
+                    "methods" : {
+                        "type" : "array",
+                        "minItems" : 1,
+                        "items" : {
+                            "type" : "object",
+                            "oneOf" : [
+                                { "$ref" : "#/definitions/GET" },
+                                { "$ref" : "#/definitions/POST" },
+                                { "$ref" : "#/definitions/PUT" },
+                                { "$ref" : "#/definitions/DELETE" }
+                            ]
+                        },
+                        "uniqueItems" : true
+                    }
+                },
+                "required" : [ "path" ]
+            },
+            "uniqueItems" : true
         },
-        "required" : [ "name", "endpoints" ]
+        "global" : {
+            "type" : "object"
+        }
+    },
+    "additionalProperties" : false,
+    "required" : [ "name", "endpoints" ],
+
+    "definitions" : {
+        "GET" : {
+            "type" : "object",
+            "properties" : {
+                "input" : { "type" : "object" },
+                "result" : { "type" : "object" }
+            },
+            "required" : [ "result" ]
+        },
+        "POST" : {
+            "type" : "object",
+            "properties" : {
+                "input" : { "type" : "object" },
+                "result" : { "type" : "object" }
+            },
+            "required" : [ "result" ]
+        },
+        "PUT" : {
+            "type" : "object",
+            "properties" : {
+                "input" : { "type" : "object" },
+                "result" : { "type" : "object" }
+            },
+            "required" : [ "result" ]
+        },
+        "DELETE" : {
+            "type" : "object",
+            "properties" : {
+                "input" : { "type" : "object" },
+                "result" : { "type" : "object" }
+            },
+            "required" : [ "result" ]
+        }
     }
 }

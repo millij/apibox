@@ -18,7 +18,7 @@ class SchemaValidatorTest(unittest.TestCase):
         self.assertTrue(True)
 
     def test_schema(self):
-        json = {"name" : "Eggs", "price" : 34.99}
+        json = {"name" : 11, "price" : 34.99, "endpoints" : []}
         is_valid = validate_json(json)
         print is_valid
         self.assertTrue(True)

@@ -1,0 +1,9 @@
+{
+    "name" : "Minimal CMS",
+    "version" : "v1",
+    "prefix" : "/api/v1",
+    "endpoints" : [
+
+    ],
+    "global" : {}
+}
