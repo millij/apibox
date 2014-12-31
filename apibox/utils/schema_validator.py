@@ -1,5 +1,6 @@
 import json
 import os
+import logging as log
 from jsonschema import validate 
 
 JSON_SCHEMA_REL_PATH = "/apibox/utils/schema.json"
@@ -12,7 +13,7 @@ def get_abs_path(rel_path):
     cwd = os.getcwd()
     abs_path = cwd + rel_path
 
-    print "absolute path : " + abs_path
+    log.debug("absolute path : %s", abs_path)
     return abs_path
 
 
@@ -21,6 +22,7 @@ def validate_json(in_json):
     validates whether the json file is in required schema or not.
 
     input: json to be validated
+
     returns: boolean
     """
     # load schema
@@ -28,11 +30,7 @@ def validate_json(in_json):
     schema_data = open(schema_path, "r+")
     schema = json.load(schema_data)
 
-    print "------------- Schema ------------"
-    print schema
-
-    print "------------- In JSON -----------"
-    print in_json
+    log.debug("In coming JSON for validation : %s", str(in_json))
 
     # validate the incoming json
     if validate(in_json, schema) == None :

@@ -9,7 +9,7 @@ def convert(data):
     - data: json object
     Output: dictionary
     '''
-    
+
     if isinstance(data, basestring):
         return str(data)
     elif isinstance(data, collections.Mapping):

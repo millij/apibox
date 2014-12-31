@@ -8,7 +8,6 @@ install:
 	sudo apt-get -y install python-virtualenv
 
 	# creating virtual environment
-	virtualenv envi
-	envi/bin/pip install -r requirements.txt
+	virtualenv virt_env
+	virt_env/bin/pip install -r requirements.txt
 
-	
