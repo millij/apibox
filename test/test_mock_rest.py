@@ -31,9 +31,34 @@ class MockRESTTest(unittest.TestCase):
 
     # --- EndPoint --- #
 
-    def test_endPoint(self):
-        pass
+    def test_endPoint_create(self):
+        path = "/test_ep_1"
+        ep = Endpoint(path, None)
 
+        self.assertEqual(ep.path, path)
+
+        # check the methods
+        self.assertIsNotNone(ep.methods)
+        self.assertEqual(len(ep.methods), 0)
+
+    def test_endPoint_create_empty_path(self):
+        with self.assertRaises(ValueError):
+            ep = Endpoint("", None)
+
+    def test_endPoint_add_method(self):
+        ep = Endpoint("ep_add_test", None)
+
+        # EndPoint methods
+        ep_method1 = EndPointMethod()
+
+        with self.assertRaises(TypeError):
+            ep.add_method("")
+
+        
+
+
+    def test_endPoint_method_method(self):
+        pass
 
     # --- MockREST --- #
 

@@ -36,15 +36,31 @@ class Endpoint(object):
         path: REST endpoint path
         methods: an array of objects of type - EndPointMethod
         """
-        self.path = path
-        self.methods = methods
+        if not path or path.isspace():
+            raise ValueError("Invalid Path")
 
-    def add_endPointMethod(self, ep_method):
+        self.path = path
+        self.methods = methods or []
+
+    def add_method(self, ep_method):
         """
-        endpoint: Endpoint object
-        Adds new endpoint to the the list of existing endpoints
+        ep_method: EndPointMethod object
+        Adds new endpoint to the list of existing endpoints
         """
-        pass
+        if not isinstance(ep_method, EndPointMethod)
+            raise TypeError("Invalid type. expected EndPointMethod")
+
+        self.methods.append(ep_method)
+
+    def remove_method(self, ep_method):
+        """
+        ep_method: EndPointMethod object
+        Removes existing endpoint from the list of existing endpoints
+        """
+        if not isinstance(ep_method, EndPointMethod)
+            raise TypeError("Invalid type. expected EndPointMethod")
+
+        self.methods.remove(ep_method)
 
 
 
