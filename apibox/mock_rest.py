@@ -3,7 +3,24 @@
 This Module holds the definitions of MOCK REST objects.
 """
 
-class EndPointMethod(object):
+class MockRESTBase(object):
+
+    def __json__(self):
+        """
+        exports the current MockREST object to JSON.
+        """
+        import json
+        return json.dumps(james.__dict__, sort_keys=True)
+
+    def __str__(self):
+        return str(self.__dict__)
+
+    def __eq__(self, other): 
+        return self.__dict__ == other.__dict__
+
+
+
+class EndPointMethod(MockRESTBase):
     """
     defines a specific method of an endpoint. An endpoint with the same path
     can have have multiple request method types
@@ -24,10 +41,12 @@ class EndPointMethod(object):
         """
         Validates the input data.
         """
-        pass
+        # TODO validator logic
+        return True
 
 
-class Endpoint(object):
+
+class EndPoint(MockRESTBase):
     'Defines a REST endpoint'
 
     def __init__(self, path, methods):
@@ -47,7 +66,7 @@ class Endpoint(object):
         ep_method: EndPointMethod object
         Adds new endpoint to the list of existing endpoints
         """
-        if not isinstance(ep_method, EndPointMethod)
+        if not isinstance(ep_method, EndPointMethod):
             raise TypeError("Invalid type. expected EndPointMethod")
 
         self.methods.append(ep_method)
@@ -57,37 +76,55 @@ class Endpoint(object):
         ep_method: EndPointMethod object
         Removes existing endpoint from the list of existing endpoints
         """
-        if not isinstance(ep_method, EndPointMethod)
+        if not isinstance(ep_method, EndPointMethod):
             raise TypeError("Invalid type. expected EndPointMethod")
 
-        self.methods.remove(ep_method)
+        try:
+            self.methods.remove(ep_method)
+        except ValueError as err:
+            # log TypeError
+            pass
 
 
 
-class MockREST(object):
+class MockREST(MockRESTBase):
     'Defines a mock rest object. Includes all its end-points definitions.'
 
     def __init__(self, name, version, prefix, endpoints):
         """
         default constructor
         """
+        if not name or name.isspace():
+            raise ValueError("Invalid Name")
+
         self.name = name
         self.version = version
         self.prefix = prefix
-        self.endpoints = endpoints
+        self.endpoints = endpoints or []
 
-
-    def add_endPoint(self, endpoint):
+    def add_endPoint(self, ep):
         """
-        endpoint: Endpoint object
+        endpoint: EndPoint object
         Adds new endpoint to the the list of existing endpoints
         """
-        pass
+        if not isinstance(ep, EndPoint):
+            raise TypeError("Invalid type. expected EndPoint")
 
-    def export_as_json(self):
+        self.endpoints.append(ep)
+
+    def remove_endPoint(self, ep):
         """
-        exports the current MockREST object to JSON.
+        endpoint: EndPoint object
+        Adds new endpoint to the the list of existing endpoints
         """
-        pass
+        if not isinstance(ep, EndPoint):
+            raise TypeError("Invalid type. expected EndPoint")
+
+        try:
+            self.endpoints.remove(ep)
+        except ValueError as err:
+            # log TypeError
+            pass
+
 
 
