@@ -4,6 +4,7 @@ This Module holds the definitions of MOCK REST objects.
 """
 
 class MockRESTBase(object):
+    'Base class for Mock REST API classes'
 
     def __json__(self):
         """
@@ -37,6 +38,10 @@ class EndPointMethod(MockRESTBase):
         self.inp_data = inp_data
         self.result = result
 
+    @classmethod
+    def from_json(method_json):
+        pass
+
     def is_input_valid(self, in_data):
         """
         Validates the input data.
@@ -63,6 +68,11 @@ class EndPoint(MockRESTBase):
         self.path = path
         self.methods = methods or []
 
+    @classmethod
+    def from_json(endpoint_json):
+        pass
+
+
     def add_method(self, ep_method):
         """
         Adds new endpoint_method to the existing list.
@@ -87,6 +97,12 @@ class EndPoint(MockRESTBase):
             # log TypeError
             pass
 
+    def get_method(self, in_method_type):
+        """
+        Returns the Method with the given type
+        :param in_method_type: request method type
+        """
+        pass
 
 
 class MockREST(MockRESTBase):
@@ -107,6 +123,11 @@ class MockREST(MockRESTBase):
         self.version = version
         self.prefix = prefix or ""
         self.endpoints = endpoints or []
+
+    @classmethod
+    def from_json(mock_rest_json):
+        pass
+
 
     def add_endPoint(self, ep):
         """
@@ -132,5 +153,33 @@ class MockREST(MockRESTBase):
             # log TypeError
             pass
 
+    def get_endpoint(self, in_path):
+        """
+        Returns the endpoint with the given path
+        :param in_path: path of the endpoint
+        """
+        pass
+
+
+
+class MockRESTServer(MockRESTBase):
+    'defines a mock rest server'
+
+    default_host = 0.0.0.0
+    default_port = 5000
+
+    def __init__(self, mock_rest, host, port):
+        """
+        default constructor
+        :param mock_rest: object containing all the MockAPI details.
+        :param host: host to start the server at.. (default: 0.0.0.0)
+        :param port: port to start the server at.. (default: 5000)  
+        """
+        if not isinstance(mock_rest, MockREST):
+            raise TypeError("Invalid type. expected MockREST")
+
+        self.mock_rest = mock_rest
+        self.host = host or MockRESTServer.default_host
+        self.port = port or MockRESTServer.default_port
 
 
