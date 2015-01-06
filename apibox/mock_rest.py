@@ -40,7 +40,10 @@ class EndPointMethod(MockRESTBase):
 
     @classmethod
     def from_json(method_json):
-        pass
+        self.method = method_json.get("method")
+        self.inp_data = method_json.get("inp_data")
+        self.result = method_json.get("result")
+
 
     def is_input_valid(self, in_data):
         """
@@ -70,7 +73,8 @@ class EndPoint(MockRESTBase):
 
     @classmethod
     def from_json(endpoint_json):
-        pass
+        self.path = endpoint_json.get("path")
+        self.methods = endpoint_json.get("methods")
 
 
     def add_method(self, ep_method):
@@ -102,7 +106,11 @@ class EndPoint(MockRESTBase):
         Returns the Method with the given type
         :param in_method_type: request method type
         """
-        pass
+		for method in self.methods:
+        	if method.keys().contains(in_method_type):
+				return method.get(in_method_type)
+			else:
+				return "not a valid method"		
 
 
 class MockREST(MockRESTBase):
@@ -126,7 +134,10 @@ class MockREST(MockRESTBase):
 
     @classmethod
     def from_json(mock_rest_json):
-        pass
+        self.name=mock_rest_json.get("name")
+		self.version = mock_rest_json.get("version")
+        self.prefix = mock_rest_json.get("prefix")
+        self.endpoints = mock_rest_json.get("endpoints")
 
 
     def add_endPoint(self, ep):
@@ -158,7 +169,11 @@ class MockREST(MockRESTBase):
         Returns the endpoint with the given path
         :param in_path: path of the endpoint
         """
-        pass
+		for end_p in self.endpoints:
+			if end_p.get("path")==in_path:
+        		return end_p
+			else:
+				return "not a valid path"
 
 
 
