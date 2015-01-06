@@ -3,6 +3,11 @@
 This Module holds the definitions of MOCK REST objects.
 """
 
+import logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+
 class MockRESTBase(object):
     'Base class for Mock REST API classes'
 
@@ -44,6 +49,9 @@ class EndPointMethod(MockRESTBase):
         self.inp_data = method_json.get("inp_data")
         self.result = method_json.get("result")
 
+	def get_result(self):
+		return self.result
+	
 
     def is_input_valid(self, in_data):
         """
@@ -99,7 +107,8 @@ class EndPoint(MockRESTBase):
             self.methods.remove(ep_method)
         except ValueError as err:
             # log TypeError
-            pass
+			logger.debug(err)
+            
 
     def get_method(self, in_method_type):
         """
@@ -175,6 +184,8 @@ class MockREST(MockRESTBase):
 			else:
 				return "not a valid path"
 
+	def get_name(self):
+		return self.name
 
 
 class MockRESTServer(MockRESTBase):
