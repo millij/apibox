@@ -109,17 +109,20 @@ class EndPoint(MockRESTBase):
             # log TypeError
 			logger.debug(err)
             
-
     def get_method(self, in_method_type):
         """
         Returns the Method with the given type
         :param in_method_type: request method type
         """
-		for method in self.methods:
-        	if method.keys().contains(in_method_type):
-				return method.get(in_method_type)
-			else:
-				return "not a valid method"		
+        try:
+            for method in self.methods:
+                print str(self.methods),type(self.methods)
+                if method.keys().contains(in_method_type):
+                    return method.get(in_method_type)
+                else:
+                        return "not a valid method"		
+        except Exception, e:
+            print e
 
 
 class MockREST(MockRESTBase):
@@ -144,7 +147,7 @@ class MockREST(MockRESTBase):
     @classmethod
     def from_json(mock_rest_json):
         self.name=mock_rest_json.get("name")
-		self.version = mock_rest_json.get("version")
+        self.version = mock_rest_json.get("version")
         self.prefix = mock_rest_json.get("prefix")
         self.endpoints = mock_rest_json.get("endpoints")
 
@@ -178,11 +181,13 @@ class MockREST(MockRESTBase):
         Returns the endpoint with the given path
         :param in_path: path of the endpoint
         """
-		for end_p in self.endpoints:
-			if end_p.get("path")==in_path:
-        		return end_p
-			else:
-				return "not a valid path"
+        for end_p in self.endpoints:
+            print type(end_p), " this is end_p"
+            print end_p.get_method("path"), " this is path"
+            if end_p.get_method("path")==in_path:
+                return end_p
+            else:
+                return "not a valid path"
 
 	def get_name(self):
 		return self.name
@@ -191,7 +196,7 @@ class MockREST(MockRESTBase):
 class MockRESTServer(MockRESTBase):
     'defines a mock rest server'
 
-    default_host = 0.0.0.0
+    default_host ='0.0.0.0'
     default_port = 5000
 
     def __init__(self, mock_rest, host, port):
