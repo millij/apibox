@@ -29,17 +29,19 @@ class EndPointMethod(MockRESTBase):
     def __init__(self, method, inp_data, result):
         """
         Default constructor.
-        method: Request method type
-        inp_data: inp request data/body (if any)
-        result: The result of the request
+        :param method: Request method type
+        :param np_data: inp request data/body (if any)
+        :param result: The result of the request
         """
         self.method = method
         self.inp_data = inp_data
         self.result = result
 
-    def is_input_valid(self, data):
+    def is_input_valid(self, in_data):
         """
         Validates the input data.
+        :param in_data: incoming data.
+        :return: True if the incoming data is valid and acceptible.
         """
         # TODO validator logic
         return True
@@ -52,8 +54,8 @@ class EndPoint(MockRESTBase):
     def __init__(self, path, methods):
         """
         default constructor. 
-        path: REST endpoint path
-        methods: an array of objects of type - EndPointMethod
+        :param path: REST endpoint path
+        :param methods: an array of objects of type - EndPointMethod
         """
         if not path or path.isspace():
             raise ValueError("Invalid Path")
@@ -63,8 +65,8 @@ class EndPoint(MockRESTBase):
 
     def add_method(self, ep_method):
         """
-        ep_method: EndPointMethod object
         Adds new endpoint to the list of existing endpoints
+        :param ep_method: EndPointMethod object
         """
         if not isinstance(ep_method, EndPointMethod):
             raise TypeError("Invalid type. expected EndPointMethod")
@@ -73,8 +75,8 @@ class EndPoint(MockRESTBase):
 
     def remove_method(self, ep_method):
         """
-        ep_method: EndPointMethod object
         Removes existing endpoint from the list of existing endpoints
+        :param ep_method: EndPointMethod object
         """
         if not isinstance(ep_method, EndPointMethod):
             raise TypeError("Invalid type. expected EndPointMethod")
@@ -93,6 +95,10 @@ class MockREST(MockRESTBase):
     def __init__(self, name, version, prefix, endpoints):
         """
         default constructor
+        :param name: Name of the application.
+        :param version: Version details of API (if any).
+        :param prefix: Common prefix to prepend to all API paths (if any).
+        :param endpoints: array of Mock API endpoints.
         """
         if not name or name.isspace():
             raise ValueError("Invalid Name")
@@ -104,8 +110,8 @@ class MockREST(MockRESTBase):
 
     def add_endPoint(self, ep):
         """
-        endpoint: EndPoint object
         Adds new endpoint to the the list of existing endpoints
+        :param endpoint: EndPoint object
         """
         if not isinstance(ep, EndPoint):
             raise TypeError("Invalid type. expected EndPoint")
@@ -114,8 +120,8 @@ class MockREST(MockRESTBase):
 
     def remove_endPoint(self, ep):
         """
-        endpoint: EndPoint object
         Adds new endpoint to the the list of existing endpoints
+        :param endpoint: EndPoint object
         """
         if not isinstance(ep, EndPoint):
             raise TypeError("Invalid type. expected EndPoint")

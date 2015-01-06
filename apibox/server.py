@@ -10,6 +10,9 @@ class MockRESTServer(object):
     def __init__(self, mock_rest, host, port):
         """
         default constructor
+        :param mock_rest: object containing all the MockAPI details.
+        :param host: host to start the server at.. (default: 0.0.0.0)
+        :param port: port to start the server at.. (default: 5000)  
         """
         if not isinstance(mock_rest, MockREST):
             raise TypeError("Invalid type. expected MockREST")
