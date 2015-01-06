@@ -10,7 +10,7 @@ class MockRESTBase(object):
         exports the current MockREST object to JSON.
         """
         import json
-        return json.dumps(james.__dict__, sort_keys=True)
+        return json.dumps(self.__dict__, sort_keys=True)
 
     def __str__(self):
         return str(self.__dict__)
