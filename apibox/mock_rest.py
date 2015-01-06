@@ -107,8 +107,8 @@ class EndPoint(MockRESTBase):
             self.methods.remove(ep_method)
         except ValueError as err:
             # log TypeError
-			logger.debug(err)
-            
+            logger.debug(err)
+
     def get_method(self, in_method_type):
         """
         Returns the Method with the given type
@@ -189,8 +189,6 @@ class MockREST(MockRESTBase):
             else:
                 return "not a valid path"
 
-	def get_name(self):
-		return self.name
 
 
 class MockRESTServer(MockRESTBase):
@@ -212,5 +210,9 @@ class MockRESTServer(MockRESTBase):
         self.mock_rest = mock_rest
         self.host = host or MockRESTServer.default_host
         self.port = port or MockRESTServer.default_port
+
+
+    def process_request(self, path, method, inp_data):
+        pass
 
 

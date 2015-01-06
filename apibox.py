@@ -21,6 +21,8 @@ import sys
 import getopt
 import argparse
 
+from apibox.ui.server import UIServer
+
 def verify_virtualenv():
     'Verifies the virtual environment.'
 
@@ -39,6 +41,9 @@ def process_arguments(args):
     enable_ui = args.ui
     verbose = args.verbosity
 
+    if enable_ui:
+        ui_server = UIServer()
+        ui_server.start()
 
     print args
 

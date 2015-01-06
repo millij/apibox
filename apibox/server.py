@@ -1,4 +1,23 @@
 from mock_rest import *
+
+class AppContainer(object):
+
+    apps = {}
+
+    def __init__(self):
+        pass
+
+    def add_app(self, app_name, mock_rest):
+        pass
+
+    def remove_app(self, app_name):
+        pass
+
+    def get_app(self, app_name):
+        pass
+
+
+
 app_container = {}
 def launch(host, port, mock_rest):
     """
