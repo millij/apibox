@@ -65,7 +65,7 @@ class EndPoint(MockRESTBase):
 
     def add_method(self, ep_method):
         """
-        Adds new endpoint to the list of existing endpoints
+        Adds new endpoint_method to the existing list.
         :param ep_method: EndPointMethod object
         """
         if not isinstance(ep_method, EndPointMethod):
@@ -75,7 +75,7 @@ class EndPoint(MockRESTBase):
 
     def remove_method(self, ep_method):
         """
-        Removes existing endpoint from the list of existing endpoints
+        Removes existing endpoint_method from the existing list.
         :param ep_method: EndPointMethod object
         """
         if not isinstance(ep_method, EndPointMethod):
@@ -105,7 +105,7 @@ class MockREST(MockRESTBase):
 
         self.name = name
         self.version = version
-        self.prefix = prefix
+        self.prefix = prefix or ""
         self.endpoints = endpoints or []
 
     def add_endPoint(self, ep):
@@ -120,7 +120,7 @@ class MockREST(MockRESTBase):
 
     def remove_endPoint(self, ep):
         """
-        Adds new endpoint to the the list of existing endpoints
+        Removes the endpoint from the the list of existing endpoints
         :param endpoint: EndPoint object
         """
         if not isinstance(ep, EndPoint):
