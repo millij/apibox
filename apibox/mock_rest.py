@@ -44,13 +44,15 @@ class EndPointMethod(MockRESTBase):
         self.result = result
 
     @classmethod
-    def from_json(method_json):
-        self.method = method_json.get("method")
-        self.inp_data = method_json.get("inp_data")
-        self.result = method_json.get("result")
+    def from_json(self,method_json):
+        in_method = method_json.get("method")
+        in_inp_data = method_json.get("inp_data")
+        in_result = method_json.get("result")
 
-	def get_result(self):
-		return self.result
+        return EndPointMethod(in_method,in_inp_data,in_result)
+
+    def get_result(self):
+        return self.result
 	
 
     def is_input_valid(self, in_data):
@@ -80,10 +82,10 @@ class EndPoint(MockRESTBase):
         self.methods = methods or []
 
     @classmethod
-    def from_json(endpoint_json):
-        self.path = endpoint_json.get("path")
-        self.methods = endpoint_json.get("methods")
-
+    def from_json(self,endpoint_json):
+        in_path = endpoint_json.get("path")
+        in_methods = endpoint_json.get("methods") or []
+        return EndPoint(in_path,in_methods)
 
     def add_method(self, ep_method):
         """
@@ -116,13 +118,13 @@ class EndPoint(MockRESTBase):
         """
         try:
             for method in self.methods:
-                print str(self.methods),type(self.methods)
                 if method.keys().contains(in_method_type):
                     return method.get(in_method_type)
-                else:
-                        return "not a valid method"		
-        except Exception, e:
-            print e
+            else:
+                return "not a valid method"		
+        except Exception as e:
+            # log TypeError
+            pass
 
 
 class MockREST(MockRESTBase):
@@ -145,12 +147,12 @@ class MockREST(MockRESTBase):
         self.endpoints = endpoints or []
 
     @classmethod
-    def from_json(mock_rest_json):
-        self.name=mock_rest_json.get("name")
-        self.version = mock_rest_json.get("version")
-        self.prefix = mock_rest_json.get("prefix")
-        self.endpoints = mock_rest_json.get("endpoints")
-
+    def from_json(self,mock_rest_json):
+        in_name=mock_rest_json.get("name")
+        in_version = mock_rest_json.get("version")
+        in_prefix = mock_rest_json.get("prefix") or ""
+        in_endpoints = mock_rest_json.get("endpoints") or []
+        return MockTest(in_name,in_version,in_prefix,in_endpoints)
 
     def add_endPoint(self, ep):
         """
@@ -182,12 +184,10 @@ class MockREST(MockRESTBase):
         :param in_path: path of the endpoint
         """
         for end_p in self.endpoints:
-            print type(end_p), " this is end_p"
-            print end_p.get_method("path"), " this is path"
-            if end_p.get_method("path")==in_path:
+            if end_p.get("path")==in_path:
                 return end_p
-            else:
-                return "not a valid path"
+        else:
+            return "not a valid path"
 
 
 
