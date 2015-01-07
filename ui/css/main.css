@@ -45,6 +45,9 @@ a,a:focus {
 a:hover{
 	text-decoration: none;
 }
+.font-bold{
+	font-weight: bold;
+}
 
 
 /*reset ends*/
