@@ -1,12 +1,14 @@
 
-from apibox.mock_rest import *
-from apibox.utils.schema_validator import *
+from utils.schema_validator import *
 import shelve
+
 from apibox.mock_rest import *
 # from flask.ext.cache import Cache
 from tornado.wsgi import WSGIContainer
 from tornado.httpserver import HTTPServer
 from tornado.ioloop import IOLoop
+
+from mock_rest import *
 
 import multiprocessing as mp
 #TODO: make configurable files
@@ -47,6 +49,9 @@ def launch_app_server_from_file(port, file_path, file_type):
         apps[str(mock_rest.name)] = file_path
         launch_flask_server(port, mock_rest) 
 
+        launch_flask_server(port, mock_rest)
+
+
         # TODO Add these details to app container
 
     else:
@@ -68,6 +73,7 @@ def launch_flask_server(port, mock_rest, shut_down=False):
     :type port: integer
     """
     app_name = mock_rest.name
+   
     from flask import Flask, request
     # cache = Cache(config={'CACHE_TYPE': 'simple'})
 
@@ -80,8 +86,19 @@ def launch_flask_server(port, mock_rest, shut_down=False):
     @app.route('/<path:path>', methods=["GET", "POST", "DELETE", "PUT"])
     def catch_all(path):
         path = "/"+path
+
         endpoint_obj = mock_rest.get_endpoint(path, request.method)
         return str(endpoint_obj)
+        #print path, " this is path"
+        #print (mock_rest.endpoints),"is it mock rest object"
+        endpoint_obj = mock_rest.get_endpoint(path)
+        if type(endpoint_obj)==str:
+            return endpoint_obj
+        else:
+            method = endpoint_obj.get_method(request.method)
+            if type(method)==str:
+                return method
+        return str(method.get_result())
 
     if not shut_down:
         app.run(debug=False, port = port)
