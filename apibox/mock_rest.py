@@ -46,10 +46,10 @@ class EndPointMethod(MockRESTBase):
     @classmethod
     def from_json(self,method_json):
         in_method = method_json.get("method")
-        in_inp_data = method_json.get("inp_data")
+        in_inp_data = method_json.get("input")
         in_result = method_json.get("result")
 
-        return EndPointMethod(in_method,in_inp_data,in_result)
+        return self(in_method,in_inp_data,in_result)
 
     def get_result(self):
         return self.result
@@ -62,6 +62,7 @@ class EndPointMethod(MockRESTBase):
         :return: True if the incoming data is valid and acceptible.
         """
         # TODO validator logic
+		
         return True
 
 
@@ -85,7 +86,7 @@ class EndPoint(MockRESTBase):
     def from_json(self,endpoint_json):
         in_path = endpoint_json.get("path")
         in_methods = endpoint_json.get("methods") or []
-        return EndPoint(in_path,in_methods)
+        return self(in_path,in_methods)
 
     def add_method(self, ep_method):
         """
@@ -118,13 +119,15 @@ class EndPoint(MockRESTBase):
         """
         try:
             for method in self.methods:
-                if method.keys().contains(in_method_type):
-                    return method.get(in_method_type)
+				if not isinstance(ep_method, EndPointMethod):
+            		raise TypeError("Invalid type. expected EndPointMethod")
+                if method.method=in_method_type:
+                    return method
             else:
                 return "not a valid method"		
         except Exception as e:
             # log TypeError
-            pass
+            logger.debug(e)
 
 
 class MockREST(MockRESTBase):
@@ -176,7 +179,7 @@ class MockREST(MockRESTBase):
             self.endpoints.remove(ep)
         except ValueError as err:
             # log TypeError
-            pass
+            logger.debug(err)
 
     def get_endpoint(self, in_path):
         """
@@ -184,13 +187,12 @@ class MockREST(MockRESTBase):
         :param in_path: path of the endpoint
         """
         for end_p in self.endpoints:
-            if end_p.get("path")==in_path:
+            if not isinstance(ep, EndPoint):
+                raise TypeError("Invalid type. expected EndPoint")
+            if end_p.path==in_path:
                 return end_p
         else:
             return "not a valid path"
-
-    def get_all_endpoints(self):
-        pass
 
 
 
