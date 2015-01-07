@@ -37,7 +37,7 @@ def launch_app_server_from_file(port, file_path, file_type):
             mock_rest = MockREST.from_json(content)
 
         # launch server
-        launch_flask_server(port, mock_rest) 
+        launch_flask_server(port, mock_rest)
 
         # TODO Add these details to app container
 
@@ -60,7 +60,7 @@ def launch_flask_server(port, mock_rest, shut_down=False):
     Launches a new mock rest server with the passed configuration.
     """
     app_name = mock_rest.name
-    
+   
     from flask import Flask, request
     app = Flask(app_name)
     @app.route('/', defaults={'path': ''})

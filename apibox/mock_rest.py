@@ -21,7 +21,7 @@ class MockRESTBase(object):
     def __str__(self):
         return str(self.__dict__)
 
-    def __eq__(self, other): 
+    def __eq__(self, other):
         return self.__dict__ == other.__dict__
 
 
@@ -53,7 +53,7 @@ class EndPointMethod(MockRESTBase):
 
     def get_result(self):
         return self.result
-	
+   
 
     def is_input_valid(self, in_data):
         """
@@ -62,7 +62,7 @@ class EndPointMethod(MockRESTBase):
         :return: True if the incoming data is valid and acceptible.
         """
         # TODO validator logic
-		
+       
         return True
 
 
@@ -72,7 +72,7 @@ class EndPoint(MockRESTBase):
 
     def __init__(self, path, methods):
         """
-        default constructor. 
+        default constructor.
         :param path: REST endpoint path
         :param methods: an array of objects of type - EndPointMethod
         """
@@ -119,7 +119,7 @@ class EndPoint(MockRESTBase):
         """
         #print " in get method of EndPoint"
         #print (self.methods), " len of self.methods"
-   
+  
         for method in self.methods:
             #print method , "  this is method"
             #print type(method), " this is type of method"
@@ -136,7 +136,7 @@ class EndPoint(MockRESTBase):
                     return method
         else:
             return "Invalid Method"
-                    
+                   
 
 class MockREST(MockRESTBase):
     'Defines a mock rest object. Includes all its end-points definitions.'
@@ -195,7 +195,7 @@ class MockREST(MockRESTBase):
         :param in_path: path of the endpoint
         """
         #print self.endpoints, " self.endpoints snhbhd"
-       
+      
         for end_p in self.endpoints:
             if not isinstance(end_p, EndPoint) and end_p.get("path") == in_path:
                 try:
@@ -210,8 +210,8 @@ class MockREST(MockRESTBase):
                     return end_p
         else:
             return "Invalid path"
-            
-                
+           
+               
 
 class MockRESTServer(MockRESTBase):
     'defines a mock rest server'
@@ -224,7 +224,7 @@ class MockRESTServer(MockRESTBase):
         default constructor
         :param mock_rest: object containing all the MockAPI details.
         :param host: host to start the server at.. (default: 0.0.0.0)
-        :param port: port to start the server at.. (default: 5000)  
+        :param port: port to start the server at.. (default: 5000) 
         """
         if not isinstance(mock_rest, MockREST):
             raise TypeError("Invalid type. expected MockREST")
@@ -236,5 +236,6 @@ class MockRESTServer(MockRESTBase):
 
     def process_request(self, path, method, inp_data):
         pass
+
 
 
