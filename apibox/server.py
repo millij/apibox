@@ -1,8 +1,7 @@
 
-from apibox.mock_rest import *
-from apibox.utils.schema_validator import *
+from utils.schema_validator import *
 import shelve
-from apibox.mock_rest import *
+from mock_rest import *
 
 
 
@@ -61,14 +60,22 @@ def launch_flask_server(port, mock_rest, shut_down=False):
     Launches a new mock rest server with the passed configuration.
     """
     app_name = mock_rest.name
+    
     from flask import Flask, request
     app = Flask(app_name)
     @app.route('/', defaults={'path': ''})
     @app.route('/<path:path>', methods=["GET", "POST", "DELETE", "PUT"])
     def catch_all(path):
         path = "/"+path
+        #print path, " this is path"
+        #print (mock_rest.endpoints),"is it mock rest object"
         endpoint_obj = mock_rest.get_endpoint(path)
-        method = endpoint_obj.get_method(request.method)
+        if type(endpoint_obj)==str:
+            return endpoint_obj
+        else:
+            method = endpoint_obj.get_method(request.method)
+            if type(method)==str:
+                return method
         return str(method.get_result())
     if not shut_down:
         app.run(debug=True, port = port)

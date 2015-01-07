@@ -117,18 +117,26 @@ class EndPoint(MockRESTBase):
         Returns the Method with the given type
         :param in_method_type: request method type
         """
-        try:
-            for method in self.methods:
-				if not isinstance(ep_method, EndPointMethod):
-            		raise TypeError("Invalid type. expected EndPointMethod")
-                if method.method=in_method_type:
+        #print " in get method of EndPoint"
+        #print (self.methods), " len of self.methods"
+   
+        for method in self.methods:
+            #print method , "  this is method"
+            #print type(method), " this is type of method"
+            if not isinstance(method, EndPointMethod) and method.get("method") == in_method_type:
+                try:
+                    #do something
+                    method_obj = EndPointMethod(method.get("method"),method.get("input"),method.get("result"))
+                    #print method_obj, "hjdbghbfbfkfbkfbvfbxd"
+                    #print type(method_obj), " hjdchukvvbbvfuvvbb"
+                    return method_obj
+                except TypeError as err:
+                    logger.debug(err)
+            elif isinstance(method, EndPointMethod) and method.method==in_method_type:
                     return method
-            else:
-                return "not a valid method"		
-        except Exception as e:
-            # log TypeError
-            logger.debug(e)
-
+        else:
+            return "Invalid Method"
+                    
 
 class MockREST(MockRESTBase):
     'Defines a mock rest object. Includes all its end-points definitions.'
@@ -186,15 +194,24 @@ class MockREST(MockRESTBase):
         Returns the endpoint with the given path
         :param in_path: path of the endpoint
         """
+        #print self.endpoints, " self.endpoints snhbhd"
+       
         for end_p in self.endpoints:
-            if not isinstance(ep, EndPoint):
-                raise TypeError("Invalid type. expected EndPoint")
-            if end_p.path==in_path:
-                return end_p
+            if not isinstance(end_p, EndPoint) and end_p.get("path") == in_path:
+                try:
+                    #do something
+                    #print end_p.get("path"), " this is path aaaaaaaaaaaaaa"
+                    #print end_p.get("method"), " this is method aaaaaaaaaaa"
+                    endpoint_obj = EndPoint(end_p.get("path"),end_p.get("methods"))
+                    return endpoint_obj
+                except TypeError as err:
+                    logger.debug(err)
+            elif isinstance(end_p, EndPoint) and end_p.path==in_path:
+                    return end_p
         else:
-            return "not a valid path"
-
-
+            return "Invalid path"
+            
+                
 
 class MockRESTServer(MockRESTBase):
     'defines a mock rest server'
