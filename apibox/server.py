@@ -8,46 +8,31 @@ class AppContainer(object):
         pass
 
     def add_app(self, app_name, mock_rest):
-        pass
+        apps.update({app_name:mock_rest})
 
     def remove_app(self, app_name):
-        pass
+        del apps[app_name]
 
     def get_app(self, app_name):
-        pass
+        return apps.get(app_name)
 
 
 
-app_container = {}
 def launch(host, port, mock_rest):
     """
     Launches a new mock rest server with the passed configuration.
     """
-    #mock_rest_obj = MockREST.from_json(mr_json)
-    #app_name = host + "_" + port
-    #app_container.update({app_name:mock_rest_obj})
+    app_name = mock_rest.name
     from flask import Flask, request
-    app = Flask(__name__)
-    @app.route("/login")
-    def h():
-        print str(mock_rest.endpoints[0])
-        path = "/login"
-        method = "GET"
-        me = mock_rest.get_endpoint(path)
-        mee = EndPoint(path,me)
-        return str(mee.get_method("GET")) 
+    app = Flask(app_name)
+    @app.route('/', defaults={'path': ''})
+    @app.route('/<path:path>', methods=["GET", "POST", "DELETE", "PUT"])
+    def catch_all(path):
+        path = "/"+path
+        endpoint_obj = mock_rest.get_endpoint(path)
+        method = endpoint_obj.get_method(request.method)
+        return str(method.get_result())
 
     app.run(debug=True,host = host,port = port)
 
-if __name__ == "__main__":
-    ep_m = EndPointMethod("GET", "", "hello hi")
-    mock_rest = MockREST("mr_test", "", "", None)
-    mr_ep1 = EndPoint("/login", [])
-           
 
-    mock_rest.add_endPoint(mr_ep1)
-
-    #print str(mr_ep1)
-    #print str(mock_rest.endpoints[0])
-
-    launch("0.0.0.0",5000,mock_rest)
