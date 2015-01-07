@@ -1,4 +1,4 @@
-app.controller("mainController", ['$scope', '$resource', function($scope, $resource) {
+app.controller("mainController", function($scope, $resource, ConfigService) {
 	$scope.init = function() {
 		$scope.ajax.readAllConfig(function(response){
 			if(response){
@@ -23,9 +23,10 @@ app.controller("mainController", ['$scope', '$resource', function($scope, $resou
     };
 
     var isConfigSelected = false;
-	$scope.addRow = function(){		
+	$scope.saveRow = function(){	
+		var selectedRow;
 		if(isConfigSelected){
-			var selectedRow = $(".configList>tr").index($(".configList>tr.success"));
+			selectedRow = $(".configList>tr").index($(".configList>tr.success"));
 			if(selectedRow>=0){
 				$scope.configurations[selectedRow].path = $scope.path;
 				$scope.configurations[selectedRow].method = $scope.method;
@@ -37,7 +38,11 @@ app.controller("mainController", ['$scope', '$resource', function($scope, $resou
 
 		} else{
 			$scope.configurations.push({ 'path':$scope.path, 'method': $scope.method, 'response':$scope.response });
+			selectedRow = $scope.configurations.length-1;
 		}
+		$scope.ajax.updateConfig(function(response){
+			alert("Update config "+ ((response)?"Succed": "Failed"));
+		}, $scope.configurations[selectedRow]);
 
 		$scope.path='';
 		$scope.method='';
@@ -46,8 +51,11 @@ app.controller("mainController", ['$scope', '$resource', function($scope, $resou
 	
 	$scope.removeRow = function(path){				
 		var index = _findRowIndex(path);
-
 		$scope.configurations.splice( index, 1 );		
+
+		$scope.ajax.deleteConfig(function(response){
+			alert("Delete config "+ ((response)?"Succed": "Failed"));
+		}, path);
 	};
 
 	$scope.editRow = function(path){
@@ -82,23 +90,28 @@ app.controller("mainController", ['$scope', '$resource', function($scope, $resou
 	*/
 	$scope.ajax = {
 		readAllConfig : function(callback){
-			var ConfigList = $resource('/configs');
-			var configs = ConfigList.get(null, function(data) {
-				if(callback){
-					callback.call(null, data);
-				}
-			}, function(){
-				if(callback){
-					callback.call(null);
-				}
+			ConfigService.retrieveConfig(function(){
+				callback.call(null, []);
+			},function(){
+				callback.call(null);
 			});
 		}, 
-		addConfig : function(callback){
-			var NewConfig = $resource('/configs');
+		updateConfig : function(callback, cofigInfo){
+			ConfigService.storeConfig(cofigInfo, function(){
+				callback.call(null, true);
+			},function(){
+				callback.call(null, false);
+			});
+		}, 
+		deleteConfig : function(callback, cofigPath){
+			ConfigService.eraseConfig(cofigPath, function(){
+				callback.call(null, true);
+			},function(){
+				callback.call(null, false);
+			});
 		}
-
 	}
 	
 	
-}]);
+});
 
