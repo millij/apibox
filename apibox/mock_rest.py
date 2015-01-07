@@ -21,7 +21,7 @@ class MockRESTBase(object):
     def __str__(self):
         return str(self.__dict__)
 
-    def __eq__(self, other): 
+    def __eq__(self, other):
         return self.__dict__ == other.__dict__
 
 
@@ -53,7 +53,7 @@ class EndPointMethod(MockRESTBase):
 
     def get_result(self):
         return self.result
-	
+
 
     def is_input_valid(self, in_data):
         """
@@ -62,7 +62,7 @@ class EndPointMethod(MockRESTBase):
         :return: True if the incoming data is valid and acceptible.
         """
         # TODO validator logic
-		
+
         return True
 
 
@@ -119,12 +119,12 @@ class EndPoint(MockRESTBase):
         """
         try:
             for method in self.methods:
-				if not isinstance(ep_method, EndPointMethod):
-            		raise TypeError("Invalid type. expected EndPointMethod")
-                if method.method=in_method_type:
+
+
+                if method.method==in_method_type:
                     return method
             else:
-                return "not a valid method"		
+                return "not a valid method"
         except Exception as e:
             # log TypeError
             logger.debug(e)
@@ -181,16 +181,19 @@ class MockREST(MockRESTBase):
             # log TypeError
             logger.debug(err)
 
-    def get_endpoint(self, in_path):
+    def get_endpoint(self, in_path, method_name):
         """
         Returns the endpoint with the given path
         :param in_path: path of the endpoint
         """
         for end_p in self.endpoints:
-            if not isinstance(ep, EndPoint):
-                raise TypeError("Invalid type. expected EndPoint")
-            if end_p.path==in_path:
-                return end_p
+            # if not isinstance(end_p, EndPoint):
+            #     raise TypeError("Invalid type. expected EndPoint")
+
+            if str(end_p["path"]) == in_path:
+                for me in end_p["methods"]:
+                    if dict(me)["method"] == method_name:
+                        return dict(me)["result"]
         else:
             return "not a valid path"
 

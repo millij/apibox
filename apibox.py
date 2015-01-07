@@ -38,6 +38,7 @@ def process_arguments(args):
     """
     port = args.port
 
+
     file_path = args.file
     file_type = args.type
 
@@ -45,7 +46,8 @@ def process_arguments(args):
     verbose = args.verbosity
 
     # launch APP server from file
-    launch_app_server_from_file(port, file_path, file_type)
+    if file_path:
+        launch_app_server_from_file(port, file_path, file_type)
 
     # Launch the UI server 
     if enable_ui:
@@ -63,7 +65,7 @@ if __name__ == "__main__":
     #parser.add_argument("-h", "--host", default="0.0.0.0", help="Server hostname")
     parser.add_argument("-p", "--port", action="store", type=int, default=5000, help="Server port")
     parser.add_argument("-ui", "--ui", action="store_true", default=False, help="Initiate the server with UI")
-    parser.add_argument("-f", "--file", action="store", required=True, help="RESTful api configuration file")
+    parser.add_argument("-f", "--file", action="store", required=False, help="RESTful api configuration file")
     parser.add_argument("-t", "--type", action="store", default="JSON", help="Configuration file type")
     parser.add_argument("-v", "--verbosity", action="store_true", default=False, help="Increase output verbosity")
 

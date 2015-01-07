@@ -8,15 +8,25 @@ from multiprocessing import Process
 # Mock_rest Requirements
 from apibox.server import AppContainer, apps as a, launch_app_server_from_ui
 from apibox.mock_rest import *
-
+from flask.ext.cache import Cache
 # Schema Validator
 from apibox.utils.schema_validator import *
+
+def send_mr_obj(app_name):
+    k = a[str(app_name)]
+    is_valid, content = validate_file_content(str(k), "JSON")
+    mock_rest = MockREST.from_json(content)
+    kk =  str(mock_rest.endpoints)
+    return mock_rest
 
 class UIServer(object):
     'UI Server object'
 
     port = 8000               # Default UI Server Port 
+    cache = Cache(config={'CACHE_TYPE': 'simple'})
+
     app = Flask(__name__)
+    cache.init_app(app)
 
     def __init__(self):
         print "UI server Initiated"
@@ -34,26 +44,27 @@ class UIServer(object):
 
 
     """ Routes for UI Support """
-
+    @cache.cached(timeout=None)
     @app.route("/", methods=["GET"])
-    @app.route("/app", methods=["GET"])
     def apps_home():
         """
         Return all existing apps as JSON
         """
+        # return "hi ths is kanth"
+        return str(a)
 
-        return "hi here is the length of apps "
-
+    # @cache.cached(timeout=None)
     @app.route("/app/<app_name>", methods=["GET", "POST", "PUT", "DELETE"])
     def app_handler(app_name):
         """
         Applications handler
         """
-
+        import json
         if request.method == 'GET':
             # GET: Return app details
             print "GET"
-            return a.keys()
+            kk = send_mr_obj(app_name)
+            return (json.dumps(kk.endpoints))
 
         elif request.method == 'POST':
             # POST: Create new App
@@ -63,7 +74,7 @@ class UIServer(object):
             is_valid, content = validate_file_content(file_path, file_type)
             if not content is None:
                 mock_rest = MockREST.from_json(content)
-                a[app_name] = mock_rest
+                a[str(mock_rest.name)] = file_path
                 return "Created New App"
             return "Config file is not valid"
 
@@ -75,7 +86,7 @@ class UIServer(object):
             is_valid, content = validate_file_content(file_path, file_type)
             if not content is None:
                 mock_rest = MockREST.from_json(content)
-                a[app_name] = mock_rest
+                a[str(mock_rest.name)] = file_path
                 return "Updated New App"
             return "Config file is not valid"
         else:
@@ -94,9 +105,9 @@ class UIServer(object):
         """
         Starts the app with the given name
         """
-        port_number = "get the port number"
+        port_number = 9999
 
-        launch_app_server_from_ui(port_number, a[app_name])
+        launch_app_server_from_ui(port_number, send_mr_obj(app_name))
         return "successfully started the sever"
 
 
@@ -117,14 +128,15 @@ class UIServer(object):
         if request.method == 'GET':
             # GET: Return endpoint details
             print "GET"
-            return AppContainer.get_app(app_name)
+            kk = send_mr_obj(app_name)
+            return str(kk.endpoints)
         elif request.method == 'POST':
             # POST: Create new endpoint
             print "POST"
             ep_name = "get the file name here from form"
             method_name = "get method name"
             input_data = "get data here"
-            reuslt = "get result for the method"
+            result = "get result for the method"
             ep_meth   =  EndPointMethod(method_name, input_data, result)
             new_ep_obj = EndPoint.add_method(ep_meth)
 

@@ -3,14 +3,18 @@ from apibox.mock_rest import *
 from apibox.utils.schema_validator import *
 import shelve
 from apibox.mock_rest import *
+# from flask.ext.cache import Cache
+from tornado.wsgi import WSGIContainer
+from tornado.httpserver import HTTPServer
+from tornado.ioloop import IOLoop
 
-
-
+#TODO: make configurable files
 
 class AppContainer(object):
     pass
 
 apps = shelve.open("allapps.txt",writeback=True)
+
 
 def add_app(app_name, mock_rest):
     global apps
@@ -38,6 +42,8 @@ def launch_app_server_from_file(port, file_path, file_type):
             mock_rest = MockREST.from_json(content)
 
         # launch server
+        print type(mock_rest.name)
+        apps[str(mock_rest.name)] = file_path
         launch_flask_server(port, mock_rest) 
 
         # TODO Add these details to app container
@@ -62,13 +68,23 @@ def launch_flask_server(port, mock_rest, shut_down=False):
     """
     app_name = mock_rest.name
     from flask import Flask, request
-    app = Flask(app_name)
+    # cache = Cache(config={'CACHE_TYPE': 'simple'})
+
+    app = Flask(__name__)
+    # cache.init_app(app)
+
     @app.route('/', defaults={'path': ''})
     @app.route('/<path:path>', methods=["GET", "POST", "DELETE", "PUT"])
     def catch_all(path):
         path = "/"+path
-        endpoint_obj = mock_rest.get_endpoint(path)
-        method = endpoint_obj.get_method(request.method)
-        return str(method.get_result())
+        endpoint_obj = mock_rest.get_endpoint(path, request.method)
+
+
+        return str(endpoint_obj)
+        # return str(method.get_result())
     if not shut_down:
+#
+# http_server = HTTPServer(WSGIContainer(app))
+# http_server.listen(5000)
+# IOLoop.instance().start()
         app.run(debug=True, port = port)
