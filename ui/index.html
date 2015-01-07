@@ -7,12 +7,11 @@
 
     <!-- css -->
     <link rel="stylesheet" href="css/bootstrap.css">
-    <link rel="stylesheet" href="css/bootstrap-responsive.css">
     <link rel="stylesheet" href="css/main.css">
 
 </head>
 <body ng-app="ApiboxUI">
-  d  <div class="header">
+    <div class="header">
         <div class="container">
             <a href="#" class="link-a">login</a>
             <a href="#" class="logo"></a>
@@ -29,145 +28,76 @@
      </div>
 
     <div class="main-content" ng-controller="mainController" ng-init="init()">
-        <div class="container">
-            <div class="cont-a">
-                <h2>Generate your custom response</h2>
-                <ul class="form-list">
-                    <li>
-                        <label class="label-form"> Path </label>
-                        <div class="form-box">
-                            <input class="input-a"></input>
+        <div style="padding-bottom:50px">
+            <table style="width:100%" class="container">
+                <tr class="row">
+                    <td style="width:50%;vertical-align: top" class="col-lg-5">
+                        <div style="padding-bottom:20px">
+                            <h3>Add Configurations</h3>
                         </div>
-                        <div class="clearfix"></div>
-                    </li>
-
-                    <li>
-                        <label class="label-form"> Method </label>
-                        <div class="form-box">
-                            <div class="dropdown clearfix dd-a">
-                                <button data-toggle="dropdown" id="dropdownMenu1" type="button" class="btn btn-default dropdown-toggle input-a">
-                                    <label>Williams & Sonoma - Post Street<i class="fa fa-caret-down"></i></label>
-                                </button>
-                                <ul aria-labelledby="dropdownMenu1" role="menu" class="dropdown-menu">
-                                    <li role="presentation"><a href="#" tabindex="-1" role="menuitem">Action</a></li>
-                                    <li role="presentation"><a href="#" tabindex="-1" role="menuitem">Another action</a></li>
-                                    <li role="presentation"><a href="#" tabindex="-1" role="menuitem">Something else here</a></li>
-                                </ul>
+                        <form class="form-horizontal" role="form" ng-submit="addRow()">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Path</label>
+                                <div class="col-sm-6">
+                                    <input type="text" class="form-control" name="path" ng-model="path" />
+                                </div>
                             </div>
-                        </div>
-                        <div class="clearfix"></div>
-                    </li>
-
-                    <li>
-                        <label class="label-form">Response</label>
-                        <div class="form-box">
-                            <textarea class="input-a"></textarea>
-                        </div>
-                        <div class="clearfix"></div>
-                    </li>
-
-                    <li>
-                        <label class="label-form"> </label>
-                        <div class="form-box">
-                            <a href="#" class="btn-a">save</a>
-                        </div>
-                        <div class="clearfix"></div>
-                    </li>
-                </ul>
-            </div>
-            <div class="cont-b">
-                <h2>API <a href="#" class="add-api"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> add new api</a></h2>
-                <h3>Your link is ready: <a href="#">http:/xyz.com</a></h3>
-
-                <ul class="list-b">
-                    <li class="lb-header">
-                        <label class="lb-a">Path</label>
-                        <label class="lb-b">Method</label>
-                        <label class="lb-c">Action</label>
-                        <label class="lb-d">Status</label>
-                    </li>
-                    <li>
-                        <label class="lb-a">http:/xyz.com</label>
-                        <label class="lb-b">Post</label>
-                        <label class="lb-c">Active</label>
-                        <label class="lb-d green">Started</label>
-
-                    </li>
-                    <li>
-                        <label class="lb-a">http:/xyz.com</label>
-                        <label class="lb-b">Post</label>
-                        <label class="lb-c">Active</label>
-                        <label class="lb-d green">Started</label>
-                    </li>
-                    <li>
-                        <ul class="form-list">
-                            <li>
-                                <label class="label-form"></label>
-                                <div class="form-box">
-                                    <h4>Edit: http:/xyz.com <a href="#"><span aria-hidden="true" class="glyphicon glyphicon-remove"></span></a></h4>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Method</label>
+                                <div class="col-sm-6">
+                                    <input type="text" class="form-control" name="method" ng-model="method" />
                                 </div>
-                            </li>
-                            <li>
-                                <label class="label-form">Path</label>
-                                <div class="form-box">
-                                    <input class="input-a"></input>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Response</label>
+                                <div class="col-sm-6">
+                                    <textarea type="text" class="form-control" name="response" ng-model="response"></textarea>
                                 </div>
-                                <div class="clearfix"></div>
-                            </li>
-                            <li>
-                                <label class="label-form">Method</label>
-                                <div class="form-box">
-                                    <div class="dropdown clearfix dd-a">
-                                        <button data-toggle="dropdown" id="dropdownMenu1" type="button" class="btn btn-default dropdown-toggle input-a">
-                                            <label>Williams & Sonoma - Post Street<i class="fa fa-caret-down"></i></label>
-                                        </button>
-                                        <ul aria-labelledby="dropdownMenu1" role="menu" class="dropdown-menu">
-                                            <li role="presentation"><a href="#" tabindex="-1" role="menuitem">Action</a></li>
-                                            <li role="presentation"><a href="#" tabindex="-1" role="menuitem">Another action</a></li>
-                                            <li role="presentation"><a href="#" tabindex="-1" role="menuitem">Something else here</a></li>
-                                        </ul>
-                                    </div>
+                            </div>
+                            <div class="form-group">
+                                <div style="padding-left:110px">
+                                    <input type="submit" value="Submit" class="btn btn-primary"/>
                                 </div>
-                                <div class="clearfix"></div>
-                            </li>
-
-                            <li>
-                                <label class="label-form">Response</label>
-                                <div class="form-box">
-                                    <textarea class="input-a"></textarea>
-                                </div>
-                                <div class="clearfix"></div>
-                            </li>
-
-                            <li>
-                                <label class="label-form"></label>
-                                <div class="form-box">
-                                    <a href="#" class="btn-a">save</a>
-                                </div>
-                                <div class="clearfix"></div>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <label class="lb-a">http:/xyz.com</label>
-                        <label class="lb-b">Post</label>
-                        <label class="lb-c">Active</label>
-                        <label class="lb-d green">Started</label>
-                    </li>
-                </li>
-            </ul>
+                            </div>
+                        </form>
+                    </td>
+                    <td style="vertical-align: top" class="col-lg-5">
+                        <table class="table table-hover">
+                            <caption class="font-bold">Select the row to edit</caption>
+                            <thead>
+                                <tr>
+                                    <th>Path</th>
+                                    <th>Method</th>
+                                    <th>Response</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody class="configList">
+                                <tr ng-repeat="config in configurations" ng-click="editRow(config.path)">
+                                    <td>{{config.path}}</td>
+                                    <td>{{config.method}}</td>
+                                    <td>{{config.response}}</td>
+                                    <td>
+                                        <input type="button" value="Remove" class="btn btn-link btn-xs" ng-click="removeRow(config.path)"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            </table>
         </div>
     </div>
 
     <!-- scripts -->
     <section>
         <script type="text/javascript" src="js/angular.min.js"></script>
+        <script type="text/javascript" src="js/angular-resource.js"></script>
         <script type="text/javascript" src="js/apibox/app.js"></script>
         <script type="text/javascript" src="js/apibox/controllers/mainController.js"></script>
 
         <script type="text/javascript" src="js/jquery.js"></script>
         <script type="text/javascript" src="js/bootstrap.min.js"></script>
-        <script type="text/javascript" src="js/custom.js"></script>
     </section>
 
 </body>

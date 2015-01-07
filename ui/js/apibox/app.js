@@ -1,1 +1,1 @@
-var app = angular.module('ApiboxUI',[]);
+var app = angular.module('ApiboxUI',['ngResource']);
