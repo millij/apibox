@@ -18,12 +18,15 @@
                         "minItems" : 1,
                         "items" : {
                             "type" : "object",
-                            "oneOf" : [
-                                { "$ref" : "#/definitions/GET" },
-                                { "$ref" : "#/definitions/POST" },
-                                { "$ref" : "#/definitions/PUT" },
-                                { "$ref" : "#/definitions/DELETE" }
-                            ]
+                            "properties" : {
+                                "method" : {
+                                    "enum": [ "GET", "POST", "PUT", "DELETE"]
+                                },
+                                "content_type" : { "type" : "string" },
+                                "input" : { "type" : "object" },
+                                "result" : { "type" : "object" }
+                            },
+                            "required" : [ "type", "result" ]
                         },
                         "uniqueItems" : true
                     }
@@ -40,37 +43,6 @@
     "required" : [ "name", "endpoints" ],
 
     "definitions" : {
-        "GET" : {
-            "type" : "object",
-            "properties" : {
-                "input" : { "type" : "object" },
-                "result" : { "type" : "object" }
-            },
-            "required" : [ "result" ]
-        },
-        "POST" : {
-            "type" : "object",
-            "properties" : {
-                "input" : { "type" : "object" },
-                "result" : { "type" : "object" }
-            },
-            "required" : [ "result" ]
-        },
-        "PUT" : {
-            "type" : "object",
-            "properties" : {
-                "input" : { "type" : "object" },
-                "result" : { "type" : "object" }
-            },
-            "required" : [ "result" ]
-        },
-        "DELETE" : {
-            "type" : "object",
-            "properties" : {
-                "input" : { "type" : "object" },
-                "result" : { "type" : "object" }
-            },
-            "required" : [ "result" ]
-        }
+        
     }
 }
