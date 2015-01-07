@@ -22,11 +22,14 @@ import getopt
 import argparse
 
 from apibox.ui.server import UIServer
+from apibox.server import *
 
 def verify_virtualenv():
     'Verifies the virtual environment.'
 
+    # TODO verify dependencies
     pass
+
 
 def process_arguments(args):
     """
@@ -41,13 +44,16 @@ def process_arguments(args):
     enable_ui = args.ui
     verbose = args.verbosity
 
+    # launch APP server from file
+    launch_app_server_from_file(port, file_path, file_type)
+
+    # Launch the UI server 
     if enable_ui:
         ui_server = UIServer()
         ui_server.start()
 
-    print args
+    # TODO Handle verbosity
 
-    pass
 
 if __name__ == "__main__":
 
@@ -57,7 +63,7 @@ if __name__ == "__main__":
     #parser.add_argument("-h", "--host", default="0.0.0.0", help="Server hostname")
     parser.add_argument("-p", "--port", action="store", type=int, default=5000, help="Server port")
     parser.add_argument("-ui", "--ui", action="store_true", default=False, help="Initiate the server with UI")
-    parser.add_argument("-f", "--file", action="store", help="RESTful api configuration file")
+    parser.add_argument("-f", "--file", action="store", required=True, help="RESTful api configuration file")
     parser.add_argument("-t", "--type", action="store", default="JSON", help="Configuration file type")
     parser.add_argument("-v", "--verbosity", action="store_true", default=False, help="Increase output verbosity")
 

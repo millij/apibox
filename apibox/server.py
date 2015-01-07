@@ -1,24 +1,51 @@
-from mock_rest import *
+
+from apibox.mock_rest import *
+from apibox.utils.schema_validator import *
+
 
 class AppContainer(object):
-
-    apps = {}
-
-    def __init__(self):
-        pass
-
-    def add_app(self, app_name, mock_rest):
-        apps.update({app_name:mock_rest})
-
-    def remove_app(self, app_name):
-        del apps[app_name]
-
-    def get_app(self, app_name):
-        return apps.get(app_name)
+    pass
 
 
+from apibox.mock_rest import *
 
-def launch(host, port, mock_rest):
+# Global app holder
+apps = {}
+
+def add_app(app_name, mock_rest):
+    global apps
+    apps.update({app_name:mock_rest})
+
+def remove_app(app_name):
+    global apps
+    del apps[app_name]
+
+def get_app(app_name):
+    global apps
+    return apps.get(app_name)
+
+
+
+def launch_app_server_from_file(port, file_path, file_type):
+
+    # validate and get the file content
+    is_valid, content = validate_file_content(file_path, file_type)
+
+    if is_valid:
+        if(file_type == "JSON"):
+            mock_rest = MockREST.from_json(content)
+
+        # launch server
+        launch_flask_server(port, mock_rest) 
+
+        # TODO Add these details to app container
+
+    else:
+        print "Invalid Content"
+        raise ValueError("Invalid Content")
+
+
+def launch_flask_server(port, mock_rest):
     """
     Launches a new mock rest server with the passed configuration.
     """
@@ -33,6 +60,6 @@ def launch(host, port, mock_rest):
         method = endpoint_obj.get_method(request.method)
         return str(method.get_result())
 
-    app.run(debug=True,host = host,port = port)
+    app.run(debug=True, port = port)
 
 

@@ -17,13 +17,12 @@ def get_abs_path(rel_path):
     return abs_path
 
 
-def validate_json(in_json):
+def is_json_valid(in_json):
     """
     validates whether the json file is in required schema or not.
 
-    input: json to be validated
-
-    returns: boolean
+    :param in_json: json to be validated
+    :returns: boolean
     """
     # load schema
     schema_path = get_abs_path(JSON_SCHEMA_REL_PATH)
@@ -39,9 +38,22 @@ def validate_json(in_json):
         return False
 
 
+def validate_file_content(file_path, file_type):
+    """
+    Validates the file contents
+    """
+    if file_type == "JSON":
+        # read file for json content
+        json_content = json.load(open(file_path))
 
+        # validate and return
+        if is_json_valid(json_content):
+            return True, json_content
+        else:
+            return False, None
 
-
+    else:
+        raise ValueError("Unkown file tyre")
 
 
 

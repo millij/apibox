@@ -152,7 +152,7 @@ class MockREST(MockRESTBase):
         in_version = mock_rest_json.get("version")
         in_prefix = mock_rest_json.get("prefix") or ""
         in_endpoints = mock_rest_json.get("endpoints") or []
-        return MockTest(in_name,in_version,in_prefix,in_endpoints)
+        return self(in_name,in_version,in_prefix,in_endpoints)
 
     def add_endPoint(self, ep):
         """
