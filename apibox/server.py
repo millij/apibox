@@ -8,6 +8,7 @@ from tornado.wsgi import WSGIContainer
 from tornado.httpserver import HTTPServer
 from tornado.ioloop import IOLoop
 
+import multiprocessing as mp
 #TODO: make configurable files
 
 class AppContainer(object):
@@ -53,7 +54,6 @@ def launch_app_server_from_file(port, file_path, file_type):
         raise ValueError("Invalid Content")
 
 
-
 def launch_app_server_from_ui(port, app_data):
     # launch server
     if app_data:
@@ -65,26 +65,24 @@ def launch_app_server_from_ui(port, app_data):
 def launch_flask_server(port, mock_rest, shut_down=False):
     """
     Launches a new mock rest server with the passed configuration.
+    :type port: integer
     """
     app_name = mock_rest.name
     from flask import Flask, request
     # cache = Cache(config={'CACHE_TYPE': 'simple'})
 
-    app = Flask(__name__)
+    app = Flask(str(mock_rest.name).replace(" ",''))
     # cache.init_app(app)
+    print app
+    print port,"his is prot"
 
     @app.route('/', defaults={'path': ''})
     @app.route('/<path:path>', methods=["GET", "POST", "DELETE", "PUT"])
     def catch_all(path):
         path = "/"+path
         endpoint_obj = mock_rest.get_endpoint(path, request.method)
-
-
         return str(endpoint_obj)
-        # return str(method.get_result())
+
     if not shut_down:
-#
-# http_server = HTTPServer(WSGIContainer(app))
-# http_server.listen(5000)
-# IOLoop.instance().start()
-        app.run(debug=True, port = port)
+        app.run(debug=False, port = port)
+

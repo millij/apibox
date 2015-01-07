@@ -20,6 +20,7 @@ import logging as log
 import sys
 import getopt
 import argparse
+import multiprocessing as mp
 
 from apibox.ui.server import UIServer
 from apibox.server import *
@@ -29,6 +30,8 @@ def verify_virtualenv():
 
     # TODO verify dependencies
     pass
+
+Mul = mp
 
 
 def process_arguments(args):
@@ -46,10 +49,20 @@ def process_arguments(args):
     verbose = args.verbosity
 
     # launch APP server from file
+    if file_path and enable_ui:
+        p = mp.Process(target=launch_app_server_from_file, args=(port, file_path, file_type))
+        p.daemon = True
+        p.start()
+        ui_server = UIServer()
+        q = mp.Process(target=ui_server.start())
+        q.daemon=True
+        q.start()
+        p.join()
+        q.join()
     if file_path:
-        launch_app_server_from_file(port, file_path, file_type)
+        launch_app_server_from_file(port, file_path,file_type)
 
-    # Launch the UI server 
+    # Launch the UI server
     if enable_ui:
         ui_server = UIServer()
         ui_server.start()

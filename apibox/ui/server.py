@@ -12,6 +12,8 @@ from flask.ext.cache import Cache
 # Schema Validator
 from apibox.utils.schema_validator import *
 
+import multiprocessing as mp
+
 def send_mr_obj(app_name):
     k = a[str(app_name)]
     is_valid, content = validate_file_content(str(k), "JSON")
@@ -106,7 +108,6 @@ class UIServer(object):
         Starts the app with the given name
         """
         port_number = 9999
-
         launch_app_server_from_ui(port_number, send_mr_obj(app_name))
         return "successfully started the sever"
 
