@@ -1,24 +1,26 @@
 
 from apibox.mock_rest import *
 from apibox.utils.schema_validator import *
+import shelve
+from apibox.mock_rest import *
+
+
 
 
 class AppContainer(object):
     pass
 
-
-from apibox.mock_rest import *
-
-# Global app holder
-apps = {}
+apps = shelve.open("allapps.txt",writeback=True)
 
 def add_app(app_name, mock_rest):
     global apps
     apps.update({app_name:mock_rest})
 
+
 def remove_app(app_name):
     global apps
     del apps[app_name]
+
 
 def get_app(app_name):
     global apps
@@ -45,7 +47,16 @@ def launch_app_server_from_file(port, file_path, file_type):
         raise ValueError("Invalid Content")
 
 
-def launch_flask_server(port, mock_rest):
+
+def launch_app_server_from_ui(port, app_data):
+    # launch server
+    if app_data:
+        launch_flask_server(port, app_data)
+    else:
+        print "Invalid Content"
+        raise ValueError("Invalid Content")
+
+def launch_flask_server(port, mock_rest, shut_down=False):
     """
     Launches a new mock rest server with the passed configuration.
     """
@@ -59,7 +70,5 @@ def launch_flask_server(port, mock_rest):
         endpoint_obj = mock_rest.get_endpoint(path)
         method = endpoint_obj.get_method(request.method)
         return str(method.get_result())
-
-    app.run(debug=True, port = port)
-
-
+    if not shut_down:
+        app.run(debug=True, port = port)

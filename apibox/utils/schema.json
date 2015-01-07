@@ -24,9 +24,15 @@
                                 },
                                 "content_type" : { "type" : "string" },
                                 "input" : { "type" : "object" },
-                                "result" : { "type" : "object" }
+                                "result" : {
+                                    "anyOf": [
+                                        { "type": "string" },
+                                        { "type": "number" },
+                                        { "type": "object" },
+                                        { "type": "array" }
+                                    ]}
                             },
-                            "required" : [ "type", "result" ]
+                            "required" : [ "method", "result" ]
                         },
                         "uniqueItems" : true
                     }
@@ -43,6 +49,6 @@
     "required" : [ "name", "endpoints" ],
 
     "definitions" : {
-        
+
     }
 }

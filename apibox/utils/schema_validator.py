@@ -1,7 +1,7 @@
 import json
 import os
 import logging as log
-from jsonschema import validate 
+from jsonschema import validate
 
 JSON_SCHEMA_REL_PATH = "/apibox/utils/schema.json"
 

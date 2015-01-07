@@ -5,7 +5,12 @@ import logging as log
 from flask import Flask, jsonify, make_response, abort, request
 from multiprocessing import Process
 
-from apibox.server import AppContainer
+# Mock_rest Requirements
+from apibox.server import AppContainer, apps as a, launch_app_server_from_ui
+from apibox.mock_rest import *
+
+# Schema Validator
+from apibox.utils.schema_validator import *
 
 class UIServer(object):
     'UI Server object'
@@ -36,28 +41,52 @@ class UIServer(object):
         """
         Return all existing apps as JSON
         """
-        print len(AppContainer.apps)
-        return "hi"
+
+        return "hi here is the length of apps "
 
     @app.route("/app/<app_name>", methods=["GET", "POST", "PUT", "DELETE"])
     def app_handler(app_name):
         """
         Applications handler
         """
+
         if request.method == 'GET':
             # GET: Return app details
             print "GET"
+            return a.keys()
+
         elif request.method == 'POST':
             # POST: Create new App
             print "POST"
+            file_path = "get the file path here from form"
+            file_type= "get the file type here"
+            is_valid, content = validate_file_content(file_path, file_type)
+            if not content is None:
+                mock_rest = MockREST.from_json(content)
+                a[app_name] = mock_rest
+                return "Created New App"
+            return "Config file is not valid"
+
         elif request.method == 'PUT':
             # PUT: Update the App
             print "PUT"
+            file_path = "get the path here"
+            file_type= "get the file type here"
+            is_valid, content = validate_file_content(file_path, file_type)
+            if not content is None:
+                mock_rest = MockREST.from_json(content)
+                a[app_name] = mock_rest
+                return "Updated New App"
+            return "Config file is not valid"
         else:
             # DELETE: Delete the APP
-            print "DELETE" 
+            print "DELETE"
+            try:
+                del a[app_name]
+            except:
+                print "No such app"
 
-        pass
+
 
 
     @app.route("/app/<app_name>/start", methods=["GET"])
@@ -65,7 +94,11 @@ class UIServer(object):
         """
         Starts the app with the given name
         """
-        pass
+        port_number = "get the port number"
+
+        launch_app_server_from_ui(port_number, a[app_name])
+        return "successfully started the sever"
+
 
     @app.route("/app/<app_name>/stop", methods=["GET"])
     def app_handler_stop(app_name):
@@ -82,19 +115,35 @@ class UIServer(object):
         :param app_name: Unique name of the application
         """
         if request.method == 'GET':
-            # GET: Returns all app endpoints 
+            # GET: Return endpoint details
             print "GET"
+            return AppContainer.get_app(app_name)
         elif request.method == 'POST':
-            # POST: Create new endpoint for App 
+            # POST: Create new endpoint
             print "POST"
-        elif request.method == 'PUT':
-            # PUT: Update the endpoint for App
-            print "PUT"
-        else:
-            # DELETE: Delete the endpoint for App
-            print "DELETE" 
+            ep_name = "get the file name here from form"
+            method_name = "get method name"
+            input_data = "get data here"
+            reuslt = "get result for the method"
+            ep_meth   =  EndPointMethod(method_name, input_data, result)
+            new_ep_obj = EndPoint.add_method(ep_meth)
 
-        pass
+        elif request.method == 'PUT':
+            # PUT: Update the endpoint
+            print "PUT"
+            path = "get the new end point here"
+            method = "get the new method here"
+
+            new_ep_obj = EndPoint(path, method)
+            MockREST.add_endPoint(new_ep_obj)
+
+        else:
+            # DELETE: Delete the endpoint
+            ep_path = "get the path here"
+            ep_obj = MockREST.get_endpoint(ep_path)
+            MockREST.remove_endPoint(ep_obj)
+            print "DELETE"
+
 
 
     """ Routes / error handling """

@@ -189,6 +189,9 @@ class MockREST(MockRESTBase):
         else:
             return "not a valid path"
 
+    def get_all_endpoints(self):
+        pass
+
 
 
 class MockRESTServer(MockRESTBase):
