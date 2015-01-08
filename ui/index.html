@@ -6,8 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- css -->
-    <link rel="stylesheet" href="css/bootstrap.css">
-    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="{{url_for('static',filename='css/bootstrap.css')}}">
+    <link rel="stylesheet" href="{{url_for('static',filename='css/main.css')}}">
 
 </head>
 <body ng-app="ApiboxUI">
@@ -16,14 +16,17 @@
             <a href="#" class="link-a">login</a>
             <a href="#" class="logo"></a>
             <div class="clearfix"></div>
+                <form action=/app/new>
                 <ul class="form-list">
+                <li><input name="app_name" placeholder= "Application Name"></li>
                 <li>
                     <label class="label-form"> </label>
                     <div class="form-box">
                         <input class="input-a browse-btn" type="file"></input>
                     </div>
-                </li>
-            </ul>
+                    </li>
+                </ul>
+             </form>           
        </div>
      </div>
 
@@ -91,13 +94,13 @@
 
     <!-- scripts -->
     <section>
-        <script type="text/javascript" src="js/angular.min.js"></script>
-        <script type="text/javascript" src="js/angular-resource.js"></script>
-        <script type="text/javascript" src="js/apibox/app.js"></script>
-        <script type="text/javascript" src="js/apibox/controllers/mainController.js"></script>
+        <script type="text/javascript" src="{{url_for('static',filename='js/angular.min.js')}}"></script>
+        <script type="text/javascript" src="{{url_for('static',filename='js/angular-resource.js')}}"></script>
+        <script type="text/javascript" src="{{url_for('static',filename='js/apibox/app.js')}}"></script>
+        <script type="text/javascript" src="{{url_for('static',filename='js/apibox/controllers/mainController.js')}}"></script>
 
-        <script type="text/javascript" src="js/jquery.js"></script>
-        <script type="text/javascript" src="js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="{{url_for('static',filename='js/jquery.js')}}"></script>
+        <script type="text/javascript" src="{{url_for('static',filename='js/bootstrap.min.js')}}"></script>
     </section>
 
 </body>

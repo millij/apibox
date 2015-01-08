@@ -66,7 +66,6 @@ class EndPointMethod(MockRESTBase):
         return True
 
 
-
 class EndPoint(MockRESTBase):
     'Defines a REST endpoint'
 

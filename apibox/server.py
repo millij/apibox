@@ -2,7 +2,7 @@
 from utils.schema_validator import *
 import shelve
 
-from apibox.mock_rest import *
+from mock_rest import *
 # from flask.ext.cache import Cache
 from tornado.wsgi import WSGIContainer
 from tornado.httpserver import HTTPServer
@@ -49,7 +49,7 @@ def launch_app_server_from_file(port, file_path, file_type):
         apps[str(mock_rest.name)] = file_path
         launch_flask_server(port, mock_rest) 
 
-        launch_flask_server(port, mock_rest)
+        #launch_flask_server(port, mock_rest)
 
 
         # TODO Add these details to app container
@@ -74,13 +74,20 @@ def launch_flask_server(port, mock_rest, shut_down=False):
     """
     app_name = mock_rest.name
    
-    from flask import Flask, request
+    from flask import Flask, request,render_template
     # cache = Cache(config={'CACHE_TYPE': 'simple'})
 
-    app = Flask(str(mock_rest.name).replace(" ",''))
+    app = Flask(str(mock_rest.name).replace(" ",''),static_folder='static')
     # cache.init_app(app)
-    print app
-    print port,"his is prot"
+    #print app
+    #print port,"his is prot"
+    #@app
+    @app.route('/Apibox')
+    def index():
+        """ Displays the index page accessible at '/Apibox'
+        """
+   
+        return render_template('index.html')
 
     @app.route('/', defaults={'path': ''})
     @app.route('/<path:path>', methods=["GET", "POST", "DELETE", "PUT"])
@@ -93,7 +100,7 @@ def launch_flask_server(port, mock_rest, shut_down=False):
         #print (mock_rest.endpoints),"is it mock rest object"
         endpoint_obj = mock_rest.get_endpoint(path)
         if type(endpoint_obj)==str:
-            return endpoint_obj
+            return endpoint_obj.__json__()
         else:
             method = endpoint_obj.get_method(request.method)
             if type(method)==str:
@@ -101,5 +108,5 @@ def launch_flask_server(port, mock_rest, shut_down=False):
         return str(method.get_result())
 
     if not shut_down:
-        app.run(debug=False, port = port)
+        app.run(debug=True, port = port)
 
