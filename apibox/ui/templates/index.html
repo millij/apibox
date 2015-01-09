@@ -11,25 +11,29 @@
 
 </head>
 <body ng-app="ApiboxUI">
-  d  <div class="header">
+    <div class="header">
         <div class="container">
             <a href="#" class="link-a">login</a>
             <a href="#" class="logo"></a>
             <div class="clearfix"></div>
-                <form action=/app/new>
+           
+                <form action="/app/new" method="POST" enctype="multipart/form-data">
                 <ul class="form-list">
-                <li><input name="app_name" placeholder= "Application Name"></li>
+                <li><input name="app_name" placeholder= "Application Name"/></li>
+                <li><input name="port_number" type="number" placeholder= "port number other than 5000 and 8000"/></li>
                 <li>
                     <label class="label-form"> </label>
                     <div class="form-box">
-                        <input class="input-a browse-btn" type="file"></input>
+                        <input class="input-a browse-btn" type="file" name="filehere"></input>
                     </div>
+               
                     </li>
                 </ul>
-             </form>           
+                <button>Submit </button>
+             </form>          
        </div>
      </div>
-
+       
     <div class="main-content" ng-controller="mainController" ng-init="init()">
         <div style="padding-bottom:50px">
             <table style="width:100%" class="container">
@@ -66,24 +70,24 @@
                     </td>
                     <td style="vertical-align: top" class="col-lg-5">
                         <table class="table table-hover">
-                            <caption class="font-bold">Select the row to edit</caption>
+                            <caption class="font-bold">Select an Application</caption>
                             <thead>
                                 <tr>
-                                    <th>Path</th>
-                                    <th>Method</th>
-                                    <th>Response</th>
-                                    <th>Action</th>
+                                    <th>Application Name</th>
+                                    <th>Port Number</th>
                                 </tr>
                             </thead>
                             <tbody class="configList">
+                            {% for config in a.keys()%}
                                 <tr ng-repeat="config in configurations" ng-click="editRow(config.path)">
-                                    <td>{{config.path}}</td>
-                                    <td>{{config.method}}</td>
-                                    <td>{{config.response}}</td>
+                                   
+                                    <td>{{config}}</td>
+                                    <td>{{a[config].split("$$")[1]}}</td>
                                     <td>
                                         <input type="button" value="Remove" class="btn btn-link btn-xs" ng-click="removeRow(config.path)"/>
                                     </td>
                                 </tr>
+                            {%endfor%}
                             </tbody>
                         </table>
                     </td>
@@ -94,8 +98,7 @@
 
     <!-- scripts -->
     <section>
-        <script type="text/javascript" src="{{url_for('static',filename='js/angular.min.js')}}"></script>
-        <script type="text/javascript" src="{{url_for('static',filename='js/angular-resource.js')}}"></script>
+
         <script type="text/javascript" src="{{url_for('static',filename='js/apibox/app.js')}}"></script>
         <script type="text/javascript" src="{{url_for('static',filename='js/apibox/controllers/mainController.js')}}"></script>
 

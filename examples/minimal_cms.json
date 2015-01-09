@@ -3,7 +3,26 @@
     "version" : "v1",
     "prefix" : "/api/v1",
     "endpoints" : [
-
+        {
+            "path" : "",
+            "methods" : [
+                {
+                    "type" : "GET",
+                    "result" : {
+                    
+                    }
+                },
+                {
+                    "type" : "POST",
+                    "input" : {
+                    
+                    },
+                    "result" : {
+                    
+                    }
+                }
+            ]
+        }
     ],
     "global" : {}
 }

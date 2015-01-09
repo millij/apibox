@@ -1,0 +1,53 @@
+{
+    "name" : "Office Pramati",
+    "version" : "v1",
+    "prefix" : "/api/v1",
+    "endpoints" : [
+        {
+            "path" : "/employee",
+            "methods" : [
+                {
+                    "method" : "GET",
+                    "result" : [
+                        {
+                            "id" : 11711,
+                            "name" : "Raju",
+                            "designation" : "Developer"
+                        },
+                        {
+                            "id" : 11712,
+                            "name" : "Pandu",
+                            "designation" : "Sr. Developer"
+                        }
+                    ]
+                },
+                {
+                    "method" : "POST",
+                    "input" : {
+                        "name" : "Parani",
+                        "designation" : "Sr. Architect"
+                    },
+                    "result" : {
+                        "id" : 11812,
+                        "name" : "Parani",
+                        "designation" : "Sr. Architect"
+                    }
+                }
+            ]
+        },
+        {
+            "path": "/org/details",
+            "methods": [
+                {
+                    "method": "GET",
+                    "result": {
+                        "name" : "Housing Co",
+                        "estb" : 2013,
+                        "size" : "300 employees"
+                    }
+                }
+            ]
+        }
+    ],
+    "global" : {}
+}

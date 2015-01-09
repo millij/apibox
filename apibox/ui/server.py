@@ -12,7 +12,11 @@ from apibox.mock_rest import *
 # Schema Validator
 from apibox.utils.schema_validator import *
 from werkzeug import secure_filename
+<<<<<<< HEAD
 import subprocess as sub
+=======
+
+>>>>>>> 8462dad99b5b949db0f48d8c6d253771f21d84f9
 import multiprocessing as mp
 import json
 import ast
@@ -27,13 +31,13 @@ def send_mr_obj(app_name):
 class UIServer(object):
     'UI Server object'
 
-    port = 8000               # Default UI Server Port 
+
+    port = 8000               # Default UI Server Port
     #cache = Cache(config={'CACHE_TYPE': 'simple'})
 
     UPLOAD_FOLDER = ''
     app = Flask(__name__, static_folder='static')
     app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-    #cache.init_app(app)
 
     def __init__(self):
         print "UI server Initiated"
@@ -67,8 +71,6 @@ class UIServer(object):
         """
         Applications handler
         """
-        #print app_name, request
-
         if request.method == 'GET':
             # GET: Return app details
             print "GET"
@@ -78,15 +80,6 @@ class UIServer(object):
         elif request.method == 'POST':
             # POST: Create new App
             print "This Is POST Method"
-            #file_path = "get the file path here from form"
-            #file_type= "get the file type here"
-            #is_valid, content = validate_file_content(file_path, file_type)
-            #if not content is None:
-                #mock_rest = MockREST.from_json(content)
-                #a[str(mock_rest.name)] = file_path
-                #return "Created New App"
-            #return "Config file is not valid"
-            
             if not apps.has_key(app_name):
                 print (request.data), " this is request data"
                 temp_dict = ast.literal_eval(request.data)
@@ -116,7 +109,6 @@ class UIServer(object):
             except:
                 print "No such app"
 
-
     @app.route("/app/new", methods=["GET", "POST", "PUT", "DELETE"])
     def app_new_handler():
         """
@@ -134,37 +126,7 @@ class UIServer(object):
             a[str(app_name)] = str(app_name)+".json$$"+str(port_num).strip()
 
             return render_template("index.html", a=a)
-#            return "THERE IS LOT OF CONTENT <p>"+str(content)
-            #return str(content)
-            # POST: Create new App
-            #file_path = "get the file path here from form"
-            #file_type= "get the file type here"
-            #is_valid, content = validate_file_content(file_path, file_type)
-            #if not content is None:
-                #mock_rest = MockREST.from_json(content)
-                #a[str(mock_rest.name)] = file_path
-                #return "Created New App"
-            #return "Config file is not valid"
-            '''
-            if not apps.has_key(app_name):
-                print (request.data), " this is request data"
-                temp_dict = ast.literal_eval(request.data)
-                mockrest_obj = MockREST.from_json(temp_dict)
-                print mockrest_obj, " this is endpoint_obj"
-                print type(mockrest_obj), " this is type of endpoint_obj"
-                return str(mockrest_obj)
-            else:
-                return "Request app already has" '''
         return "reached new app"
-
-
-
-    @app.route('/box')
-    def index():
-        """ Displays the index page accessible at '/Apibox'
-        """
-   
-        return render_template('index.html')
 
     @app.route("/app/<app_name>/start", methods=["GET"])
     def app_handler_start(app_name):
@@ -172,6 +134,7 @@ class UIServer(object):
         Starts the app with the given name
         """
         port_number = 9999
+
         sub.call('ls',shell=True)
         kk = sub.call('nohup python apibox/ui/sampleapp.py '+str(app_name)+' '+str(port_number) +' '+ '"test/kk.json" &> /dev/null &', shell=True)
         print "started the server "
@@ -186,8 +149,6 @@ class UIServer(object):
         """
         port_number = "get the port number"
         sub.call("fuser -k "+str(port_number)+"/tcp")
-        pass
-
 
     @app.route("/app/<app_name>/endpoint", methods=["GET", "POST", "PUT", "DELETE"])
     def app_endpoint_handler(app_name):
@@ -201,25 +162,14 @@ class UIServer(object):
             kk = send_mr_obj(app_name)
             return str(kk.endpoints)
         elif request.method == 'POST':
-            # POST: Create new endpoint
-            print "This is POST Method for adding endpoints"
-            #ep_name = "get the file name here from form"
-            #method_name = "get method name"
-            #input_data = "get data here"
-            #result = "get result for the method"
-            #ep_meth   =  EndPointMethod(method_name, input_data, result)
-            #new_ep_obj = EndPoint.add_method(ep_meth)
             print (request.data), " this is request data"
             
             temp_dict = ast.literal_eval(request.data)
             endpoint_obj = EndPoint.from_json(temp_dict)
             if a.has_key(app_name):
                 send_mr_obj(app_name).add_endPoint(endpoint_obj)
-                print endpoint_obj, " this is endpoint_obj"
-                print type(endpoint_obj), " this is type of endpoint_obj"
-                return str(endpoint_obj)
             else:
-                return "Invalid app_name"
+                print "Invalid End point"
 
         elif request.method == 'PUT':
             # PUT: Update the endpoint
