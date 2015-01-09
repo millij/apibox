@@ -59,6 +59,9 @@ envi/
 # linux temp files
 *.*~
 
+# Python Virtual env
+virt_env/
+
 # eclipse
 .project
 .pydevproject
