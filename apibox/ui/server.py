@@ -205,6 +205,10 @@ class UIServer(object):
             if a.has_key(app_name):
                 f = open(filename)
                 la = json.load(f)
+                print type(la['endpoints']), "Type of endpoints"
+                print type(data), "type of data"
+                # return str(len(la['endpoints']))
+
                 la['endpoints'].append(data)
 
                 mr_data= send_mr_obj(app_name)
@@ -216,12 +220,13 @@ class UIServer(object):
 
                 print la,"hey man"
                 f.close()
-                f = open(filename,'w')
+                f = open(filename,'wb')
                 json.dump(la, f)
                 f.close()
                 # f.write(json.load(f.read())['endpoints'].append(data))
                 f.close()
-                return jsonify({'Success':data['path']})
+                return render_template("index.html", a=a, st=stopped_apps,status="Sucessfully added "+data["path"])
+                # return jsonify({'Success':data['path']})
             else:
                 print "Invalid End point"
 

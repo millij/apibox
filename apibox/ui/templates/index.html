@@ -16,7 +16,7 @@
             <a href="#" class="link-a">login</a>
             <a href="#" class="logo"></a>
             <div class="clearfix"></div>
-           
+                <img  src="{{url_for('static', filename='img/mock.png')}}" style="margin-top:-100px">
                 <form action="/app/new" method="POST" enctype="multipart/form-data">
                 <ul class="form-list">
                 <li>
@@ -31,11 +31,15 @@
              </form>          
        </div>
      </div>
-    <li>   {{st}}</li>
-    <li>   existing</li>
-    <li>   {{a}}</li>
+    <!--<li>   {{st}}</li>-->
+    <!--<li>   existing</li>-->
+    <!--<li>   {{a}}</li>-->
 
-    <div class="main-content" ng-controller="mainController" ng-init="init()">
+    {%if status%}
+    <div class='notifications top-left text-center' style="font-size:35px">{{status}}</div>
+    {%endif%}
+
+    <div class="main-content" ng-controller="mainController"  ng-init="init()">
         <div style="padding-bottom:50px">
             <table style="width:100%" class="container">
                 <tr class="row">
@@ -111,6 +115,8 @@
     <section>
 
         <script type="text/javascript" src="{{url_for('static',filename='js/apibox/app.js')}}"></script>
+        <script type="text/javascript" src="{{url_for('static',filename='js/angular.min.js')}}"></script>
+        <script type="text/javascript" src="{{url_for('static',filename='js/angular-resource.js')}}"></script>
         <script type="text/javascript" src="{{url_for('static',filename='js/apibox/controllers/mainController.js')}}"></script>
 
         <script type="text/javascript" src="{{url_for('static',filename='js/jquery.js')}}"></script>

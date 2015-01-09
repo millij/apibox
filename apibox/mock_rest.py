@@ -205,13 +205,22 @@ class MockREST(MockRESTBase):
         Returns the endpoint with the given path
         :param in_path: path of the endpoint
         """
+        print "_----_----__----__-----_------_-----_____-------"
 
+        # print self.endpoints ,"here are the endpoints"
         for end_p in self.endpoints:
+            print end_p ,"entered the dragon"
+            print in_path
 
-            if str(end_p["path"]) == in_path:
-                for me in end_p["methods"]:
-                    if dict(me)["method"] == method_name:
-                        return dict(me)["result"]
+
+            if end_p["path"] == in_path:
+                print type(end_p["methods"])
+                if end_p["methods"]["method"]==str(method_name):
+                    return end_p["methods"]["result"]
+            #     for me in end_p["methods"]:
+            #         print type(me), me
+            #         if dict(str(me))["method"] == method_name:
+            #             return dict(me)["result"]
             if not isinstance(
                     end_p,
                     EndPoint) and end_p.get("path") == in_path:
