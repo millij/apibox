@@ -19,8 +19,6 @@
            
                 <form action="/app/new" method="POST" enctype="multipart/form-data">
                 <ul class="form-list">
-                <li><input name="app_name" placeholder= "Application Name"/></li>
-                <li><input name="port_number" type="number" placeholder= "port number other than 5000 and 8000"/></li>
                 <li>
                     <label class="label-form"> </label>
                     <div class="form-box">
@@ -33,16 +31,20 @@
              </form>          
        </div>
      </div>
-       
+    <li>   {{st}}</li>
+    <li>   existing</li>
+    <li>   {{a}}</li>
+
     <div class="main-content" ng-controller="mainController" ng-init="init()">
         <div style="padding-bottom:50px">
             <table style="width:100%" class="container">
                 <tr class="row">
                     <td style="width:50%;vertical-align: top" class="col-lg-5">
                         <div style="padding-bottom:20px">
+
                             <h3>Add Configurations</h3>
                         </div>
-                        <form class="form-horizontal" role="form" ng-submit="saveRow()">
+                        <form class="form-horizontal" role="form"  action="/app/kanth/endpoint" method="POST">
                             <div class="form-group">
                                 <label class="col-sm-3 control-label">Path</label>
                                 <div class="col-sm-6">
@@ -67,6 +69,7 @@
                                 </div>
                             </div>
                         </form>
+                        </td>
                     </td>
                     <td style="vertical-align: top" class="col-lg-5">
                         <table class="table table-hover">
@@ -74,18 +77,26 @@
                             <thead>
                                 <tr>
                                     <th>Application Name</th>
-                                    <th>Port Number</th>
+
                                 </tr>
                             </thead>
                             <tbody class="configList">
                             {% for config in a.keys()%}
                                 <tr ng-repeat="config in configurations" ng-click="editRow(config.path)">
-                                   
+                                    {%if st.has_key(config)%}
+                                   <form action="/app/start/{{config}}" method="POST">
+                                       {%else%}
+                                       <form action="/app/stop/{{config}}" method="POST">
+                                           {%endif%}
                                     <td>{{config}}</td>
-                                    <td>{{a[config].split("$$")[1]}}</td>
                                     <td>
-                                        <input type="button" value="Remove" class="btn btn-link btn-xs" ng-click="removeRow(config.path)"/>
+                                        {% if st.has_key(config)  %}
+                                        <input type="submit" value="Start" class="btn btn-link btn-xs" ng-click="removeRow(config.path)"/>
+                                        {%else%}
+                                        <input type="submit" value="Stop" class="btn btn-link btn-xs" ng-click="removeRow(config.path)"/>
+                                        {%endif%}
                                     </td>
+                                       </form>
                                 </tr>
                             {%endfor%}
                             </tbody>

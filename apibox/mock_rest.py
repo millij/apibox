@@ -183,7 +183,7 @@ class MockREST(MockRESTBase):
         """
         if not isinstance(ep, EndPoint):
             raise TypeError("Invalid type. expected EndPoint")
-
+        print ep.__str__()
         self.endpoints.append(ep)
 
     def remove_endPoint(self, ep):
@@ -234,7 +234,7 @@ class MockRESTServer(MockRESTBase):
     'defines a mock rest server'
 
     default_host = '0.0.0.0'
-    default_port = 5000
+    default_port = 5123
 
     def __init__(self, mock_rest, host, port):
         """

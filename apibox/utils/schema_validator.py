@@ -46,6 +46,8 @@ def validate_file_content(file_path, file_type):
         # read file for json content
         json_content = json.load(open(file_path))
 
+        return True, json_content
+
         # validate and return
         if is_json_valid(json_content):
             return True, json_content

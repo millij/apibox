@@ -19,6 +19,7 @@ class AppContainer(object):
     pass
 
 apps = shelve.open("allapps.txt", writeback=True)
+app_objs = {}
 
 
 def add_app(app_name, mock_rest):
@@ -48,7 +49,7 @@ def launch_app_server_from_file(port, file_path, file_type):
         # launch server
         print type(mock_rest.name)
         apps[str(mock_rest.name)] = file_path
-        launch_flask_server(port, mock_rest)
+        launch_flask_server(file_path, str(mock_rest.name))
 
         #launch_flask_server(port, mock_rest)
 
@@ -58,55 +59,23 @@ def launch_app_server_from_file(port, file_path, file_type):
         print "Invalid Content"
         raise ValueError("Invalid Content")
 
-
-def launch_app_server_from_ui(port, app_data):
-    # launch server
-    if app_data:
-        launch_flask_server(port, app_data)
-    else:
-        print "Invalid Content"
-        raise ValueError("Invalid Content")
-
-
-def launch_flask_server(port, mock_rest, shut_down=False):
+def launch_flask_server(fp, name):
     """
     Launches a new mock rest server with the passed configuration.
-    :type port: integer
+
     """
-    app_name = mock_rest.name
+    from apibox.ui.server import *
+    import requests
 
-    # cache = Cache(config={'CACHE_TYPE': 'simple'})
+    print "Starting Server...."
+    UIServer().start()
+    file_name =name
+    print "Adding "+str(file_name)+ " to current API BOX"
+    r = requests.post('http://127.0.0.1:5123/app/new', files={'filehere': open(fp, 'r')})
+    a[name] = fp
+    print "Added "+str(file_name)+ " to current API BOX"
 
-    app = Flask(str(mock_rest.name).replace(" ", ''), static_folder='static')
-    # cache.init_app(app)
-    # print app
-    # print port,"his is prot"
-    #@app
 
-    @app.route('/Apibox')
-    def index():
-        """ Displays the index page accessible at '/Apibox'
-        """
 
-        return render_template('index.html')
 
-    @app.route('/', defaults={'path': ''})
-    @app.route('/<path:path>', methods=["GET", "POST", "DELETE", "PUT"])
-    def catch_all(path):
-        path = "/" + path
 
-        endpoint_obj = mock_rest.get_endpoint(path, request.method)
-        return str(endpoint_obj)
-        # print path, " this is path"
-        #print (mock_rest.endpoints),"is it mock rest object"
-        endpoint_obj = mock_rest.get_endpoint(path)
-        if isinstance(endpoint_obj, str):
-            return endpoint_obj.__json__()
-        else:
-            method = endpoint_obj.get_method(request.method)
-            if isinstance(method, str):
-                return method
-        return str(method.get_result())
-
-    if not shut_down:
-        app.run(debug=True, port=port)

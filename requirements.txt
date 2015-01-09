@@ -20,4 +20,5 @@ pep8==1.5.7
 tornado==4.0.2
 validictory==0.9.3
 wsgiref==0.1.2
+requests
 

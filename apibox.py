@@ -31,9 +31,6 @@ def verify_virtualenv():
     # TODO verify dependencies
     pass
 
-Mul = mp
-
-
 def process_arguments(args):
     """
     Entry point of the project. Parses args and processes.
@@ -49,16 +46,10 @@ def process_arguments(args):
     verbose = args.verbosity
 
     # launch APP server from file
-    if file_path and enable_ui:
+    if file_path:
         p = mp.Process(target=launch_app_server_from_file, args=(port, file_path, file_type))
-        p.daemon = True
         p.start()
-        ui_server = UIServer()
-        q = mp.Process(target=ui_server.start())
-        q.daemon=True
-        q.start()
-        p.join()
-        q.join()
+
     if file_path:
         launch_app_server_from_file(port, file_path,file_type)
 
@@ -76,7 +67,7 @@ if __name__ == "__main__":
 
     #parser.add_argument("cmd")
     #parser.add_argument("-h", "--host", default="0.0.0.0", help="Server hostname")
-    parser.add_argument("-p", "--port", action="store", type=int, default=5000, help="Server port")
+    parser.add_argument("-p", "--port", action="store", type=int, default=5123, help="Server port to be used")
     parser.add_argument("-ui", "--ui", action="store_true", default=False, help="Initiate the server with UI")
     parser.add_argument("-f", "--file", action="store", required=False, help="RESTful api configuration file")
     parser.add_argument("-t", "--type", action="store", default="JSON", help="Configuration file type")
