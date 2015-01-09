@@ -32,7 +32,7 @@ def is_json_valid(in_json):
     log.debug("In coming JSON for validation : %s", str(in_json))
 
     # validate the incoming json
-    if validate(in_json, schema) == None :
+    if validate(in_json, schema) is None:
         return True
     else:
         return False
@@ -56,14 +56,12 @@ def validate_file_content(file_path, file_type):
         raise ValueError("Unkown file tyre")
 
 
-
-
 def validate_filed(file_name, file_type):
     """
     Validates the file contents
     """
     if file_type == "JSON":
-        print dir(file) 
+        print dir(file)
 
         # read file for json content
         json_content = json.load((file))
@@ -76,8 +74,3 @@ def validate_filed(file_name, file_type):
 
     else:
         raise ValueError("Unkown file tyre")
-
-
-
-
-

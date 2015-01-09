@@ -12,25 +12,25 @@ from apibox.mock_rest import *
 # Schema Validator
 from apibox.utils.schema_validator import *
 from werkzeug import secure_filename
-<<<<<<< HEAD
-import subprocess as sub
-=======
 
->>>>>>> 8462dad99b5b949db0f48d8c6d253771f21d84f9
+import subprocess as sub
+
 import multiprocessing as mp
 import json
 import ast
+
 
 def send_mr_obj(app_name):
     k = a[str(app_name)]
     is_valid, content = validate_file_content(str(k), "JSON")
     mock_rest = MockREST.from_json(content)
-    kk =  str(mock_rest.endpoints)
+    kk = str(mock_rest.endpoints)
     return mock_rest
 
-class UIServer(object):
-    'UI Server object'
 
+class UIServer(object):
+
+    'UI Server object'
 
     port = 8000               # Default UI Server Port
     #cache = Cache(config={'CACHE_TYPE': 'simple'})
@@ -53,7 +53,6 @@ class UIServer(object):
         # TODO
         print "UI Server stopped successfully"
 
-
     """ Routes for UI Support """
     #@cache.cached(timeout=None)
     @app.route("/", methods=["GET"])
@@ -62,7 +61,7 @@ class UIServer(object):
         Return all existing apps as JSON
         """
         # return "hi ths is kanth"
-        return render_template('index.html',a=a)
+        return render_template('index.html', a=a)
 
     # @cache.cached(timeout=None)
 
@@ -80,7 +79,7 @@ class UIServer(object):
         elif request.method == 'POST':
             # POST: Create new App
             print "This Is POST Method"
-            if not apps.has_key(app_name):
+            if app_name not in apps:
                 print (request.data), " this is request data"
                 temp_dict = ast.literal_eval(request.data)
                 mockrest_obj = MockREST.from_json(temp_dict)
@@ -94,7 +93,7 @@ class UIServer(object):
             # PUT: Update the App
             print "PUT"
             file_path = "get the path here"
-            file_type= "get the file type here"
+            file_type = "get the file type here"
             is_valid, content = validate_file_content(file_path, file_type)
             if not content is None:
                 mock_rest = MockREST.from_json(content)
@@ -119,11 +118,13 @@ class UIServer(object):
             port_num = request.form["port_number"]
             print port_num
             file = request.files["filehere"]
-            file.save(os.path.join(str(app_name)+".json"))
-            is_valid, content = validate_file_content(str(app_name)+".json", "JSON")
+            file.save(os.path.join(str(app_name) + ".json"))
+            is_valid, content = validate_file_content(
+                str(app_name) + ".json", "JSON")
             if not is_valid:
                 return "there is no content"
-            a[str(app_name)] = str(app_name)+".json$$"+str(port_num).strip()
+            a[str(app_name)] = str(app_name) + \
+                ".json$$" + str(port_num).strip()
 
             return render_template("index.html", a=a)
         return "reached new app"
@@ -135,12 +136,18 @@ class UIServer(object):
         """
         port_number = 9999
 
-        sub.call('ls',shell=True)
-        kk = sub.call('nohup python apibox/ui/sampleapp.py '+str(app_name)+' '+str(port_number) +' '+ '"test/kk.json" &> /dev/null &', shell=True)
+        sub.call('ls', shell=True)
+        kk = sub.call(
+            'nohup python apibox/ui/sampleapp.py ' +
+            str(app_name) +
+            ' ' +
+            str(port_number) +
+            ' ' +
+            '"test/kk.json" &> /dev/null &',
+            shell=True)
         print "started the server "
         print (kk)
         return "successfully started the sever"
-
 
     @app.route("/app/<app_name>/stop", methods=["GET"])
     def app_handler_stop(app_name):
@@ -148,9 +155,15 @@ class UIServer(object):
         Stops the app with the given name
         """
         port_number = "get the port number"
-        sub.call("fuser -k "+str(port_number)+"/tcp")
+        sub.call("fuser -k " + str(port_number) + "/tcp")
 
-    @app.route("/app/<app_name>/endpoint", methods=["GET", "POST", "PUT", "DELETE"])
+    @app.route(
+        "/app/<app_name>/endpoint",
+        methods=[
+            "GET",
+            "POST",
+            "PUT",
+            "DELETE"])
     def app_endpoint_handler(app_name):
         """
         Applications endpoints handler
@@ -163,10 +176,10 @@ class UIServer(object):
             return str(kk.endpoints)
         elif request.method == 'POST':
             print (request.data), " this is request data"
-            
+
             temp_dict = ast.literal_eval(request.data)
             endpoint_obj = EndPoint.from_json(temp_dict)
-            if a.has_key(app_name):
+            if app_name in a:
                 send_mr_obj(app_name).add_endPoint(endpoint_obj)
             else:
                 print "Invalid End point"
@@ -187,8 +200,6 @@ class UIServer(object):
             MockREST.remove_endPoint(ep_obj)
             print "DELETE"
 
-
-
     """ Routes / error handling """
 
     @app.errorhandler(404)
@@ -198,4 +209,3 @@ class UIServer(object):
     @app.errorhandler(500)
     def internal_server_error(error):
         return make_response(jsonify({'error': str(error)}), 500)
-

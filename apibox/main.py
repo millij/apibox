@@ -2,8 +2,9 @@ from flask import Flask, request
 import json
 import collections
 
+
 def convert(data):
-    ''' 
+    '''
     converts json object to dictionary ( from unicode dict to dict )
     Input:
     - data: json object
@@ -47,16 +48,19 @@ def read_config_file(file_path):
     Returns: all the three variables.
     '''
 
-    json_dict = {}                          # temprary variable to store the json as dictionary
-    endpoints_list = []                     # list of all the endpoints mentioned by the user
-    prefix_list = []                        # stores name and version of the project mentioned by the user
+    # temprary variable to store the json as dictionary
+    json_dict = {}
+    # list of all the endpoints mentioned by the user
+    endpoints_list = []
+    # stores name and version of the project mentioned by the user
+    prefix_list = []
     json_obj = json.load(open(file_path))
     temp = convert(json_obj)
     prefix_list.append(temp.get("name"))
     prefix_list.append(temp.get("version"))
     list_endpoints = temp.get("endpoints")
 
-    # iterate for end-points 
+    # iterate for end-points
     for i in list_endpoints:
         endpoints_list.append(i.get("path"))
         try:

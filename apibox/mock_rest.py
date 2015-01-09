@@ -9,6 +9,7 @@ logger = logging.getLogger(__name__)
 
 
 class MockRESTBase(object):
+
     'Base class for Mock REST API classes'
 
     def __json__(self):
@@ -25,8 +26,8 @@ class MockRESTBase(object):
         return self.__dict__ == other.__dict__
 
 
-
 class EndPointMethod(MockRESTBase):
+
     """
     defines a specific method of an endpoint. An endpoint with the same path
     can have have multiple request method types
@@ -44,16 +45,15 @@ class EndPointMethod(MockRESTBase):
         self.result = result
 
     @classmethod
-    def from_json(self,method_json):
+    def from_json(self, method_json):
         in_method = method_json.get("method")
         in_inp_data = method_json.get("input")
         in_result = method_json.get("result")
 
-        return self(in_method,in_inp_data,in_result)
+        return self(in_method, in_inp_data, in_result)
 
     def get_result(self):
         return self.result
-
 
     def is_input_valid(self, in_data):
         """
@@ -67,6 +67,7 @@ class EndPointMethod(MockRESTBase):
 
 
 class EndPoint(MockRESTBase):
+
     'Defines a REST endpoint'
 
     def __init__(self, path, methods):
@@ -82,10 +83,10 @@ class EndPoint(MockRESTBase):
         self.methods = methods or []
 
     @classmethod
-    def from_json(self,endpoint_json):
+    def from_json(self, endpoint_json):
         in_path = endpoint_json.get("path")
         in_methods = endpoint_json.get("methods") or []
-        return self(in_path,in_methods)
+        return self(in_path, in_methods)
 
     def add_method(self, ep_method):
         """
@@ -120,8 +121,7 @@ class EndPoint(MockRESTBase):
         try:
             for method in self.methods:
 
-
-                if method.method==in_method_type:
+                if method.method == in_method_type:
                     return method
             else:
                 return "not a valid method"
@@ -131,19 +131,25 @@ class EndPoint(MockRESTBase):
 
         for method in self.methods:
 
-            if not isinstance(method, EndPointMethod) and method.get("method") == in_method_type:
+            if not isinstance(
+                    method,
+                    EndPointMethod) and method.get("method") == in_method_type:
                 try:
-                    method_obj = EndPointMethod(method.get("method"),method.get("input"),method.get("result"))
+                    method_obj = EndPointMethod(
+                        method.get("method"),
+                        method.get("input"),
+                        method.get("result"))
                     return method_obj
                 except TypeError as err:
                     logger.debug(err)
-            elif isinstance(method, EndPointMethod) and method.method==in_method_type:
-                    return method
+            elif isinstance(method, EndPointMethod) and method.method == in_method_type:
+                return method
         else:
             return "Invalid Method"
 
 
 class MockREST(MockRESTBase):
+
     'Defines a mock rest object. Includes all its end-points definitions.'
 
     def __init__(self, name, version, prefix, endpoints):
@@ -163,12 +169,12 @@ class MockREST(MockRESTBase):
         self.endpoints = endpoints or []
 
     @classmethod
-    def from_json(self,mock_rest_json):
-        in_name=mock_rest_json.get("name")
+    def from_json(self, mock_rest_json):
+        in_name = mock_rest_json.get("name")
         in_version = mock_rest_json.get("version")
         in_prefix = mock_rest_json.get("prefix") or ""
         in_endpoints = mock_rest_json.get("endpoints") or []
-        return self(in_name,in_version,in_prefix,in_endpoints)
+        return self(in_name, in_version, in_prefix, in_endpoints)
 
     def add_endPoint(self, ep):
         """
@@ -206,23 +212,28 @@ class MockREST(MockRESTBase):
                 for me in end_p["methods"]:
                     if dict(me)["method"] == method_name:
                         return dict(me)["result"]
-            if not isinstance(end_p, EndPoint) and end_p.get("path") == in_path:
+            if not isinstance(
+                    end_p,
+                    EndPoint) and end_p.get("path") == in_path:
                 try:
-                    endpoint_obj = EndPoint(end_p.get("path"),end_p.get("methods"))
+                    endpoint_obj = EndPoint(
+                        end_p.get("path"),
+                        end_p.get("methods"))
                     return endpoint_obj
                 except TypeError as err:
                     logger.debug(err)
-            elif isinstance(end_p, EndPoint) and end_p.path==in_path:
-                    return end_p
+            elif isinstance(end_p, EndPoint) and end_p.path == in_path:
+                return end_p
 
         else:
             return "Invalid path"
 
 
 class MockRESTServer(MockRESTBase):
+
     'defines a mock rest server'
 
-    default_host ='0.0.0.0'
+    default_host = '0.0.0.0'
     default_port = 5000
 
     def __init__(self, mock_rest, host, port):
@@ -238,7 +249,6 @@ class MockRESTServer(MockRESTBase):
         self.mock_rest = mock_rest
         self.host = host or MockRESTServer.default_host
         self.port = port or MockRESTServer.default_port
-
 
     def process_request(self, path, method, inp_data):
         pass
