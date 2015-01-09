@@ -13,6 +13,7 @@ html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockq
 	color: #666;
 
 }
+
 a:hover,a:visited{
 	color: inherit;
 }
@@ -231,6 +232,9 @@ h4 a{
 /***************************************************************************************************mediaqueries begin *******************************************/
 
 
+.rowSelect{
+background:red;
+}
 
 
 

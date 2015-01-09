@@ -225,7 +225,7 @@ class UIServer(object):
                 f.close()
                 # f.write(json.load(f.read())['endpoints'].append(data))
                 f.close()
-                return render_template("index.html", a=a, st=stopped_apps,status="Sucessfully added "+data["path"])
+                return render_template("index.html", a=a, st=stopped_apps,status="Sucessfully added <"+data["path"]+"> endpoint to <"+str(app_name)+">" )
                 # return jsonify({'Success':data['path']})
             else:
                 print "Invalid End point"

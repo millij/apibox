@@ -10,6 +10,8 @@
     <link rel="stylesheet" href="{{url_for('static',filename='css/main.css')}}">
 
 </head>
+
+
 <body ng-app="ApiboxUI">
     <div class="header">
         <div class="container">
@@ -92,7 +94,7 @@
                                        {%else%}
                                        <form action="/app/stop/{{config}}" method="POST">
                                            {%endif%}
-                                    <td>{{config}}</td>
+                                    <td class="myapp"  >{{config}}</td>
                                     <td>
                                         {% if st.has_key(config)  %}
                                         <input type="submit" value="Start" class="btn btn-link btn-xs" ng-click="removeRow(config.path)"/>
@@ -122,6 +124,16 @@
         <script type="text/javascript" src="{{url_for('static',filename='js/jquery.js')}}"></script>
         <script type="text/javascript" src="{{url_for('static',filename='js/bootstrap.min.js')}}"></script>
     </section>
+
+
+<script>
+$('.myapp').on('click',function(){
+console.log($(this).html());
+$('.form-horizontal').attr('action','/app/'+$(this).html()+'/endpoint');
+$('.rowSelect').removeClass('rowSelect');
+$(this).parent().addClass('rowSelect');
+})
+</script>
 
 </body>
 </html>
