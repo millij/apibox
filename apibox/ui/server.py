@@ -8,7 +8,7 @@ from multiprocessing import Process
 # Mock_rest Requirements
 from apibox.server import AppContainer, apps as a, launch_app_server_from_ui
 from apibox.mock_rest import *
-from flask.ext.cache import Cache
+#from flask.ext.cache import Cache
 # Schema Validator
 from apibox.utils.schema_validator import *
 
@@ -25,10 +25,10 @@ class UIServer(object):
     'UI Server object'
 
     port = 8000               # Default UI Server Port 
-    cache = Cache(config={'CACHE_TYPE': 'simple'})
+    #cache = Cache(config={'CACHE_TYPE': 'simple'})
 
     app = Flask(__name__)
-    cache.init_app(app)
+    #cache.init_app(app)
 
     def __init__(self):
         print "UI server Initiated"
@@ -46,7 +46,7 @@ class UIServer(object):
 
 
     """ Routes for UI Support """
-    @cache.cached(timeout=None)
+    #@cache.cached(timeout=None)
     @app.route("/", methods=["GET"])
     def apps_home():
         """
@@ -108,16 +108,23 @@ class UIServer(object):
         Starts the app with the given name
         """
         port_number = 9999
-        launch_app_server_from_ui(port_number, send_mr_obj(app_name))
+        import subprocess as sub
+        # launch_app_server_from_ui(port_number, send_mr_obj(app_name))
+        sub.call('ls',shell=True)
+        kk = sub.call('nohup python apibox/ui/sampleapp.py '+str(app_name)+' '+str(port_number) +' '+ '"test/kk.json" &> /dev/null &', shell=True)
+        print "started the server " 
+        print (kk)
         return "successfully started the sever"
-
 
     @app.route("/app/<app_name>/stop", methods=["GET"])
     def app_handler_stop(app_name):
         """
         Stops the app with the given name
         """
-        pass
+        port_number = "get the port number"
+        import subprocess as sub
+        sub.call("fuser -k "+str(port_number)+"/tcp")
+
 
 
     @app.route("/app/<app_name>/endpoint", methods=["GET", "POST", "PUT", "DELETE"])
@@ -134,12 +141,17 @@ class UIServer(object):
         elif request.method == 'POST':
             # POST: Create new endpoint
             print "POST"
-            ep_name = "get the file name here from form"
-            method_name = "get method name"
-            input_data = "get data here"
-            result = "get result for the method"
-            ep_meth   =  EndPointMethod(method_name, input_data, result)
-            new_ep_obj = EndPoint.add_method(ep_meth)
+            #ep_name = "get the file name here from form"
+            #method_name = "get method name"
+            #input_data = "get data here"
+            #result = "get result for the method"
+            #ep_meth   =  EndPointMethod(method_name, input_data, result)
+            #new_ep_obj = EndPoint.add_method(ep_meth)
+            print request.data, " this is request data"
+            import ast
+            temp_dict = ast.literal_eval(request.data)
+            endpoint_obj = EndPoint.from_json(temp_dict)
+            return str(endpoint_obj)
 
         elif request.method == 'PUT':
             # PUT: Update the endpoint
