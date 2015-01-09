@@ -27,12 +27,19 @@ def send_mr_obj(app_name):
 class UIServer(object):
     'UI Server object'
 
+<<<<<<< HEAD
     port = 8000               # Default UI Server Port
     #cache = Cache(config={'CACHE_TYPE': 'simple'})
 
     UPLOAD_FOLDER = ''
     app = Flask(__name__, static_folder='static')
     app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+=======
+    port = 8000               # Default UI Server Port 
+    #cache = Cache(config={'CACHE_TYPE': 'simple'})
+
+    app = Flask(__name__)
+>>>>>>> b7b3b6466a2afdd94feb437f1a9613bd7c2f2bf9
     #cache.init_app(app)
 
     def __init__(self):
@@ -172,16 +179,23 @@ class UIServer(object):
         Starts the app with the given name
         """
         port_number = 9999
-        launch_app_server_from_ui(port_number, send_mr_obj(app_name))
+        import subprocess as sub
+        # launch_app_server_from_ui(port_number, send_mr_obj(app_name))
+        sub.call('ls',shell=True)
+        kk = sub.call('nohup python apibox/ui/sampleapp.py '+str(app_name)+' '+str(port_number) +' '+ '"test/kk.json" &> /dev/null &', shell=True)
+        print "started the server " 
+        print (kk)
         return "successfully started the sever"
-
 
     @app.route("/app/<app_name>/stop", methods=["GET"])
     def app_handler_stop(app_name):
         """
         Stops the app with the given name
         """
-        pass
+        port_number = "get the port number"
+        import subprocess as sub
+        sub.call("fuser -k "+str(port_number)+"/tcp")
+
 
 
     @app.route("/app/<app_name>/endpoint", methods=["GET", "POST", "PUT", "DELETE"])
@@ -197,13 +211,18 @@ class UIServer(object):
             return str(kk.endpoints)
         elif request.method == 'POST':
             # POST: Create new endpoint
+<<<<<<< HEAD
             print "This is POST Method for adding endpoints"
+=======
+            print "POST"
+>>>>>>> b7b3b6466a2afdd94feb437f1a9613bd7c2f2bf9
             #ep_name = "get the file name here from form"
             #method_name = "get method name"
             #input_data = "get data here"
             #result = "get result for the method"
             #ep_meth   =  EndPointMethod(method_name, input_data, result)
             #new_ep_obj = EndPoint.add_method(ep_meth)
+<<<<<<< HEAD
             print (request.data), " this is request data"
            
             temp_dict = ast.literal_eval(request.data)
@@ -215,6 +234,13 @@ class UIServer(object):
                 return str(endpoint_obj)
             else:
                 return "Invalid app_name"
+=======
+            print request.data, " this is request data"
+            import ast
+            temp_dict = ast.literal_eval(request.data)
+            endpoint_obj = EndPoint.from_json(temp_dict)
+            return str(endpoint_obj)
+>>>>>>> b7b3b6466a2afdd94feb437f1a9613bd7c2f2bf9
 
         elif request.method == 'PUT':
             # PUT: Update the endpoint

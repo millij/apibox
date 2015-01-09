@@ -1,5 +1,9 @@
 {
+<<<<<<< HEAD
     "name" : "heymant",
+=======
+    "name" : "dash it",
+>>>>>>> b7b3b6466a2afdd94feb437f1a9613bd7c2f2bf9
     "version" : "v1",
     "prefix" : "/api/v1",
     "endpoints" : [
@@ -50,4 +54,8 @@
         }
     ],
     "global" : {}
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> b7b3b6466a2afdd94feb437f1a9613bd7c2f2bf9
