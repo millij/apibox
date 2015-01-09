@@ -1,7 +1,7 @@
 import json
 import os
 import logging as log
-from jsonschema import validate 
+from jsonschema import validate
 
 JSON_SCHEMA_REL_PATH = "/apibox/utils/schema.json"
 
@@ -57,6 +57,25 @@ def validate_file_content(file_path, file_type):
 
 
 
+
+def validate_filed(file_name, file_type):
+    """
+    Validates the file contents
+    """
+    if file_type == "JSON":
+        print dir(file) 
+
+        # read file for json content
+        json_content = json.load((file))
+
+        # validate and return
+        if is_json_valid(json_content):
+            return True, json_content
+        else:
+            return False, None
+
+    else:
+        raise ValueError("Unkown file tyre")
 
 
 
