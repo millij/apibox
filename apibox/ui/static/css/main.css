@@ -1,0 +1,248 @@
+
+/*reset begins*/
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 12px;
+	font: inherit;
+	vertical-align: baseline;
+	font-weight: normal;
+	outline: none;
+	font-family: helvetica;
+	color: #666;
+
+}
+a:hover,a:visited{
+	color: inherit;
+}
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after, q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+.flt-left {
+	float: left;
+}
+.flt-right {
+	float: right;
+}
+a,a:focus {
+	text-decoration: none;
+}
+a:hover{
+	text-decoration: none;
+}
+.font-bold{
+	font-weight: bold;
+}
+
+
+/*reset ends*/
+body{
+		background: #ebebeb;
+}
+.header{
+	background: #f6f6f6;
+	padding:20px 0px;
+	text-align: center;
+}
+.link-a{
+	font-size: 14px;
+	text-transform: uppercase;
+	color: #666 !important;
+}
+.header .link-a{
+	float: right;
+}
+.logo{
+	display: inline-block;
+	width: 248px;
+	height: 76px;
+	margin: 0 auto;
+	background: url('images/logo.png') no-repeat;
+	margin-top: 50px;
+}
+.main-content{
+
+	padding: 50px 0px 150px 0px;
+}
+
+h2{
+	font-size: 24px;
+	color: #999;
+	margin: 20px 0px 40px;
+}
+.form-list>li{
+	padding: 15px 0px;
+}
+.form-list .label-form{
+	font-size: 18px;
+	color: #333;
+	width:20%;
+	display: inline-block;
+	padding: 10px 10px;
+	float: left;
+	text-align: right;
+}
+.form-list .form-box{
+	padding: 5px 20px;
+
+}
+.form-box{
+	float: left;
+	width:80%;
+}
+
+.btn-a{
+	padding: 10px 30px;
+	background: #666;
+	font-size: 16px;
+	text-transform: uppercase;
+	display: inline-block;
+	color: #fff !important;
+}
+.btn-a:hover{
+	background: #999;
+}
+.dd-a button{
+	width: auto !important;
+	border-radius: 0px;
+}
+.dd-a button:hover{
+	background: #f9f9f9 !important;
+}
+.dd-a i{
+	margin:0px 0px 0px 15px;
+}
+.input-a{
+	border:1px solid #999;
+	padding: 10px 20px;
+	background: #fff;
+	width:100%;
+}
+textarea.input-a{
+	height: 100px;
+}
+
+.container{
+	width: 800px;
+}
+.form-list>li{
+	min-height: 65px;
+}
+.browse-btn{
+	margin: 35px 0px;
+	width: 430px;
+	background: #ebebeb;
+}
+
+h3{
+	font-size: 20px;
+	font-weight: bold;
+	padding: 0px 0px 20px 0;
+
+}
+h3 a{
+	color: #3c5dcb !important;
+}
+h3 a:hover{
+	text-decoration: underline;
+}
+h4{
+	font-size: 18px;
+	color: #666;
+	font-weight: bold;
+	padding: 20px 0px;
+}
+h4 a{
+	float: right;
+}
+.green{color: #009900 !important;}
+.add-api{
+	float: right;
+	font-size: 18px;
+	font-weight: bold;
+	color: #666;
+}
+.add-api:hover{
+	color: #333;
+}
+.add-api:hover span{
+	color: #333;
+}
+.add-api span{
+	position: relative;
+	top: 2px;
+	margin-right: 5px;
+}
+
+.list-b>li{
+	width: 100%;
+	border-bottom:1px solid #999;
+	min-height: 45px;
+}
+.list-b>li>label{
+	color: #666;
+	font-size: 18px;
+	display: inline-block;
+	float: left;
+	padding: 10px 10px;
+	background: none;
+
+}
+.list-b li.lb-header{
+	background: #ccc;
+
+}
+.list-b li.lb-header label{
+	color: #333;
+	font-weight: bold;
+}
+.list-b .form-list{
+	background: #fff;
+}
+.list-b .form-list .input-a{
+	background: #f0f0f0;
+}
+.lb-a{width:40%;}
+.lb-b{width:20%;}
+.lb-c{width:20%;}
+.lb-d{width:20%;}
+/***************************************************************************************************mediaqueries begin *******************************************/
+/***************************************************************************************************mediaqueries begin *******************************************/
+/***************************************************************************************************mediaqueries begin *******************************************/
+/***************************************************************************************************mediaqueries begin *******************************************/
+/***************************************************************************************************mediaqueries begin *******************************************/
+/***************************************************************************************************mediaqueries begin *******************************************/
+/***************************************************************************************************mediaqueries begin *******************************************/
+/***************************************************************************************************mediaqueries begin *******************************************/
+
+
+
+
+
+@media screen and (min-width: 768px) {
+
+	
+}
+@media screen and (min-width: 992px) {
+	
+}
+
+@media screen and (min-width: 1200px) {
+
+}
+

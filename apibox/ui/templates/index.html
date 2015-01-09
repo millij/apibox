@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Apibox UI</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- css -->
+    <link rel="stylesheet" href="{{url_for('static',filename='css/bootstrap.css')}}">
+    <link rel="stylesheet" href="{{url_for('static',filename='css/main.css')}}">
+
+</head>
+<body ng-app="ApiboxUI">
+    <div class="header">
+        <div class="container">
+            <a href="#" class="link-a">login</a>
+            <a href="#" class="logo"></a>
+            <div class="clearfix"></div>
+           
+                <form action="/app/new" method="POST" enctype="multipart/form-data">
+                <ul class="form-list">
+                <li><input name="app_name" placeholder= "Application Name"/></li>
+                <li><input name="port_number" type="number" placeholder= "port number other than 5000 and 8000"/></li>
+                <li>
+                    <label class="label-form"> </label>
+                    <div class="form-box">
+                        <input class="input-a browse-btn" type="file" name="filehere"></input>
+                    </div>
+               
+                    </li>
+                </ul>
+                <button>Submit </button>
+             </form>          
+       </div>
+     </div>
+       
+    <div class="main-content" ng-controller="mainController" ng-init="init()">
+        <div style="padding-bottom:50px">
+            <table style="width:100%" class="container">
+                <tr class="row">
+                    <td style="width:50%;vertical-align: top" class="col-lg-5">
+                        <div style="padding-bottom:20px">
+                            <h3>Add Configurations</h3>
+                        </div>
+                        <form class="form-horizontal" role="form" ng-submit="saveRow()">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Path</label>
+                                <div class="col-sm-6">
+                                    <input type="text" class="form-control" name="path" ng-model="path" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Method</label>
+                                <div class="col-sm-6">
+                                    <input type="text" class="form-control" name="method" ng-model="method" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Response</label>
+                                <div class="col-sm-6">
+                                    <textarea type="text" class="form-control" name="response" ng-model="response"></textarea>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div style="padding-left:110px">
+                                    <input type="submit" value="Submit" class="btn btn-primary"/>
+                                </div>
+                            </div>
+                        </form>
+                    </td>
+                    <td style="vertical-align: top" class="col-lg-5">
+                        <table class="table table-hover">
+                            <caption class="font-bold">Select an Application</caption>
+                            <thead>
+                                <tr>
+                                    <th>Application Name</th>
+                                    <th>Port Number</th>
+                                </tr>
+                            </thead>
+                            <tbody class="configList">
+                            {% for config in a.keys()%}
+                                <tr ng-repeat="config in configurations" ng-click="editRow(config.path)">
+                                   
+                                    <td>{{config}}</td>
+                                    <td>{{a[config].split("$$")[1]}}</td>
+                                    <td>
+                                        <input type="button" value="Remove" class="btn btn-link btn-xs" ng-click="removeRow(config.path)"/>
+                                    </td>
+                                </tr>
+                            {%endfor%}
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <!-- scripts -->
+    <section>
+
+        <script type="text/javascript" src="{{url_for('static',filename='js/apibox/app.js')}}"></script>
+        <script type="text/javascript" src="{{url_for('static',filename='js/apibox/controllers/mainController.js')}}"></script>
+
+        <script type="text/javascript" src="{{url_for('static',filename='js/jquery.js')}}"></script>
+        <script type="text/javascript" src="{{url_for('static',filename='js/bootstrap.min.js')}}"></script>
+    </section>
+
+</body>
+</html>

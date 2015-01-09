@@ -27,7 +27,7 @@ def send_mr_obj(app_name):
 class UIServer(object):
     'UI Server object'
 
-    port = 8000               # Default UI Server Port 
+    port = 8000               # Default UI Server Port
     #cache = Cache(config={'CACHE_TYPE': 'simple'})
 
     UPLOAD_FOLDER = ''
@@ -86,7 +86,7 @@ class UIServer(object):
                 #a[str(mock_rest.name)] = file_path
                 #return "Created New App"
             #return "Config file is not valid"
-            
+           
             if not apps.has_key(app_name):
                 print (request.data), " this is request data"
                 temp_dict = ast.literal_eval(request.data)
@@ -163,7 +163,7 @@ class UIServer(object):
     def index():
         """ Displays the index page accessible at '/Apibox'
         """
-   
+  
         return render_template('index.html')
 
     @app.route("/app/<app_name>/start", methods=["GET"])
@@ -205,7 +205,7 @@ class UIServer(object):
             #ep_meth   =  EndPointMethod(method_name, input_data, result)
             #new_ep_obj = EndPoint.add_method(ep_meth)
             print (request.data), " this is request data"
-            
+           
             temp_dict = ast.literal_eval(request.data)
             endpoint_obj = EndPoint.from_json(temp_dict)
             if apps.has_key(app_name):
@@ -243,6 +243,7 @@ class UIServer(object):
     @app.errorhandler(500)
     def internal_server_error(error):
         return make_response(jsonify({'error': str(error)}), 500)
+
 
 
 

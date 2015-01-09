@@ -131,7 +131,7 @@ class EndPoint(MockRESTBase):
 
         #print " in get method of EndPoint"
         #print (self.methods), " len of self.methods"
-  
+ 
         for method in self.methods:
             #print method , "  this is method"
             #print type(method), " this is type of method"
@@ -207,7 +207,7 @@ class MockREST(MockRESTBase):
         :param in_path: path of the endpoint
         """
         #print self.endpoints, " self.endpoints snhbhd"
-      
+     
         for end_p in self.endpoints:
             # if not isinstance(end_p, EndPoint):
             #     raise TypeError("Invalid type. expected EndPoint")
@@ -230,8 +230,8 @@ class MockREST(MockRESTBase):
 
         else:
             return "Invalid path"
-           
-               
+          
+              
 
 class MockRESTServer(MockRESTBase):
     'defines a mock rest server'
@@ -244,7 +244,7 @@ class MockRESTServer(MockRESTBase):
         default constructor
         :param mock_rest: object containing all the MockAPI details.
         :param host: host to start the server at.. (default: 0.0.0.0)
-        :param port: port to start the server at.. (default: 5000) 
+        :param port: port to start the server at.. (default: 5000)
         """
         if not isinstance(mock_rest, MockREST):
             raise TypeError("Invalid type. expected MockREST")
@@ -256,6 +256,7 @@ class MockRESTServer(MockRESTBase):
 
     def process_request(self, path, method, inp_data):
         pass
+
 
 
 
