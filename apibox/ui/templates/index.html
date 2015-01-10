@@ -25,7 +25,10 @@
     <link rel="stylesheet" href="{{url_for('static',filename='css/main.css')}}">
 
 </head>
-<style>   .box { width:350px; }
+<style>   .box { width:350px; } .popover{
+    max-width: 100%; // Max Width of the popover (depending on the container!)
+}
+
  </style>
 
 <body ng-app="ApiboxUI">
@@ -36,14 +39,14 @@
             <!--<button  type="button" class="btn btn-primary pop-bottom link-a" data-toggle="popover" data-placement="bottom" title="Create App" >Create Application</button>-->
 
             <div class="popover-markup pull-right"> <a href="#" class="trigger"> Create New</a>
-                <div class="head hide">Lorem Ipsum</div>
+
                 <div class="content hide">
                     <form action="/app/new_ui" method="POST" content="application/json">
                     <div class="form-group">
                         <input name="name" class="form-control" placeholder="App Name"/>
                         <input name="pefix" class="form-control" placeholder="Prefix"/>
                         <input name="Version" class="form-control" placeholder="Version"/>
-                        <h3> Create your Endpoints </h3>
+                        <h3> Create your Endpoints Below </h3>
                     </div>
                     <button type="submit" class="btn btn-default btn-block">Submit</button>
                      </form>
@@ -83,7 +86,15 @@
 
                             <h3>Add Configurations</h3>
                         </div>
-                        <form class="form-horizontal" role="form"  action="/app/kanth/endpoint" method="POST">
+
+                          <button  type="button" class="btn btn-primary pop-bottom pull-right allends" data-toggle="popover" data-placement="bottom" title="Endpoints" >All Endpoints</button>
+
+                             <div class="endcontent hide">
+                                 <div class="stage"> </div>
+                                </div>
+                        <form class="form-horizontal" role="form"  action="#" method="POST">
+                            <!--<a class="allends" href="">View End Points</a>-->
+
                             <div class="form-group">
                                 <label class="col-sm-3 control-label">Path</label>
                                 <div class="col-sm-6">
@@ -152,6 +163,7 @@
 $('.myapp').on('click',function(){
 console.log($(this).html());
 $('.form-horizontal').attr('action','/app/'+$(this).html()+'/endpoint');
+$('.allends').attr('href','/app/'+$(this).html()+'/endpoint');
 $('.rowSelect').removeClass('rowSelect');
 $(this).parent().addClass('rowSelect');
 })
@@ -176,5 +188,34 @@ $('.popover-markup .trigger').popover({
     }
 });
 </script>
+
+    <script type="text/javascript">
+$('.allends').popover({
+    placement : 'bottom',
+    html: true,
+    content: function () {
+        return $(this).parent().find('.endcontent').html();
+    }
+});
+</script>
+
+<script type="text/javascript" language="javascript">
+$(document).ready(function() {
+  $(".allends").click(function(event){
+      $.getJSON($(".allends").attr('href'), function(jd) {
+        var ep = $(".allends").attr("href")
+         $.each(jd, function(index) {
+            //alert(data[index].TEST1);
+            //alert(data[index].TEST2);
+            //$('.stage').append('<form action="'+ep+'" method="DELETE"> <button><h4 name="number">'+index+'</h4> <h2>' + jd[index] + '</h2></button> </form>');
+            $('.stage').append(' <h2>' + jd[index] + '</h2>');
+        });
+
+
+      });
+  });
+});
+</script>
+
 </body>
 </html>
