@@ -1,7 +1,7 @@
 #!flask/bin/python
 
 import logging as log
-
+import json
 from flask import Flask, jsonify, make_response, abort, request, render_template, url_for
 from multiprocessing import Process
 
@@ -16,7 +16,6 @@ import shelve
 import subprocess as sub
 
 import multiprocessing as mp
-import json
 import ast
 
 stopped_apps = shelve.open("stopped.txt", writeback=True)
@@ -135,6 +134,34 @@ class UIServer(object):
             return render_template("index.html", a=a, st=stopped_apps)
         return "reached new app"
 
+    @app.route("/app/new_ui", methods=["POST"])
+    def app_new_ui_handler():
+        """
+        Applications handler
+        """
+        if request.method == 'POST':
+
+            print str(request.data)
+            import uuid
+            d ={}
+            app_name = str(uuid.uuid4())
+            d['name'] = str(request.form["name"])
+            d['prefix'] = str(request.form["name"])
+            d['version'] = str(request.form["name"])
+            d['endpoints'] = []
+            f = open(app_name+'.json','wb')
+            import json
+            json.dump(d, f)
+            f.close()
+            is_valid, content = validate_file_content(
+                str(app_name) + ".json", "JSON")
+            if not is_valid:
+                return render_template("index.html", a=a, st=stopped_apps, status="Something Went wrong")
+            mock_rest = MockREST.from_json(content)
+            a[str(mock_rest.name)] = app_name +".json"
+            return render_template("index.html", a=a, st=stopped_apps, status="Successfully Created <"+d['name']+">")
+        return "reached new app"
+
     @app.route("/app/start/<app_name>", methods=["POST"])
     def app_handler_start(app_name):
         """
@@ -215,9 +242,7 @@ class UIServer(object):
                 mr_data.add_endPoint(ep)
 
                 log.info(str(la))
-
                 # return mr_data.__str__()
-
                 print la,"hey man"
                 f.close()
                 f = open(filename,'wb')
@@ -238,13 +263,34 @@ class UIServer(object):
 
             new_ep_obj = EndPoint(path, method)
             MockREST.add_endPoint(new_ep_obj)
+            return ""
+
 
         else:
             # DELETE: Delete the endpoint
-            ep_path = "get the path here"
-            ep_obj = MockREST.get_endpoint(ep_path)
-            MockREST.remove_endPoint(ep_obj)
-            print "DELETE"
+            enp_no = request.form['endpoint_no']
+
+            log.info(str(enp_no)+" want to delete this one!!!")
+            kk = send_mr_obj(app_name)
+            k = {}
+            count =0
+            for ep in kk.endpoints:
+                k[count] = (dict(ep)['path'])
+                count+=1
+            import json
+            filename =a[app_name]
+            f = open(filename)
+            la = json.load(f)
+            del la["endpoints"][int(enp_no)]
+            log.info(str(la))
+            f.close()
+            f = open(filename,'wb')
+            json.dump(la, f)
+            f.close()
+            # f.write(json.load(f.read())['endpoints'].append(data))
+            f.close()
+            del k[int(enp_no)]
+            return jsonify(k)
 
     @app.route('/<path:path>', methods=["GET", "POST", "DELETE", "PUT"])
     def catch_all(path):
@@ -266,7 +312,6 @@ class UIServer(object):
             return end_points_result.__str__()
         else:
             return jsonify({'error': 'This App is Currently Disabled'})
-
 
     """ Routes / error handling """
 

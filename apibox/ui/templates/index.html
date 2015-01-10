@@ -5,17 +5,50 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+
+    <!-- scripts -->
+    <section>
+
+        <script type="text/javascript" src="{{url_for('static',filename='js/jquery.js')}}"></script>
+        <script type="text/javascript" src="{{url_for('static',filename='js/bootstrap.min.js')}}"></script>
+        <script type="text/javascript" src="{{url_for('static',filename='js/apibox/app.js')}}"></script>
+        <!--<script type="text/javascript" src="{{url_for('static',filename='js/angular.min.js')}}"></script>-->
+
+        <!--<script type="text/javascript" src="{{url_for('static',filename='js/angular-resource.js')}}"></script>-->
+
+        <!--<script type="text/javascript" src="{{url_for('static',filename='js/apibox/controllers/mainController.js')}}"></script>-->
+
+    </section>
+
     <!-- css -->
     <link rel="stylesheet" href="{{url_for('static',filename='css/bootstrap.css')}}">
     <link rel="stylesheet" href="{{url_for('static',filename='css/main.css')}}">
 
 </head>
-
+<style>   .box { width:350px; }
+ </style>
 
 <body ng-app="ApiboxUI">
     <div class="header">
         <div class="container">
-            <a href="#" class="link-a">login</a>
+
+            <!--<a href="#" class="link-a">Create Application</a>-->
+            <!--<button  type="button" class="btn btn-primary pop-bottom link-a" data-toggle="popover" data-placement="bottom" title="Create App" >Create Application</button>-->
+
+            <div class="popover-markup pull-right"> <a href="#" class="trigger"> Create New</a>
+                <div class="head hide">Lorem Ipsum</div>
+                <div class="content hide">
+                    <form action="/app/new_ui" method="POST" content="application/json">
+                    <div class="form-group">
+                        <input name="name" class="form-control" placeholder="App Name"/>
+                        <input name="pefix" class="form-control" placeholder="Prefix"/>
+                        <input name="Version" class="form-control" placeholder="Version"/>
+                        <h3> Create your Endpoints </h3>
+                    </div>
+                    <button type="submit" class="btn btn-default btn-block">Submit</button>
+                     </form>
+                </div>
+            </div>
             <a href="#" class="logo"></a>
             <div class="clearfix"></div>
                 <img  src="{{url_for('static', filename='img/mock.png')}}" style="margin-top:-100px">
@@ -113,17 +146,6 @@
         </div>
     </div>
 
-    <!-- scripts -->
-    <section>
-
-        <script type="text/javascript" src="{{url_for('static',filename='js/apibox/app.js')}}"></script>
-        <script type="text/javascript" src="{{url_for('static',filename='js/angular.min.js')}}"></script>
-        <script type="text/javascript" src="{{url_for('static',filename='js/angular-resource.js')}}"></script>
-        <script type="text/javascript" src="{{url_for('static',filename='js/apibox/controllers/mainController.js')}}"></script>
-
-        <script type="text/javascript" src="{{url_for('static',filename='js/jquery.js')}}"></script>
-        <script type="text/javascript" src="{{url_for('static',filename='js/bootstrap.min.js')}}"></script>
-    </section>
 
 
 <script>
@@ -135,5 +157,24 @@ $(this).parent().addClass('rowSelect');
 })
 </script>
 
+<script type="text/javascript">
+$(document).ready(function(){
+
+    $(".pop-bottom").popover({placement : 'bottom'});
+
+});
+</script>
+<script type="text/javascript">
+$('.popover-markup .trigger').popover({
+    placement : 'bottom',
+    html: true,
+    title: function () {
+        return $(this).parent().find('.head').html();
+    },
+    content: function () {
+        return $(this).parent().find('.content').html();
+    }
+});
+</script>
 </body>
 </html>

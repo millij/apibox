@@ -259,5 +259,3 @@ class MockRESTServer(MockRESTBase):
         self.host = host or MockRESTServer.default_host
         self.port = port or MockRESTServer.default_port
 
-    def process_request(self, path, method, inp_data):
-        pass
