@@ -19,6 +19,8 @@ class AppContainer(object):
     pass
 
 apps = shelve.open("allapps.txt", writeback=True)
+#app_content = shelve.open("allcontent.txt",writeback=True)
+app_content = {}
 
 
 def add_app(app_name, mock_rest):

@@ -181,8 +181,8 @@ class MockREST(MockRESTBase):
         Adds new endpoint to the the list of existing endpoints
         :param endpoint: EndPoint object
         """
-        if not isinstance(ep, EndPoint):
-            raise TypeError("Invalid type. expected EndPoint")
+        #if not isinstance(ep, EndPoint):
+            #raise TypeError("Invalid type. expected EndPoint")
 
         self.endpoints.append(ep)
 
@@ -191,40 +191,46 @@ class MockREST(MockRESTBase):
         Removes the endpoint from the the list of existing endpoints
         :param endpoint: EndPoint object
         """
-        if not isinstance(ep, EndPoint):
-            raise TypeError("Invalid type. expected EndPoint")
+        if isinstance(ep, EndPoint):
+            path = ep.path
+        else:
+            path = ep.get("path")       
+        for end_p in self.endpoints:
+            if isinstance(end_p, EndPoint) and end_p.path == path:
+                self.endpoints.remove(end_p)
+            elif not isinstance(end_p, EndPoint) and end_p.get("path") == path:
+                self.endpoints.remove(end_p)
+               
+    def get_endpoints(self):
+        endpoints_dict = {}
+        count = 1
+        for end_p in self.endpoints:
+            if isinstance(end_p, EndPoint):
+                endpoints_dict.update({count:end_p.path})
+                count = count + 1
+            else:
+                endpoints_dict.update({count:end_p["path"]})
+                count = count + 1
+        return endpoints_dict
 
-        try:
-            self.endpoints.remove(ep)
-        except ValueError as err:
-            # log TypeError
-            logger.debug(err)
-
-    def get_endpoint(self, in_path, method_name):
+    def get_app_details(self):
+        app_details = {}
+        app_details.update({"name":self.name})
+        app_details.update({"version":self.version})
+        app_details.update({"prefix":self.prefix})
+        return app_details
+        
+    def get_endpoint(self, in_path):
         """
         Returns the endpoint with the given path
         :param in_path: path of the endpoint
         """
-
         for end_p in self.endpoints:
-
-            if str(end_p["path"]) == in_path:
-                for me in end_p["methods"]:
-                    if dict(me)["method"] == method_name:
-                        return dict(me)["result"]
-            if not isinstance(
-                    end_p,
-                    EndPoint) and end_p.get("path") == in_path:
-                try:
-                    endpoint_obj = EndPoint(
-                        end_p.get("path"),
-                        end_p.get("methods"))
-                    return endpoint_obj
-                except TypeError as err:
-                    logger.debug(err)
-            elif isinstance(end_p, EndPoint) and end_p.path == in_path:
+            if isinstance(end_p, EndPoint) and end_p.path == in_path:
                 return end_p
-
+                
+            elif not isinstance(end_p, EndPoint) and end_p.get("path") == in_path:
+                return EndPoint.from_json(end_p)
         else:
             return "Invalid path"
 
