@@ -1,23 +1,23 @@
-var app = angular.module('ApiboxUI',['ngResource'])
+var app = angular.module('ApiboxUI',['ngRoute', 'ngResource'])
 	.factory("ConfigService", function ($resource)
 	  {
 	    // Construct a resource object that can
 	    // interact with the RESTful API of the server.
-	    var resource = $resource("config/:operation");
+	    var resource = $resource("app/:appname");
 
 	    // Custom function to retrieve a config List
-	    resource.retrieveConfig = function (successCallback, errorCallback) {
+	    resource.retrieveConfig = function (appName, successCallback, errorCallback) {
 	      return this.get(
 	        {
-	          operation: "retrieve"
+	          appname: appName
 	        }, successCallback, errorCallback);
 	    };
 
 	    // Custom function to save a config object
-	    resource.storeConfig = function (config, successCallback, errorCallback) {
+	    resource.storeConfig = function (appName, config, successCallback, errorCallback) {
 	      return this.save(
 	        {
-	          operation: "store",
+	          appname: appName,
 	          path: config.path,
 	          method: config.method,
 	          response: config.response,
@@ -26,10 +26,10 @@ var app = angular.module('ApiboxUI',['ngResource'])
 	    };
 
 	    // Custom function to delete a config object by path
-	    resource.eraseConfig = function (configPath, successCallback, errorCallback) {
+	    resource.eraseConfig = function (appName, configPath, successCallback, errorCallback) {
 	      return this.delete(
 	        {
-	          operation: "erase",
+	          appname: appName,
 	          path: configPath
 	        }, successCallback, errorCallback);
 	    };
