@@ -33,6 +33,15 @@ def verify_virtualenv():
 
 Mul = mp
 
+def delete_files_from_directroy():
+    folder = os.getcwd()+"/uploadedfiles"
+    for the_file in os.listdir(folder):
+        file_path = os.path.join(folder, the_file)
+        try:
+            if os.path.isfile(file_path):
+                os.unlink(file_path)
+        except Exception, e:
+            print e
 
 def process_arguments(args):
     """
@@ -86,7 +95,7 @@ if __name__ == "__main__":
 
     # Verify vitual environment settings
     verify_virtualenv()
-
+    delete_files_from_directroy()
     # Process the arguments and start the necessary services accordingly.
     process_arguments(args)
 

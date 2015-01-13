@@ -78,11 +78,10 @@
                                 </tr>
                             </thead>
                             <tbody class="configList">
-                            {% for config in a.keys()%}
+                            {% for config in a%}
                                 <tr ng-repeat="config in configurations" ng-click="editRow(config.path)">
                                    
                                     <td>{{config}}</td>
-                                    <td>{{a[config].split("$$")[1]}}</td>
                                     <td>
                                         <input type="button" value="Remove" class="btn btn-link btn-xs" ng-click="removeRow(config.path)"/>
                                     </td>
