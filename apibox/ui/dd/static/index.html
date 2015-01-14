@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Apibox UI</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- css -->
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/main.css">
+
+</head>
+<style type="text/css">
+/*.line-separator{
+    height:1px;
+    background:#717171;
+    width: 510px;
+    margin-left: 200px;
+    border-bottom:1px solid #C6C5C7;
+}*/
+</style>
+<body ng-app="ApiboxUI">
+    <div class="header">
+        <div class="container">
+            <a href="#" class="link-a">login</a>
+            <a href="#" class="logo"></a>
+            <div class="clearfix"></div>
+            <form action=/app/new>
+                <ul class="form-list">
+                    <!-- <li><input name="app_name" placeholder= "Application Name"></li> -->
+                    <img src="./img/mock.png" style="margin-top:-100px">
+                    <li>
+                        <label class="label-form"> </label>
+                        <div class="form-box">
+                            <input class="input-a browse-btn" type="file"></input>
+                        </div>
+                    </li>
+                </ul>
+            </form>           
+        </div>
+    </div>
+
+    <div class="main-content" ng-controller="mainController" ng-init="init()">
+        <div style="padding-bottom:50px">
+            
+<div class= "two-tables" style= "padding-left: 50px;">
+    <table class="container">
+        <tr class="row">
+            <td  class="col-sm-6 text-center">
+                API
+            </td>
+            <td style = "font-weight: 900;" class="col-sm-6 text-center">
+                <span class="glyphicons glyphicons-plus"></span>
+                <a href="#">ADD NEW API</a>
+            </td>
+        </tr> 
+    </table>
+    <br>
+    <div class="container" >
+        <div style="height: 40px; background-color: #C2C2C2;" class="row">
+            <div style=" font-weight: 600; padding-left: 10px;padding-top: 10px;" class="col-sm-6">
+                Path
+            </div>
+            <div style= "padding-right: 50px; font-weight: 600;padding-top: 10px;"  class="col-sm-2">
+                Method
+            </div>
+            <div style= "padding-right: 50px; font-weight: 600;padding-top: 10px;"  class="col-sm-2">
+                Action
+            </div>
+            <div style= "padding-right: 50px; font-weight: 600;padding-top: 10px;" class="col-sm-2">
+                Status
+            </div>
+        </div>  
+
+        <div style="height: 40px;"  class="row">
+            <div class="col-sm-12">
+                <div style="padding-left: 10px;padding-top: 10px;" class="col-sm-6">
+                <a href= "" class="anc">http://demo/user </a>
+                </div>
+                <div style= "padding-right: 50px; padding-top: 10px; "  class="col-sm-2">
+                    POST
+                </div>
+                <div style= "padding-right: 50px; padding-top: 10px;" class="col-sm-2">
+                    Active
+                </div>
+                <div style= "padding-right: 50px; padding-top: 10px; color: green;" class="col-sm-2">
+                    <a href="#" class= "start-link">Started</a>
+                    <a href="#" class= "stop-link hide">Stopped</a>
+
+                </div>
+            </div>
+            
+            <div class="container slidedown" style="display:none">
+
+                <div class="row">
+                        <form class="form-horizontal col-sm-12" role="form" ng-submit="saveRow()" style="padding-top:20px;">
+                            <div class="clearfix">
+                            <span class="glyphicon glyphicon-remove pull-right close"></span>
+                            </div>
+                            <div class="form-group ">
+                                <label class="col-sm-2 control-label">Path</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" name="path" ng-model="path"  style="
+                                    width: 500px;
+                                    border-radius: 0;
+                                    "/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Method</label>
+                                <div class="col-sm-10">
+                                    <div class="dropdown">
+                                      <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true" style="
+                                      border-radius: 0;
+                                      " >
+                                      SELECT METHOD
+                                      <span class="caret"></span>
+                                  </button>
+                                  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1" style="
+                                  border-radius: 0;">
+                                  <li role="presentation"><a role="menuitem" tabindex="-1" href="#">GET</a></li>
+                                  <li role="presentation"><a role="menuitem" tabindex="-1" href="#">POST</a></li>
+                                  <li role="presentation"><a role="menuitem" tabindex="-1" href="#">PUT</a></li>
+                                  <li role="presentation"><a role="menuitem" tabindex="-1" href="#">DELETE</a></li>
+                              </ul>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label">Response</label>
+                    <div class="col-sm-10">
+                        <textarea type="text" class="form-control" name="response" ng-model="response" style="
+                        width: 526px;
+                        height: 164px;
+                        border-radius: 0;
+                        "></textarea>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div style="padding-left:172px">
+                        <input type="submit" value="Submit" class="btn btn-primary" style="
+                        background-color: #2E2C2C;
+                        border-color: #2E2C2C;
+                        border-radius: 0;
+                        "/>
+                    </div>
+                </div>
+            </form>
+            </div>
+        </div>
+        <div style="height: 40px;"  class="row">
+            <div class="col-sm-12">
+                <div style="padding-left: 10px;padding-top: 10px;" class="col-sm-6">
+                <a href= "" class="anc">http://demo/user </a>
+                </div>
+                <div style= "padding-right: 50px; padding-top: 10px; "  class="col-sm-2">
+                    POST
+                </div>
+                <div style= "padding-right: 50px; padding-top: 10px;" class="col-sm-2">
+                    Active
+                </div>
+                <div style= "padding-right: 50px; padding-top: 10px; color: green;" class="col-sm-2">
+                    <a href="#" class= "start-link">Started</a>
+                    <a href="#" class= "stop-link hide">Stopped</a>
+
+                </div>
+            </div>
+            
+            <div class="container slidedown" style="display:none">
+
+                <div class="row">
+                        <form class="form-horizontal col-sm-12" role="form" ng-submit="saveRow()" style="padding-top:20px;">
+                            <div class="clearfix">
+                            <span class="glyphicon glyphicon-remove pull-right close"></span>
+                            </div>
+                            <div class="form-group ">
+                                <label class="col-sm-2 control-label">Path</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" name="path" ng-model="path"  style="
+                                    width: 500px;
+                                    border-radius: 0;
+                                    "/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Method</label>
+                                <div class="col-sm-10">
+                                    <div class="dropdown">
+                                      <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true" style="
+                                      border-radius: 0;
+                                      " >
+                                      SELECT METHOD
+                                      <span class="caret"></span>
+                                  </button>
+                                  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1" style="
+                                  border-radius: 0;">
+                                  <li role="presentation"><a role="menuitem" tabindex="-1" href="#">GET</a></li>
+                                  <li role="presentation"><a role="menuitem" tabindex="-1" href="#">POST</a></li>
+                                  <li role="presentation"><a role="menuitem" tabindex="-1" href="#">PUT</a></li>
+                                  <li role="presentation"><a role="menuitem" tabindex="-1" href="#">DELETE</a></li>
+                              </ul>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label">Response</label>
+                    <div class="col-sm-10">
+                        <textarea type="text" class="form-control" name="response" ng-model="response" style="
+                        width: 526px;
+                        height: 164px;
+                        border-radius: 0;
+                        "></textarea>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div style="padding-left:172px">
+                        <input type="submit" value="Submit" class="btn btn-primary" style="
+                        background-color: #2E2C2C;
+                        border-color: #2E2C2C;
+                        border-radius: 0;
+                        "/>
+                    </div>
+                </div>
+            </form>
+            </div>
+
+        </div>  
+        
+    
+</div>    
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+</div>
+
+<!-- scripts -->
+<section>
+    <script type="text/javascript" src="js/angular.min.js"></script>
+    <script type="text/javascript" src="js/angular-resource.js"></script>
+    <script type="text/javascript" src="js/apibox/app.js"></script>
+    <script type="text/javascript" src="js/apibox/controllers/mainController.js"></script>
+
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <script>
+    var a;
+    $(".start-link").on("click",function () {
+        $(".start-link").addClass("hide");
+        $(".stop-link ").removeClass("hide");
+    });
+
+    $(".stop-link").on("click",function () {
+        $(".stop-link").addClass("hide");
+        $(".start-link ").removeClass("hide");
+    });
+    var i=0;
+    $(".anc").on("click",function(){
+        if(i){
+            a.removeClass("hide");
+        a.parent().children(".slidedown").slideUp(1000);
+        
+        }
+        i=1;
+        a=$(this).parent().parent();
+        a.addClass("hide");
+        a.parent().children(".slidedown").slideDown(1000);
+    });
+    $(".close").on("click",function(){
+        a.removeClass("hide");
+        a.parent().children(".slidedown").slideUp(1000);
+    })
+    </script>
+    </section>
+
+    </body>
+    </html>

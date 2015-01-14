@@ -5,217 +5,361 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-
-    <!-- scripts -->
+    <!-- css -->
     <section>
 
         <script type="text/javascript" src="{{url_for('static',filename='js/jquery.js')}}"></script>
         <script type="text/javascript" src="{{url_for('static',filename='js/bootstrap.min.js')}}"></script>
-        <script type="text/javascript" src="{{url_for('static',filename='js/apibox/app.js')}}"></script>
-        <!--<script type="text/javascript" src="{{url_for('static',filename='js/angular.min.js')}}"></script>-->
-
-        <!--<script type="text/javascript" src="{{url_for('static',filename='js/angular-resource.js')}}"></script>-->
-
-        <!--<script type="text/javascript" src="{{url_for('static',filename='js/apibox/controllers/mainController.js')}}"></script>-->
 
     </section>
 
     <!-- css -->
     <link rel="stylesheet" href="{{url_for('static',filename='css/bootstrap.css')}}">
+    <link rel="stylesheet" href="{{url_for('static',filename='css/animate.css')}}">
     <link rel="stylesheet" href="{{url_for('static',filename='css/main.css')}}">
-
 </head>
-<style>   .box { width:350px; } .popover{
-    max-width: 100%; // Max Width of the popover (depending on the container!)
-}
-
- </style>
-
+<style type="text/css">
+    /*.line-separator{
+    height:1px;
+    background:#717171;
+    width: 510px;
+    margin-left: 200px;
+    border-bottom:1px solid #C6C5C7;
+    }*/
+</style>
 <body ng-app="ApiboxUI">
-    <div class="header">
-        <div class="container">
+<div class="header">
+    <div class="container">
+        <a href="#" class="link-a">login</a>
+        <a href="#" class="logo"></a>
+        <div class="clearfix"></div>
 
-            <!--<a href="#" class="link-a">Create Application</a>-->
-            <!--<button  type="button" class="btn btn-primary pop-bottom link-a" data-toggle="popover" data-placement="bottom" title="Create App" >Create Application</button>-->
-
-            <div class="popover-markup pull-right"> <a href="#" class="trigger"> Create New</a>
-
-                <div class="content hide">
-                    <form action="/app/new_ui" method="POST" content="application/json">
-                    <div class="form-group">
-                        <input name="name" class="form-control" placeholder="App Name"/>
-                        <input name="pefix" class="form-control" placeholder="Prefix"/>
-                        <input name="Version" class="form-control" placeholder="Version"/>
-                        <h3> Create your Endpoints Below </h3>
-                    </div>
-                    <button type="submit" class="btn btn-default btn-block">Submit</button>
-                     </form>
-                </div>
-            </div>
-            <a href="#" class="logo"></a>
-            <div class="clearfix"></div>
-                <img  src="{{url_for('static', filename='img/mock.png')}}" style="margin-top:-100px">
-                <form action="/app/new" method="POST" enctype="multipart/form-data">
+        <ul class="form-list">
+            <!-- <li><input name="app_name" placeholder= "Application Name"></li> -->
+            <img src="{{url_for('static',filename='img/mock.png')}}" style="margin-top:-100px">
+            <form action="/app/new" method="POST" enctype="multipart/form-data">
                 <ul class="form-list">
-                <li>
-                    <label class="label-form"> </label>
-                    <div class="form-box">
-                        <input class="input-a browse-btn" type="file" name="filehere"></input>
-                    </div>
-               
+                    <li>
+                        <label class="label-form"> </label>
+                        <div class="form-box">
+                            <input class="input-a browse-btn" type="file" name="filehere"></input>
+                        </div>
+
                     </li>
                 </ul>
                 <button>Submit </button>
-             </form>          
-       </div>
-     </div>
-    <!--<li>   {{st}}</li>-->
-    <!--<li>   existing</li>-->
-    <!--<li>   {{a}}</li>-->
+            </form>
 
-    {%if status%}
-    <div class='notifications top-left text-center' style="font-size:35px">{{status}}</div>
+    </div>
+</div>
+<!--status goes here-->
+
+<div class="container"  style="width:100%;height:50px;background: rgb(87, 202, 87);margin-top: -12px;">
+{%if status%}
+    <span id="successMessage"  style="
+    padding-left: 258px;
+    font-weight: bolder;
+    display: block;
+    padding-top: 15px;
+    color: black;
+">{{status}} {%if status_url%} <a href="" style="color:blue;">{{status_url.replace('//','/')}}</a> {%endif%}
+     {%if status_app%}<h1 style="color:blue;">{{status_app}}</h1> {%endif%}</span>
     {%endif%}
+</div>
 
-    <div class="main-content" ng-controller="mainController"  ng-init="init()">
-        <div style="padding-bottom:50px">
-            <table style="width:100%" class="container">
+<script>
+   $('#successMessage').delay(5000).fadeOut('slow');
+</script>
+
+<!--list of apis goes here-->
+<div class="main-content" ng-controller="mainController" ng-init="init()">
+    <div style="padding-bottom:50px">
+
+        <div class= "two-tables" style= "padding-left: 50px;">
+            <table class="container">
                 <tr class="row">
-                    <td style="width:50%;vertical-align: top" class="col-lg-5">
-                        <div style="padding-bottom:20px">
-
-                            <h3>Add Configurations</h3>
-                        </div>
-
-                          <button  type="button" class="btn btn-primary pop-bottom pull-right allends" data-toggle="popover" data-placement="bottom" title="Endpoints" >All Endpoints</button>
-
-                             <div class="endcontent hide">
-                                 <div class="stage"> </div>
-                                </div>
-                        <form class="form-horizontal" role="form"  action="#" method="POST">
-                            <!--<a class="allends" href="">View End Points</a>-->
-
-                            <div class="form-group">
-                                <label class="col-sm-3 control-label">Path</label>
-                                <div class="col-sm-6">
-                                    <input type="text" class="form-control" name="path" ng-model="path" />
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-sm-3 control-label">Method</label>
-                                <div class="col-sm-6">
-                                    <input type="text" class="form-control" name="method" ng-model="method" />
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-sm-3 control-label">Response</label>
-                                <div class="col-sm-6">
-                                    <textarea type="text" class="form-control" name="response" ng-model="response"></textarea>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div style="padding-left:110px">
-                                    <input type="submit" value="Submit" class="btn btn-primary"/>
-                                </div>
-                            </div>
-                        </form>
-                        </td>
+                    <td  class="col-sm-6  text-left" style = "font-weight: 900;" >
+                        <em>YOUR-</em>API
                     </td>
-                    <td style="vertical-align: top" class="col-lg-5">
-                        <table class="table table-hover">
-                            <caption class="font-bold">Select an Application</caption>
-                            <thead>
-                                <tr>
-                                    <th>Application Name</th>
-
-                                </tr>
-                            </thead>
-                            <tbody class="configList">
-                            {% for config in a.keys()%}
-                                <tr ng-repeat="config in configurations" ng-click="editRow(config.path)">
-                                    {%if st.has_key(config)%}
-                                   <form action="/app/start/{{config}}" method="POST">
-                                       {%else%}
-                                       <form action="/app/stop/{{config}}" method="POST">
-                                           {%endif%}
-                                    <td class="myapp"  >{{config}}</td>
-                                    <td>
-                                        {% if st.has_key(config)  %}
-                                        <input type="submit" value="Start" class="btn btn-link btn-xs" ng-click="removeRow(config.path)"/>
-                                        {%else%}
-                                        <input type="submit" value="Stop" class="btn btn-link btn-xs" ng-click="removeRow(config.path)"/>
-                                        {%endif%}
-                                    </td>
-                                       </form>
-                                </tr>
-                            {%endfor%}
-                            </tbody>
-                        </table>
+                    <td style = "font-weight: 900;" class="col-sm-6  text-right ">
+                        <span class="glyphicon glyphicon-plus-sign "></span>
+                        <a href="#" class="addnew" style = "font-weight: 900;">ADD NEW API</a>
                     </td>
                 </tr>
             </table>
+            <br>
+
+            <script>
+
+                                    $(".addnew").on("click",function(e){
+                                    e.preventDefault();
+                                    i=1;
+                                    a=$(this).parent().parent();
+                                    $(".slidedown").slideDown(1000);
+                                    //$(".anc-1").addClass("hide");
+
+                                });
+
+                                 </script>
+
+            <div class="container slidedown" style="display:none">
+                <h2></h2>
+                <div class="row">
+                    <form class="form-horizontal col-sm-12" action="/app/endpoint/newone"  method="POST" role="form" ng-submit="saveRow()" style="padding-top:20px;">
+                        <a href="#"><div class="clearfix">
+                            <span class="glyphicon glyphicon-remove pull-right close"></span>
+                        </div></a>
+
+                        <div class="form-group">
+
+                            <label class="col-sm-2 control-label">Select Application</label>
+                            <div class="col-sm-10">
+                                <div class="dropdown">
+
+                                    <select class="form-control" name="appnames" style="width:30%;">
+                                        {% for apps in a.keys()%}
+                                        <option value="{{apps}}">{{apps}}</option>
+                                        {%endfor%}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group ">
+                            <label class="col-sm-2 control-label">Path</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="path" ng-model="path"  style="
+            width: 500px;
+            border-radius: 0;
+            "/ value="{{endpoint}}">
+                            </div>
+                        </div>
+                        <input class="hide" value=""/>
+                        <div class="form-group">
+
+                            <label class="col-sm-2 control-label">Method</label>
+                            <div class="col-sm-10">
+                                <div class="dropdown">
+
+                                    <select class="form-control" name="method" style="width:30%;">
+                                        <option value="GET">GET</option>
+                                        <option value="PUT">PUT</option>
+                                        <option value="POST">POST</option>
+                                        <option value="DELETE">DELETE</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Response</label>
+                            <div class="col-sm-10">
+<textarea type="text" class="form-control" name="response" ng-model="response" style="
+width: 526px;
+height: 164px;
+border-radius: 0;
+"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div style="padding-left:172px">
+                                <input type="submit" value="Submit" class="btn btn-primary" style="
+background-color: #2E2C2C;
+border-color: #2E2C2C;
+border-radius: 0;
+"/>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <script>    $(".close").on("click",function(e){
+                                    e.preventDefault();
+
+                                    a.removeClass("hide");
+                                    $(".slidedown").slideUp(1000);
+                                });
+    </script>
+
+
+
+
+            <div class="container" >
+                <div style="height: 40px; background-color: #C2C2C2;" class="row">
+
+                    <div style=" font-weight: 600; padding-left: 30px;padding-top: 10px;" class="col-sm-2">
+                        Name
+                    </div>
+                    <div style="font-weight: 600; padding-top: 10px; padding-left: 100px;"class="col-sm-4">
+                        Path
+                    </div>
+
+                    <div style= "padding-right: 50px; font-weight: 600;padding-top: 10px;"  class="col-sm-2">
+                        Method
+                    </div>
+                    <div style= "padding-right: 50px; font-weight: 600;padding-top: 10px;"  class="col-sm-2">
+                        Action
+                    </div>
+                    <div style= "padding-right: 50px; font-weight: 600;padding-top: 10px;" class="col-sm-2">
+                        Status
+                    </div>
+                </div>
+                {%if ste.keys()%}
+                {% set count =0 %}
+                {% for endpoint in ste.keys() %}
+                {%set count = count+1%}
+                {%set app_name= ste[endpoint].split('^')[1].split('$')[0]%}
+                <div style="height: 40px;"  class="row">
+                    <div class="col-sm-12">
+                        <div style="padding-left: 10px;padding-top: 10px;" class="col-sm-2">
+                            <a href= "#"  class="anc-{{count}}">{{app_name}}</a>
+                            <script>
+
+                                    $(".anc-{{count}}").on("click",function(e){
+                                    e.preventDefault();
+                                    i=1;
+                                    a=$(this).parent().parent();
+                                    $(".slidedown-{{count}}").slideDown(1000);
+                                    //$(".anc-{{count}}").addClass("hide");
+
+                                });
+
+                                </script>
+                            <div class="container slidedown-{{count}}" style="display:none">
+                                <h2>{{endpoint}}</h2>
+                                <div class="row">
+                                    <form class="form-horizontal col-sm-12" action="/app/{{ste[endpoint].split('^')[1].split('$')[0]}}/changeep"  method="POST" role="form" ng-submit="saveRow()" style="padding-top:20px;">
+                                        <a href="#"><div class="clearfix">
+                                            <span class="glyphicon glyphicon-remove pull-right close-{{count}}"></span>
+                                        </div></a>
+                                        <div class="form-group ">
+                                            <label class="col-sm-2 control-label">Path</label>
+                                            <div class="col-sm-10">
+                                                <input type="text" class="form-control" name="path" ng-model="path"  style="
+                                            width: 500px;
+                                            border-radius: 0;
+                                            "/ value="{{endpoint}}">
+                                            </div>
+                                        </div>
+                                        <input class="hide" value="{{ste[endpoint].split('^')[1].split('$')[0]}}"/>
+                                        <div class="form-group">
+
+                                            <label class="col-sm-2 control-label">Method</label>
+                                            <div class="col-sm-10">
+                                                <div class="dropdown">
+
+                                                    <select class="form-control" name="method" style="width:30%;">
+                                                        <option value="GET">GET</option>
+                                                        <option value="PUT">PUT</option>
+                                                        <option value="POST">POST</option>
+                                                        <option value="DELETE">DELETE</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">Response</label>
+                                            <div class="col-sm-10">
+                                <textarea type="text" class="form-control" name="response" ng-model="response" style="
+                                width: 526px;
+                                height: 164px;
+                                border-radius: 0;
+                                "></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div style="padding-left:172px">
+                                                <input type="submit" value="Submit" class="btn btn-primary" style="
+                                background-color: #2E2C2C;
+                                border-color: #2E2C2C;
+                                border-radius: 0;
+                                "/>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <script>    $(".close-{{count}}").on("click",function(e){
+                                    e.preventDefault();
+
+                                    a.removeClass("hide");
+                                    $(".slidedown-{{count}}").slideUp(1000);
+                                });
+                            </script>
+
+
+                        </div>
+                        <div style= "padding-left: 50px;padding-right: 50px; padding-top: 10px;"   class="col-sm-4">
+                            {% set url_path = app_name+endpoint %}
+                            <a href= "{{url_path}}"  class="anc-{{count}}">{{endpoint}}</a>
+                            </div>
+                        <div style= "padding-right: 50px; padding-top: 10px; "  class="col-sm-2">
+                            {{ste[endpoint].split('$')[-1]}}
+                        </div>
+                        <div style= "padding-right: 50px; padding-top: 10px;" class="col-sm-2">
+                            <form method="POST" action="/app/path/delete">
+                            <input class="hide" name="path" value="{{endpoint}}"/>
+                            <input class="hide" name="appname" value="{{app_name}}"/>
+                            <button style="border: 0;
+                            background: transparent;
+                            color: black; ">Delete</button>
+                            </form>
+                        </div>
+                        {% if ste[endpoint].startswith("started")%}
+                        <div style= "padding-right: 50px; padding-top: 10px; color: green;" class="col-sm-2">
+                            <form method="POST" action="/stop/{{ste[endpoint].split('^')[1].split('$')[0]}}/path">
+                                <input name="path" class="hide" value="{{endpoint}}"/>
+                                <button class= "startlink" style="
+    border: 0;
+    background: transparent;
+    color: green;
+">Started</button>
+                            </form>
+                        </div>
+                        {%else%}
+
+                    <div style= "padding-right: 50px; padding-top: 10px; color: green;" class="col-sm-2">
+                        <form method="POST" action="/start/{{ste[endpoint].split('^')[1].split('$')[0]}}/path">
+                            <input name="path" class="hide" value="{{endpoint}}"/>
+                            <button  class= "startlink" style="
+    border: 0;
+    background: transparent;
+    color: red;
+">Stopped</button>
+                        </form>
+                    </div>
+                    {%endif%}
+                </div>
+            </div>
+            {%endfor%}
+            {%endif%}
+
+
+
+
         </div>
+
     </div>
 
 
+</div>
+
+
+<!-- scripts -->
 
 <script>
-$('.myapp').on('click',function(){
-console.log($(this).html());
-$('.form-horizontal').attr('action','/app/'+$(this).html()+'/endpoint');
-$('.allends').attr('href','/app/'+$(this).html()+'/endpoint');
-$('.rowSelect').removeClass('rowSelect');
-$(this).parent().addClass('rowSelect');
-})
-</script>
-
-<script type="text/javascript">
-$(document).ready(function(){
-
-    $(".pop-bottom").popover({placement : 'bottom'});
-
+var a;
+$(".start-link").on("click",function () {
+    $(".start-link").addClass("hide");
+    $(".stop-link ").removeClass("hide");
 });
-</script>
-<script type="text/javascript">
-$('.popover-markup .trigger').popover({
-    placement : 'bottom',
-    html: true,
-    title: function () {
-        return $(this).parent().find('.head').html();
-    },
-    content: function () {
-        return $(this).parent().find('.content').html();
-    }
+
+$(".stop-link").on("click",function () {
+    $(".stop-link").addClass("hide");
+    $(".start-link ").removeClass("hide");
 });
+var i=0;
+
 </script>
 
-    <script type="text/javascript">
-$('.allends').popover({
-    placement : 'bottom',
-    html: true,
-    content: function () {
-        return $(this).parent().find('.endcontent').html();
-    }
-});
-</script>
-
-<script type="text/javascript" language="javascript">
-$(document).ready(function() {
-  $(".allends").click(function(event){
-      $.getJSON($(".allends").attr('href'), function(jd) {
-        var ep = $(".allends").attr("href")
-         $.each(jd, function(index) {
-            //alert(data[index].TEST1);
-            //alert(data[index].TEST2);
-            //$('.stage').append('<form action="'+ep+'" method="DELETE"> <button><h4 name="number">'+index+'</h4> <h2>' + jd[index] + '</h2></button> </form>');
-            $('.stage').append(' <h2>' + jd[index] + '</h2>');
-        });
-
-
-      });
-  });
-});
-</script>
 
 </body>
 </html>
