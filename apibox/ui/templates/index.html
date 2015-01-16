@@ -26,6 +26,19 @@
     margin-left: 200px;
     border-bottom:1px solid #C6C5C7;
     }*/
+    .height-40{
+        height:40px;
+    }
+    .upload{
+        background-color: #333;
+color: #dfdfdf;width:120px;font-size:18px;text-transform:uppercase
+    }
+    .actual{
+        position:absolute; top:-100px;
+    }
+    .indi-slide{
+        display:none;padding-left:15px;padding-right:15px;background:white;border-top:1px solid #333;padding-top:10px;margin-right:-15px;margin-left:-15px
+    }
 </style>
 <body ng-app="ApiboxUI">
 <div class="header">
@@ -37,29 +50,53 @@
         <ul class="form-list">
             <!-- <li><input name="app_name" placeholder= "Application Name"></li> -->
             <img src="{{url_for('static',filename='img/mock.png')}}" style="margin-top:-100px">
-            <form action="/app/new" method="POST" enctype="multipart/form-data">
+            <form action="/app/new" method="POST" class="upload-form" enctype="multipart/form-data">
                 <ul class="form-list">
                     <li>
-                        <label class="label-form"> </label>
+                       <!--  <label class="label-form"> </label>
                         <div class="form-box">
-                            <input class="input-a browse-btn" type="file" name="filehere"></input>
+                            
+                        </div> -->
+                        <input class="actual" type="file" name="filehere"></input>
+                         <div class="input-group col-sm-8 col-sm-offset-2">
+                           <input type="" class="form-control height-40 drop" name="" placeholder="Drop your JSON files here">
+                           <div class="input-group-btn" style="">
+                              <button class="btn btn-default height-40 upload" type="button" style="">
+                                 Upload
+                              </button>
+                           </div>
                         </div>
-
                     </li>
                 </ul>
-                <button>Submit </button>
+                <!-- <button>Submit </button> -->
+
             </form>
+            <script type="text/javascript">
+            $(".drop").on("click",function(){
+                $(".actual").click();
+
+            });
+            $(".actual").on("change",function(){
+                $(".drop").val($(".actual").val());
+            });
+            $(".upload").on("click",function(){
+                alert("hi");
+                $(".upload-form").submit();
+            });
+            </script>
+            
+            
 
     </div>
 </div>
 <!--status goes here-->
 
-<div class="container"  style="width:100%;height:50px;background: rgb(87, 202, 87);margin-top: -12px;">
+<div class="container hide"  style="width:100%;height:50px;background: rgb(87, 202, 87);margin-top: -12px">
 {%if status%}
     <span id="successMessage"  style="
     padding-left: 258px;
     font-weight: bolder;
-    display: block;
+    
     padding-top: 15px;
     color: black;
 ">{{status}} {%if status_url%} <a href="" style="color:blue;">{{status_url.replace('//','/')}}</a> {%endif%}
@@ -68,7 +105,7 @@
 </div>
 
 <script>
-   $('#successMessage').delay(5000).fadeOut('slow');
+   // $('#successMessage').parent().delay(5000).fadeOut('slow');
 </script>
 
 <!--list of apis goes here-->
@@ -210,87 +247,29 @@ border-radius: 0;
                 <div style="height: 40px;"  class="row">
                     <div class="col-sm-12">
                         <div style="padding-left: 10px;padding-top: 10px;" class="col-sm-2">
-                            <a href= "#"  class="anc-{{count}}">{{app_name}}</a>
-                            <script>
-
-                                    $(".anc-{{count}}").on("click",function(e){
-                                    e.preventDefault();
-                                    i=1;
-                                    a=$(this).parent().parent();
-                                    $(".slidedown-{{count}}").slideDown(1000);
-                                    //$(".anc-{{count}}").addClass("hide");
-
-                                });
-
-                                </script>
-                            <div class="container slidedown-{{count}}" style="display:none">
-                                <h2>{{endpoint}}</h2>
-                                <div class="row">
-                                    <form class="form-horizontal col-sm-12" action="/app/{{ste[endpoint].split('^')[1].split('$')[0]}}/changeep"  method="POST" role="form" ng-submit="saveRow()" style="padding-top:20px;">
-                                        <a href="#"><div class="clearfix">
-                                            <span class="glyphicon glyphicon-remove pull-right close-{{count}}"></span>
-                                        </div></a>
-                                        <div class="form-group ">
-                                            <label class="col-sm-2 control-label">Path</label>
-                                            <div class="col-sm-10">
-                                                <input type="text" class="form-control" name="path" ng-model="path"  style="
-                                            width: 500px;
-                                            border-radius: 0;
-                                            "/ value="{{endpoint}}">
-                                            </div>
-                                        </div>
-                                        <input class="hide" value="{{ste[endpoint].split('^')[1].split('$')[0]}}"/>
-                                        <div class="form-group">
-
-                                            <label class="col-sm-2 control-label">Method</label>
-                                            <div class="col-sm-10">
-                                                <div class="dropdown">
-
-                                                    <select class="form-control" name="method" style="width:30%;">
-                                                        <option value="GET">GET</option>
-                                                        <option value="PUT">PUT</option>
-                                                        <option value="POST">POST</option>
-                                                        <option value="DELETE">DELETE</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-sm-2 control-label">Response</label>
-                                            <div class="col-sm-10">
-                                <textarea type="text" class="form-control" name="response" ng-model="response" style="
-                                width: 526px;
-                                height: 164px;
-                                border-radius: 0;
-                                "></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div style="padding-left:172px">
-                                                <input type="submit" value="Submit" class="btn btn-primary" style="
-                                background-color: #2E2C2C;
-                                border-color: #2E2C2C;
-                                border-radius: 0;
-                                "/>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                            <script>    $(".close-{{count}}").on("click",function(e){
-                                    e.preventDefault();
-
-                                    a.removeClass("hide");
-                                    $(".slidedown-{{count}}").slideUp(1000);
-                                });
-                            </script>
+                            <a href= "#"  >{{app_name}}</a>
+                            
+                            
 
 
                         </div>
                         <div style= "padding-left: 50px;padding-right: 50px; padding-top: 10px;"   class="col-sm-4">
                             {% set url_path = app_name+endpoint %}
-                            <a href= "{{url_path}}"  class="anc-{{count}}">{{endpoint}}</a>
-                            </div>
+                            <a href= ""  class="anc-{{count}}">{{endpoint}}</a>
+                        </div>
+                        <script>
+
+                                $(".anc-{{count}}").on("click",function(e){
+                                e.preventDefault();
+                                i=1;
+                                a=$(this).parent().parent();
+                                $(".slidedown-{{count}}").slideDown(1000);
+                                //$(".anc-{{count}}").addClass("hide");
+
+                            });
+
+                            </script>
+
                         <div style= "padding-right: 50px; padding-top: 10px; "  class="col-sm-2">
                             {{ste[endpoint].split('$')[-1]}}
                         </div>
@@ -329,6 +308,67 @@ border-radius: 0;
                     {%endif%}
                 </div>
             </div>
+            <div class=" slidedown-{{count}} indi-slide" style="">
+                <div class="clearfix">
+                    <span class="glyphicon glyphicon-remove pull-right close-{{count}}"></span>
+                </div>
+                <h2 style="margin-top:0px;margin-bottom:10px">Edit : {{endpoint}}</h2>
+                <div class="row">
+                    <form class="form-horizontal col-sm-12" action="/app/{{ste[endpoint].split('^')[1].split('$')[0]}}/changeep"  method="POST" role="form" ng-submit="saveRow()" style="padding-top:20px;">
+                       <div class="form-group ">
+                            <label class="col-sm-2 control-label">Path</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="path" ng-model="path"  style="
+                            width: 500px;
+                            border-radius: 0;
+                            "/ value="{{endpoint}}">
+                            </div>
+                        </div>
+                        <input class="hide" value="{{ste[endpoint].split('^')[1].split('$')[0]}}"/>
+                        <div class="form-group">
+
+                            <label class="col-sm-2 control-label">Method</label>
+                            <div class="col-sm-10">
+                                <div class="dropdown">
+
+                                    <select class="form-control" name="method" style="width:30%;">
+                                        <option value="GET">GET</option>
+                                        <option value="PUT">PUT</option>
+                                        <option value="POST">POST</option>
+                                        <option value="DELETE">DELETE</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Response</label>
+                            <div class="col-sm-10">
+                <textarea type="text" class="form-control" name="response" ng-model="response" style="
+                width: 526px;
+                height: 164px;
+                border-radius: 0;
+                "></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <input type="submit" value="Submit" class="btn btn-primary" style="
+                background-color: #2E2C2C;
+                border-color: #2E2C2C;
+                border-radius: 0;
+                "/>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <script>    $(".close-{{count}}").on("click",function(e){
+                    e.preventDefault();
+
+                    a.removeClass("hide");
+                    $(".slidedown-{{count}}").slideUp(1000);
+                });
+            </script>
             {%endfor%}
             {%endif%}
 
@@ -348,13 +388,20 @@ border-radius: 0;
 <script>
 var a;
 $(".start-link").on("click",function () {
+
     $(".start-link").addClass("hide");
     $(".stop-link ").removeClass("hide");
+    
+
 });
 
 $(".stop-link").on("click",function () {
     $(".stop-link").addClass("hide");
     $(".start-link ").removeClass("hide");
+    
+});
+$(".stoplink,.startlink").on("click",function () {
+$('#successMessage').parent().removeClass("hide");
 });
 var i=0;
 
