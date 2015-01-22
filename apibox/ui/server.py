@@ -20,17 +20,23 @@ import json
 import ast
 
 
-def send_mr_obj(app_name):
-    k = aa.get(str(app_name))
-    return k
-def conver_mockrestobj_to_dict(mockrest_obj):
-    temp_list_endpoints = []
-    for end_p in mockrest_obj.endpoints:
+def convert_dict_obj(endpoints):
+    temp_list = []
+    for end_p in endpoints:
         if isinstance(end_p,EndPoint):
-            temp_list_endpoints.append(end_p.__dict__)
+            temp_list.append(end_p)
         else:
-            temp_list_endpoints.append(end_p)
-    return temp_list_endpoints
+            temp_list.append(EndPoint.from_json(end_p))
+    return temp_list
+
+def convert_dict_objmethod(methods):
+    temp_list = []
+    for method in methods:
+        if isinstance(method,EndPointMethod):
+            temp_list.append(method)
+        else:
+            temp_list.append(EndPointMethod(method.get("method"),"",method.get("result")))
+    return temp_list
 
 class UIServer(object):
 
@@ -61,7 +67,8 @@ class UIServer(object):
         """
         Return all existing apps as JSON
         """
-        return render_template('indexnew.html')
+        #return render_template('indexnew.html')
+        return render_template('second.html')
 
 
     @app.route("/app/<app_name>", methods=["GET", "POST", "PUT", "DELETE"])
@@ -73,7 +80,7 @@ class UIServer(object):
         if request.method == 'GET':
             print " In GET"
             if aa.has_key(str(app_name)):
-                mockrest_obj = send_mr_obj(app_name)
+                mockrest_obj = aa.get(str(app_name))
                 temp_obj  = mockrest_obj.get_endpoints()
                 app_details = mockrest_obj.get_app_details()
                 return json.dumps(dict({"endpoints":temp_obj}.items()+app_details.items()))
@@ -112,30 +119,82 @@ class UIServer(object):
                 del aa[str(app_name)]
             except:
                 print "No such app"
+    @app.route("/endpoint", methods = ["GET","POST","PUT","DELETE"])
+    def app_addendpoint_holder():
+        if request.method == "POST":
+            path = request.form["path"]
+            method = request.form["method"]
+            response = request.form["response"]
+            app_name = path.split("/")
+            endpoint_path = path.replace(app_name[0],"",1)
+            mockrest_obj = aa.get(str(app_name[0]))
+            endpoint_obj = mockrest_obj.get_endpoint(endpoint_path)
+            if endpoint_obj.check_method(method):
+                endpoint_obj.update_method(method,response)
+            else:
+                endpoint_obj.add_method(EndPointMethod(method,"",response))
+            return render_template("indexnew.html",mockrest_obj_list = aa.values(),app_names = aa.keys())
+        else:
+            return "Hello"
+    @app.route("/endpoint_details", methods = ["POST"])
+    def endpoint_details():
+        app_name = request.form["app_name"]
+        endpoint_path = request.form["endpoint_path"]
+        mockrest_obj = aa.get(str(app_name))
+        endpoint_obj = mockrest_obj.get_endpoint(endpoint_path)
+        return render_template("tables.html",methods = convert_dict_objmethod(endpoint_obj.methods))
 
-    @app.route("/app", methods=["GET", "POST", "PUT", "DELETE"])
+    @app.route("/addendpoint", methods=["POST"])
+    def app_new_holder():
+        app_name = request.form["appname"]
+        endpoint_path = request.form["path"]
+        method = request.form["method"]
+        response = request.form["response"]
+        mockrest_obj = aa.get(str(app_name))
+        endpoint_obj = EndPoint(endpoint_path,[{"method":method,"result":response}])
+        mockrest_obj.add_endpoint(endpoint_obj)
+        return render_template("indexnew.html",mockrest_obj_list = aa.values(),app_names = aa.keys())
+            
+                    
+    @app.route("/delete_endpoint", methods = ["POST"])
+    def delete_endpoint():
+        app_name = request.form["app_name"]
+        endpoint_path = request.form["endpoint_path"]
+        mockrest_obj = aa.get(str(app_name))
+        mockrest_obj.remove_endpoint(endpoint_path)
+        return render_template("indexnew.html",mockrest_obj_list = aa.values(),app_names =aa.keys())
+        
+    @app.route("/app", methods=["POST"])
     def app_new_handler():
         """
         Applications handler
         """
-        print "In /app/new url"
-        if request.method == 'POST':
-            print " this is in post"
-            file = request.files["filehere"]
-            filename = secure_filename(file.filename)
-            working_dir = os.path.join(os.getcwd()+"/uploadedfiles",filename)
-            file.save(working_dir)
-            is_valid, content = validate_file_content(
-                working_dir, "JSON")
-            if not is_valid:
-                return "there is no content"
-            aa.update({filename:MockREST.from_json(content)})
-            print aa, " this is aa"
-            mockrest_obj = send_mr_obj(filename)
-            endpoints = conver_mockrestobj_to_dict(mockrest_obj)
-            return render_template("indexnew.html",endpoints = endpoints)
-            #return render_template("indexnew.html", aa=aa)
-        return "reached new app"
+        print "In /app url"
+        file = request.files["filehere"]
+        filename = secure_filename(file.filename)
+        working_dir = os.path.join(os.getcwd()+"/uploadedfiles",filename)
+        file.save(working_dir)
+        is_valid, content = validate_file_content(
+            working_dir, "JSON")
+        if not is_valid:
+            return "there is no content"
+        mockrest_obj = MockREST.from_json(content)
+        aa.update({mockrest_obj.name:mockrest_obj})
+        app_names = aa.keys()
+        return render_template("indexnew.html",mockrest_obj_list = aa.values(),app_names = aa.keys())
+        
+    @app.route("/app1",methods = ["POST"])
+    def new_app_form():
+        print " in /app1 url"
+        app_name = request.form["app_name"]
+        path = request.form["endpoint_path"]
+        method = request.form["method"]
+        response = request.form["response"]
+        methods = [{"method":method,"result":response}]
+        endpoints = [{"path":path,"methods":methods}]
+        mockrest_obj = MockREST(app_name,app_name,app_name,endpoints)
+        aa.update({mockrest_obj.name:mockrest_obj})
+        return render_template("indexnew.html",mockrest_obj_list = aa.values(),app_names = aa.keys())
 
     @app.route("/app/<app_name>/start", methods=["GET"])
     def app_handler_start(app_name):
@@ -166,7 +225,7 @@ class UIServer(object):
         sub.call("fuser -k " + str(port_number) + "/tcp")
 
     @app.route(
-        "/app/<app_name>endpoints",
+        "/app/<app_name>/endpoints",
         methods=[
             "GET",
             "POST",
@@ -181,7 +240,7 @@ class UIServer(object):
             # GET: Return endpoint details
             print "GET"
             print aa, "  this is aa in GET "
-            mockrest_obj = send_mr_obj(app_name)
+            mockrest_obj = aa.get(str(app_name))
             endpoints = conver_mockrestobj_to_dict(mockrest_obj)
             return render_template("indexnew.html",endpoints = endpoints)
             #return json.dumps(conver_mockrestobj_to_dict(mockrest_obj))
@@ -192,7 +251,7 @@ class UIServer(object):
             except:
                 return " Invalid data"
             if aa.has_key(str(app_name)):
-                mockrest_obj = send_mr_obj(app_name)
+                mockrest_obj = aa.get(str(app_name))
                 if endpoint_obj.path in mockrest_obj.get_endpoints().values():
                     return " Already this endpoint exists"
                 else:
@@ -218,7 +277,7 @@ class UIServer(object):
         else:
             # DELETE: Delete the endpoint
             path = request.data
-            mockrest_obj = send_mr_obj(app_name)
+            mockrest_obj = aa.get(str(app_name))
             if path in mockrest_obj.get_endpoints().values():
                 endpoint_obj = mockrest_obj.get_endpoint(path)
                 mockrest_obj.remove_endPoint(endpoint_obj)

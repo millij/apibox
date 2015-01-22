@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<body>
+<table border="1" style="width:100%">
+  <tr>
+    <td>Method</td>
+    <td>Result</td>		
+  </tr>
+{% for method in methods%}
+
+  <tr>
+    <td>{{method.method}}</td>
+    <td>{{method.result}}</td>
+  </tr>
+{%endfor%}
+</table>
+
+</body>
+</html>
+

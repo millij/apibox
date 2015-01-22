@@ -49,28 +49,6 @@ a:hover{
 	font-weight: bold;
 }
 
-.control-label{
-	text-align: right;
-	padding: 8px 0px;
-}
-
-.grey-text{
-	color: rgb(160, 156, 156);
-	margin-bottom: 10px;
-	font-family: serif;
-	font-size: 22px;
-}
-
-.actual{
-	visibility: hidden;
-	position: absolute;
-}
-
-.black-btn{
-	background-color: #4F4A4A;
-	color: white;
-	border: 1px solid #4F4A4A;
-}
 
 /*reset ends*/
 body{
@@ -124,7 +102,8 @@ h2{
 
 }
 .form-box{
-	margin: 0px 23%;
+	float: left;
+	width:80%;
 }
 
 .btn-a{
@@ -242,16 +221,6 @@ h4 a{
 .lb-b{width:20%;}
 .lb-c{width:20%;}
 .lb-d{width:20%;}
-
-.tabel-cells{
-	padding-right: 50px; 
-	padding-top: 10px;
-}
-.tabel-cells>a{
-	display: inline-block;
-	padding: 8px 17%;
-	text-align: center;
-}
 /***************************************************************************************************mediaqueries begin *******************************************/
 /***************************************************************************************************mediaqueries begin *******************************************/
 /***************************************************************************************************mediaqueries begin *******************************************/

@@ -1,10 +1,10 @@
 {
-    "name" : "Office_Pramati",
+    "name" : "Pramati",
     "version" : "v1",
     "prefix" : "/api/v1",
     "endpoints" : [
         {
-            "path" : "/employee",
+            "path" : "/employee/hi",
             "methods" : [
                 {
                     "method" : "GET",
@@ -36,7 +36,7 @@
             ]
         },
         {
-            "path": "/org/details",
+            "path": "/org/details/p",
             "methods": [
                 {
                     "method": "GET",

@@ -1,0 +1,108 @@
+<html>
+<head>
+    <title>Apibox UI</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- css -->
+    <link rel="stylesheet" href="static/css/bootstrap.css">
+    <link rel="stylesheet" href="static/css/main.css">
+
+</head>
+<style type="text/css">
+a,.glyphicon{
+    cursor:pointer;
+}
+/*.line-separator{
+    height:1px;
+    background:#717171;
+    width: 510px;
+    margin-left: 200px;
+    border-bottom:1px solid #C6C5C7;
+    }*/
+    </style>
+    <body ng-app="ApiboxUI">
+        <div class="header">
+            <div class="container">
+                <a href="#" class="link-a">login</a>
+                <div class="clearfix"></div>
+                <form action=/app method="POST" id="uploadForm" enctype="multipart/form-data">
+                    <img src="static/img/mock.png" style="display: block;margin: 0px auto;">
+                    <div class="form-box">
+                        <!-- <input class="input-a browse-btn" type="file" name="filehere"></input> -->
+                        <input class="actual" type="file" name="filehere"></input>
+                         <div class="input-group">
+                           <input type="" class="form-control file-input" name="">
+                           <div class="input-group-btn" style="">
+                              <button class="btn btn-default upload black-btn" type="button" style="">
+                                 Upload
+                              </button>
+                           </div>
+                        </div>
+                    </div>
+                </form>           
+            </div>
+        </div>
+        <form action="/app1" method = "POST" id="addEndpoint">
+            <div class="main-content container" ng-controller="mainController" ng-init="init()">
+                <div class="form-group row">
+                    <div class="grey-text">Generate your custom response</div>
+                </div>
+                <div class="form-group row ">
+                    <label class="col-sm-2 control-label">App Name</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" name="app_name" value="" ng-model="path" style="
+                        border-radius: 0;
+                        ">
+                    </div>
+                </div>
+                <div class="form-group row ">
+                    
+                    <label class="col-sm-2 control-label">Path</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" name="endpoint_path" value="" ng-model="path" style="
+                        border-radius: 0;
+                        ">
+                    </div>
+                    
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-2 control-label">Method</label>
+                    <div class="col-sm-10">
+                        
+
+                      <div class="dropdown">
+
+                        <select class="form-control" style="width:30%;" name="method">
+                            <option value="GET">GET</option>
+                            <option value="PUT">PUT</option>
+                            <option value="POST">POST</option>
+                            <option value="DELETE">DELETE</option>
+                        </select>
+                    </div>
+                </div>
+                </div>
+                <div class="form-group row">
+                <label class="col-sm-2 control-label">Response</label>
+                <div class="col-sm-10">
+                    <textarea type="text" class="form-control" name="response" ng-model="response" style="
+                    height: 164px;
+                    border-radius: 0;
+                    "></textarea>
+                </div>
+                </div>
+
+                <div class="form-group row">
+                    <div style="padding-left:172px">
+                        <input type="submit" value="Submit" class="btn btn-primary" style="
+                        background-color: #2E2C2C;
+                        border-color: #2E2C2C;
+                        border-radius: 0;
+                        ">
+                    </div>
+                </div>
+                </div>
+            </form>
+        <script src="static/js/boot.js"></script>
+    </body>
+    </html>

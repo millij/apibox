@@ -11,56 +11,132 @@
 
 </head>
 <style type="text/css">
+a,.glyphicon{
+    cursor:pointer;
+}
 /*.line-separator{
     height:1px;
     background:#717171;
     width: 510px;
     margin-left: 200px;
     border-bottom:1px solid #C6C5C7;
-}*/
-</style>
-<body ng-app="ApiboxUI">
-    <div class="header">
-        <div class="container">
-            <a href="#" class="link-a">login</a>
-            <a href="#" class="logo"></a>
-            <div class="clearfix"></div>
-            <form action=/app method="POST" enctype="multipart/form-data">
-                <ul class="form-list">
-                    <!-- <li><input name="app_name" placeholder= "Application Name"></li> -->
-                    <img src="static/img/mock.png" style="margin-top:-100px">
-                    <li>
-                        <label class="label-form"> </label>
-                        <div class="form-box">
-                            <input class="input-a browse-btn" type="file" name="filehere"></input>
+    }*/
+    </style>
+    <body ng-app="ApiboxUI">
+        <div class="header">
+            <div class="container">
+                <a href="#" class="link-a">login</a>
+                <div class="clearfix"></div>
+                <form action="/app" method="POST" id="uploadForm" enctype="multipart/form-data">
+                    <img src="static/img/mock.png" style="display: block;margin: 0px auto;">
+                    <div class="form-box">
+                        <!-- <input class="input-a browse-btn" type="file" name="filehere"></input> -->
+                        <input class="actual" type="file" name="filehere"></input>
+                         <div class="input-group">
+                           <input type="" class="form-control file-input" name="">
+                           <div class="input-group-btn" style="">
+                              <button class="btn btn-default upload black-btn" type="button" style="">
+                                 Upload
+                              </button>
+                           </div>
                         </div>
-                    </li>
-                </ul>
-                <button>Submit </button>
-            </form>           
+                    </div>
+                </form>           
+            </div>
         </div>
+         <div class="alert alert-success hide">
+            <div class="container ">Your links is ready: </div>
+        </div>
+        <div class="main-content" ng-controller="mainController" ng-init="init()">
+         <div class= "two-tables" style= "padding-bottom:20px">
+            <table class="container">
+                <tr class="row">
+                    <td  class="col-sm-6 text-left">
+                        API
+                    </td>
+                    <td style = "font-weight: 900;" class="col-sm-6 text-right">
+                        <span class="glyphicon glyphicon-plus-sign"></span>
+                        <a class="add_api">ADD NEW API</a>
+                    </td>
+                </tr> 
+            </table>
+            <div class="container slidedown" style="display:none">
+                <div class="row">
+                    <form action="/addendpoint" method="POST" class="form-horizontal col-sm-12 "  role="form" ng-submit="saveRow()" style="padding-top:20px;">
+                        <div class="clearfix">
+                            <span class="glyphicon glyphicon-remove pull-right add-api-close"></span>
+                        </div>
+                        <div class="form-group">
+
+                            <label class="col-sm-2 control-label">Select Application</label>
+                            <div class="col-sm-10">
+                                <div class="dropdown">
+
+                                    <select class="form-control"  style="width:30%;" name="appname">
+                                        {% for app_name in app_names%}
+                                        <option value="{{app_name}}">{{app_name}}</option>
+                                        {%endfor%}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group ">
+                            <label class="col-sm-2 control-label">Path</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="path" value="" ng-model="path"  style="
+                                width: 500px;
+                                border-radius: 0;
+                                "/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Method</label>
+                            <div class="col-sm-10">
+
+                              <div class="dropdown">
+
+                                <select class="form-control" style="width:30%;" name = "method">
+                                    <option value="GET">GET</option>
+                                    <option value="PUT">PUT</option>
+                                    <option value="POST">POST</option>
+                                    <option value="DELETE">DELETE</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Response</label>
+                        <div class="col-sm-10">
+                            <textarea type="text" class="form-control" name="response" ng-model="response" style="
+                            width: 526px;
+                            height: 164px;
+                            border-radius: 0;
+                            "></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div style="padding-left:172px">
+                            <input type="submit" value="Submit" class="btn btn-primary" style="
+                            background-color: #2E2C2C;
+                            border-color: #2E2C2C;
+                            border-radius: 0;
+                            "/>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
     </div>
 
-    <div class="main-content" ng-controller="mainController" ng-init="init()">
-        <div style="padding-bottom:50px">
-            
-<div class= "two-tables" style= "padding-left: 50px;">
-    <table class="container">
-        <tr class="row">
-            <td  class="col-sm-6 text-left">
-                API
-            </td>
-            <td style = "font-weight: 900;" class="col-sm-6 text-right">
-                <span class="glyphicons glyphicons-plus"></span>
-                <a href="#">+ADD NEW API</a>
-            </td>
-        </tr> 
-    </table>
-    <br>
     <div class="container" >
         <div style="height: 40px; background-color: #C2C2C2;" class="row">
-            <div style=" font-weight: 600; padding-left: 10px;padding-top: 10px;" class="col-sm-6">
-                Path
+            <div style=" font-weight: 600; padding-left: 35px;padding-top: 10px;" class="col-sm-2" >
+                App Name
+            </div>
+            <div style=" font-weight: 600; padding-left: 47px;padding-top: 10px;" class="col-sm-4" >
+                Endpoint Path
             </div>
             <div style= "padding-right: 50px; font-weight: 600;padding-top: 10px;"  class="col-sm-2">
                 Method
@@ -72,105 +148,108 @@
                 Status
             </div>
         </div>  
-        {% for end_p in endpoints%}
+    </div>
+    <div class="container">
+        {%for mockrest_obj in mockrest_obj_list%}
+        {% for end_p in mockrest_obj.endpoints%}
         <div style="height: 40px;"  class="row">
             <div class="col-sm-12">
-                <div style="padding-left: 10px;padding-top: 10px;" class="col-sm-6">
-                <a href= "" class="anc">{{end_p.get("path")}} </a>
+                <div>
+                    <div style= "padding-left: 0px; padding-top: 8px;" class="col-sm-2">
+                            <form method="POST" action="/endpoint_details">
+                            <input class="hide" name="endpoint_path" value="{{end_p.path}}"/>
+                            <input class="hide" name="app_name" value="{{mockrest_obj.name}}"/>
+                            <button class="btn btn-link" style="font-size:16px;">{{mockrest_obj.name}}</button>
+                            </form>
+                        </div>
+                <div class="col-sm-4 tabel-cells">
+                    <a class="anc">{{end_p.path}} </a>
                 </div>
-                <div style= "padding-right: 50px; padding-top: 10px; "  class="col-sm-2">
-                    POST
+                <div class="col-sm-2 tabel-cells">
+                    <a href="#" style="cursor: default;">
+                        {% for method in end_p.methods%}
+                            {{method.method}}
+                        {%endfor%}
+                    </a>
                 </div>
-                <div style= "padding-right: 50px; padding-top: 10px;" class="col-sm-2">
-                    Active
-                </div>
-                <div style= "padding-right: 50px; padding-top: 10px; color: green;" class="col-sm-2">
-                    <a href="#" class= "start-link">Started</a>
-                    <a href="#" class= "stop-link hide">Stopped</a>
+                <div class="col-sm-2 tabel-cells">
+                            <form method="POST" action="/delete_endpoint">
+                            <input class="hide" name="endpoint_path" value="{{end_p.path}}"/>
+                            <input class="hide" name="app_name" value="{{mockrest_obj.name}}"/>
+                            <button class="btn" style="border: 0;font-size:16px;background: transparent;color: black; ">Delete</button>
+                            </form>
+                        </div>
+                <div class="col-sm-2 tabel-cells">
+                    <a href="#" class= "start-link"  style= "color: green;">Started</a>
+                    <a href="#" class= "stop-link hide"  style= "color: red;" >Stopped</a>
 
                 </div>
             </div>
-            
-            <div class="container slidedown" style="display:none">
-
-                <div class="row">
-                        <form class="form-horizontal col-sm-12" role="form" ng-submit="saveRow()" style="padding-top:20px;">
-                            <div class="clearfix">
-                            <span class="glyphicon glyphicon-remove pull-right close"></span>
-                            </div>
-                            <div class="form-group ">
-                                <label class="col-sm-2 control-label">Path</label>
-                                <div class="col-sm-10">
-                                    <input type="text" class="form-control" name="path" ng-model="path"  style="
-                                    width: 500px;
-                                    border-radius: 0;
-                                    "/>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-sm-2 control-label">Method</label>
-                                <div class="col-sm-10">
-                                    <div class="dropdown">
-                                      <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true" style="
-                                      border-radius: 0;
-                                      " >
-                                      SELECT METHOD
-                                      <span class="caret"></span>
-                                  </button>
-                                  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1" style="
-                                  border-radius: 0;">
-                                  <li role="presentation"><a role="menuitem" tabindex="-1" href="#">GET</a></li>
-                                  <li role="presentation"><a role="menuitem" tabindex="-1" href="#">POST</a></li>
-                                  <li role="presentation"><a role="menuitem" tabindex="-1" href="#">PUT</a></li>
-                                  <li role="presentation"><a role="menuitem" tabindex="-1" href="#">DELETE</a></li>
-                              </ul>
-                          </div>
-                      </div>
-                  </div>
-                  <div class="form-group">
-                    <label class="col-sm-2 control-label">Response</label>
-                    <div class="col-sm-10">
-                        <textarea type="text" class="form-control" name="response" ng-model="response" style="
-                        width: 526px;
-                        height: 164px;
-                        border-radius: 0;
-                        "></textarea>
-                    </div>
+            <form action="/endpoint" method="POST" class="form-horizontal col-sm-12 slidedown"  role="form" ng-submit="saveRow()" style="padding-top:20px;display:none">
+                <div class="clearfix">
+                    <span class="glyphicon glyphicon-remove pull-right close"></span>
                 </div>
-                
-                <div class="form-group">
-                    <div style="padding-left:172px">
-                        <input type="submit" value="Submit" class="btn btn-primary" style="
-                        background-color: #2E2C2C;
-                        border-color: #2E2C2C;
+                <div class="form-group ">
+                    <label class="col-sm-2 control-label">Path</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" name="path" value={{mockrest_obj.name+end_p.path}} ng-model="path"  style="
+                        width: 500px;
                         border-radius: 0;
                         "/>
                     </div>
                 </div>
-            </form>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Method</label>
+                    <div class="col-sm-10">
+
+                      <div class="dropdown">
+
+                        <select class="form-control" style="width:30%;" name = "method">
+                            <option value="GET">GET</option>
+                            <option value="PUT">PUT</option>
+                            <option value="POST">POST</option>
+                            <option value="DELETE">DELETE</option>
+                        </select>
+                    </div>
+                </div>
             </div>
-        </div>
-        {%endfor%}
-        
-    
-</div>    
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Response</label>
+                <div class="col-sm-10">
+                    <textarea type="text" class="form-control" name="response" ng-model="response" style="
+                    width: 526px;
+                    height: 164px;
+                    border-radius: 0;
+                    "></textarea>
+                </div>
+            </div>
 
+            <div class="form-group">
+                <div style="padding-left:172px">
+                    <input type="submit" value="Submit" class="btn btn-primary" style="
+                    background-color: #2E2C2C;
+                    border-color: #2E2C2C;
+                    border-radius: 0;
+                    "/>
+                </div>
+            </div>
+        </form>
+    </div>
+<!-- <div class="container slidedown" style="display:none">
 
+            <div class="row">
+                   
+                  </div>
+              </div>-->
 
+          </div>
+          {%endfor%}
+          {%endfor%}
+      </div>
+  </div>
 
-
-
-
-
-
-
-
-
-</div>
-</div>
-
-<!-- scripts -->
-<section>
+  <!-- scripts -->
+  <section>
     <script type="text/javascript" src="static/js/angular.min.js"></script>
     <script type="text/javascript" src="static/js/angular-resource.js"></script>
     <script type="text/javascript" src="static/js/apibox/app.js"></script>
@@ -178,23 +257,27 @@
 
     <script type="text/javascript" src="static/js/jquery.js"></script>
     <script type="text/javascript" src="static/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="http://malsup.github.io/min/jquery.form.min.js"></script>
+    
     <script>
     var a;
     $(".start-link").on("click",function () {
-        $(".start-link").addClass("hide");
-        $(".stop-link ").removeClass("hide");
+        var $continer = $(this).parent();
+        $continer.find(".start-link").addClass("hide");
+        $continer.find(".stop-link ").removeClass("hide");
     });
 
     $(".stop-link").on("click",function () {
-        $(".stop-link").addClass("hide");
-        $(".start-link ").removeClass("hide");
+        var $continer = $(this).parent();
+        $continer.find(".stop-link").addClass("hide");
+        $continer.find(".start-link ").removeClass("hide");
     });
     var i=0;
     $(".anc").on("click",function(){
         if(i){
             a.removeClass("hide");
-        a.parent().children(".slidedown").slideUp(1000);
-        
+            a.parent().children(".slidedown").slideUp(1000);
+
         }
         i=1;
         a=$(this).parent().parent();
@@ -204,9 +287,66 @@
     $(".close").on("click",function(){
         a.removeClass("hide");
         a.parent().children(".slidedown").slideUp(1000);
-    })
-    </script>
-    </section>
+    });
 
-    </body>
-    </html>
+    $(".add_api").on("click",function(){
+
+        $(".text-left").addClass("hide");
+        $(".two-tables .slidedown").slideDown(1000);
+    });
+    $(".add-api-close").on("click",function(){
+        $(".text-left").removeClass("hide");
+        $(".container.slidedown").slideUp(1000);
+    });
+
+
+setTimeout(function(){
+
+$(document).on("click",".form-submit",function(e){
+    
+
+$(".slidedown").submit(function(){
+$(".alert").removeClass("hide");    
+// alert($(this).attr("action"));
+    $(".alert .container a").attr("href",$(this).attr("action"));
+    $(this).ajaxSubmit();
+    return false;
+});
+// e.preventDefault();
+});
+},1000);
+
+</script>
+</section>
+<script src="static/js/boot.js"></script>
+</body>
+</html>
+
+
+<!-- 
+
+delete_endpoint
+bootstrap.css
+/static/css
+main.css
+/static/css
+mock.png
+/static/img
+angular.min.js
+/static/js
+angular-resource.js
+/static/js
+app.js
+/static/js/apibox
+mainController.js
+/static/js/apibox/controllers
+jquery.js
+/static/js
+bootstrap.min.js
+/static/js
+jquery.form.min.js
+malsup.github.io/min
+
+
+
+    -->

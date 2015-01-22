@@ -1,10 +1,55 @@
 app.controller("mainController", function($scope, $resource, ConfigService) {
 	$scope.init = function() {
-		$scope.ajax.readAllConfig(function(response){
-			if(response){
-				$scope.configurations = response;
-			} else{
-				$scope.configurations = [
+		
+    };
+
+	$scope.editRow = function(){
+		var trgElm = event.target;
+		var appName = $(trgElm).parent("tr").find("td:first-child").text();
+		if(appName){
+			$(trgElm).parent("tr").find("a").click();
+		}
+	};
+	
+});
+
+app.config(["$routeProvider", function($routeProvider){
+	$routeProvider.when('/app/:appName', {
+		template: '<table style=\"width:100%\" class=\"container\">'+
+		                '<tr class=\"row\">'+
+		                    '<td style=\"vertical-align: top\" class=\"col-lg-5\">'+
+		                        '<table class=\"table table-hover\">'+
+		                            '<caption class=\"font-bold\">Select an Endpoint</caption>'+
+		                            '<thead>'+
+		                                '<tr>'+
+		                                    '<th>Path</th>'+
+		                                    '<th>Method</th>'+
+		                                    '<th>Response</th>'+
+		                                '</tr>'+
+		                            '</thead>'+
+		                            '<tbody class=\"configList\">'+
+		                            '<tr ng-repeat=\"config in configurations\" >'+
+	                                    '<td>{{config.path}}</td>'+
+	                                    '<td>{{config.method}}</td>'+
+	                                    '<td>{{config.response}}</td>'+
+	                                '</tr>'+
+		                            '</tbody>'+
+		                        '</table>'+
+		                    '</td>'+
+		                '</tr>'+
+		            '</table>',
+		controller: 'ShowAppDeatilController'
+      }).otherwise({template: '', controller: 'ShowAppListController'});
+}]);
+
+
+app.controller("ShowAppDeatilController", function($scope, $routeParams, ConfigService){
+	$("#appTable").hide();
+	ConfigService.retrieveConfig($routeParams.appName, function(){
+		debugger;
+	}, function(){
+		debugger;
+		$scope.configurations = [
 		                    { 'path':'/widget',
 		                    	'method': 'add',
 		                    	'response': '<response/>'},
@@ -18,100 +63,10 @@ app.controller("mainController", function($scope, $resource, ConfigService) {
 					                    	'method': 'add',
 					                    	'response': '<response/>'},				                    	
 		                    ];
-			}
-		});
-    };
-
-    var isConfigSelected = false;
-	$scope.saveRow = function(){	
-		var selectedRow;
-		if(isConfigSelected){
-			selectedRow = $(".configList>tr").index($(".configList>tr.success"));
-			if(selectedRow>=0){
-				$scope.configurations[selectedRow].path = $scope.path;
-				$scope.configurations[selectedRow].method = $scope.method;
-				$scope.configurations[selectedRow].response = $scope.response;
-
-				$(".configList>tr.success").removeClass("success");
-				isConfigSelected = false;
-			}
-
-		} else{
-			$scope.configurations.push({ 'path':$scope.path, 'method': $scope.method, 'response':$scope.response });
-			selectedRow = $scope.configurations.length-1;
-		}
-		$scope.ajax.updateConfig(function(response){
-			alert("Update config "+ ((response)?"Succed": "Failed"));
-		}, $scope.configurations[selectedRow]);
-
-		$scope.path='';
-		$scope.method='';
-		$scope.response='';
-	};	
-	
-	$scope.removeRow = function(path){				
-		var index = _findRowIndex(path);
-		$scope.configurations.splice( index, 1 );		
-
-		$scope.ajax.deleteConfig(function(response){
-			alert("Delete config "+ ((response)?"Succed": "Failed"));
-		}, path);
-	};
-
-	$scope.editRow = function(path){
-		var index = _findRowIndex(path);
-		
-		$(".configList>tr.success").removeClass("success");
-		if(index>=0){
-			$(".configList>tr").eq(index).addClass("success");
-
-			$scope.path = $scope.configurations[index].path;
-			$scope.method = $scope.configurations[index].method;
-			$scope.response = $scope.configurations[index].response;
-			isConfigSelected = true;
-		}
-	};
-
-	function _findRowIndex(path){
-		var index = -1;		
-		var comArr = eval( $scope.configurations );
-		for( var i = 0; i < comArr.length; i++ ) {
-			if( comArr[i].path === path ) {
-				index = i;
-				break;
-			}
-		}
-		return index;
-	}
-
-
-	/*
-	*	REST Executor section
-	*/
-	$scope.ajax = {
-		readAllConfig : function(callback){
-			ConfigService.retrieveConfig(function(){
-				callback.call(null, []);
-			},function(){
-				callback.call(null);
-			});
-		}, 
-		updateConfig : function(callback, cofigInfo){
-			ConfigService.storeConfig(cofigInfo, function(){
-				callback.call(null, true);
-			},function(){
-				callback.call(null, false);
-			});
-		}, 
-		deleteConfig : function(callback, cofigPath){
-			ConfigService.eraseConfig(cofigPath, function(){
-				callback.call(null, true);
-			},function(){
-				callback.call(null, false);
-			});
-		}
-	}
-	
+	})
 	
 });
 
+app.controller("ShowAppListController", function($scope, $routeParams){
+	$("#appTable").show();
+});
