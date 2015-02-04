@@ -106,7 +106,8 @@ def launch_flask_server(port, mock_rest, shut_down=False):
             method = endpoint_obj.get_method(request.method)
             if isinstance(method, str):
                 return method
-        return str(method.get_result())
+
+        return str(method.result)
 
     if not shut_down:
         app.run(debug=True, port=port)

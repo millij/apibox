@@ -48,7 +48,11 @@ def validate_file_content(file_path, file_type):
 
         # validate and return
         if is_json_valid(json_content):
-            return True, json_content
+            import ast
+            # TODO fix it in a better way ...
+            clean_content = ast.literal_eval(json.dumps(json_content))
+
+            return True, clean_content
         else:
             return False, None
 
