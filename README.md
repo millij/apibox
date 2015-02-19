@@ -29,7 +29,7 @@ $ . envi/bin/activate
 $ python box/apibox.py -f <conf_filepath>  -t <host> -p <port> 
 ```
 Options description:
-* -c : api config json filepath
+* -f : api config json filepath
 * -t : host IP address (default: 127.0.0.1 / localhost)
 * -p : port number (default: 5000)
 
