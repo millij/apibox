@@ -25,7 +25,7 @@ And run the below commands
 
 ```sh
 $ make install
-$ . envi/bin/activate
+$ . virt_envi/bin/activate
 $ python box/apibox.py -f <conf_filepath>  -t <host> -p <port> 
 ```
 Options description:
