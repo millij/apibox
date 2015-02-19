@@ -26,7 +26,7 @@ And run the below commands
 ```sh
 $ make install
 $ . envi/bin/activate
-$ python box/apibox.py runserver -c <conf_filepath>  -t <host> -p <port>
+$ python box/apibox.py -f <conf_filepath>  -t <host> -p <port> 
 ```
 Options description:
 * -c : api config json filepath
