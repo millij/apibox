@@ -213,6 +213,7 @@ class MockREST(MockRESTBase):
             if str(end_p["path"]) == in_path:
 
                 for rsp_method in end_p["methods"]:
+
                     if rsp_method["method"] == method_name:
                         # HACK TO get the thing done. Clear the
                         # JSON format first., if you have any plan to fix
@@ -220,10 +221,15 @@ class MockREST(MockRESTBase):
                         if method_name == "POST":
                             filter_key = "default"
                             try:
-                                filter_key = flask.request.form.get("filter_post_body_key", "default")
-                                return rsp_method["responses"][filter_key]
+                                filter_key = flask.request.form.get(rsp_method["filter_post_body_key"], "default")
                             except KeyError:
                                 pass
+
+                            try:
+                                return rsp_method["responses"][filter_key]
+                            except KeyError:
+                                return rsp_method["responses"]["default"]
+
 
                         return rsp_method["result"]
 
