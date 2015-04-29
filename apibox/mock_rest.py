@@ -3,6 +3,7 @@
 This Module holds the definitions of MOCK REST objects.
 """
 
+import flask
 import logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -205,13 +206,27 @@ class MockREST(MockRESTBase):
         Returns the endpoint with the given path
         :param in_path: path of the endpoint
         """
+        # TODO Avoid all the linear searching.
 
         for end_p in self.endpoints:
 
             if str(end_p["path"]) == in_path:
-                for me in end_p["methods"]:
-                    if dict(me)["method"] == method_name:
-                        return dict(me)["result"]
+
+                for rsp_method in end_p["methods"]:
+                    if rsp_method["method"] == method_name:
+                        # HACK TO get the thing done. Clear the
+                        # JSON format first., if you have any plan to fix
+                        # this hack.
+                        if method_name == "POST":
+                            filter_key = "default"
+                            try:
+                                filter_key = flask.request.form.get("filter_post_body_key", "default")
+                                return rsp_method["responses"][filter_key]
+                            except KeyError:
+                                pass
+
+                        return rsp_method["result"]
+
             if not isinstance(
                     end_p,
                     EndPoint) and end_p.get("path") == in_path:

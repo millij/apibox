@@ -30,7 +30,6 @@ def is_json_valid(in_json):
     schema = json.load(schema_data)
 
     log.debug("In coming JSON for validation : %s", str(in_json))
-
     # validate the incoming json
     if validate(in_json, schema) is None:
         return True
@@ -50,9 +49,9 @@ def validate_file_content(file_path, file_type):
         if is_json_valid(json_content):
             import ast
             # TODO fix it in a better way ...
-            clean_content = ast.literal_eval(json.dumps(json_content))
+            #clean_content = ast.literal_eval(json.dumps(json_content))
 
-            return True, clean_content
+            return True, json_content
         else:
             return False, None
 
