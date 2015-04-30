@@ -10,6 +10,7 @@ from tornado.ioloop import IOLoop
 
 from flask import Flask, request, render_template
 from mock_rest import *
+from flask import jsonify
 
 import multiprocessing as mp
 # TODO: make configurable files
@@ -93,21 +94,24 @@ def launch_flask_server(port, mock_rest, shut_down=False):
     @app.route('/', defaults={'path': ''})
     @app.route('/<path:path>', methods=["GET", "POST", "DELETE", "PUT"])
     def catch_all(path):
+
         path = "/" + path
 
         endpoint_obj = mock_rest.get_endpoint(path, request.method)
-        return str(endpoint_obj)
+
+        return jsonify(endpoint_obj)
+
         # print path, " this is path"
         #print (mock_rest.endpoints),"is it mock rest object"
-        endpoint_obj = mock_rest.get_endpoint(path)
-        if isinstance(endpoint_obj, str):
-            return endpoint_obj.__json__()
-        else:
-            method = endpoint_obj.get_method(request.method)
-            if isinstance(method, str):
-                return method
+        #  endpoint_obj = mock_rest.get_endpoint(path)
+        #  if isinstance(endpoint_obj, str):
+        #      return endpoint_obj.__json__()
+        #  else:
+        #      method = endpoint_obj.get_method(request.method)
+        #      if isinstance(method, str):
+        #          return method
 
-        return str(method.result)
+        #  return str(method.result)
 
     if not shut_down:
         app.run(debug=True, port=port)

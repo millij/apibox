@@ -211,7 +211,6 @@ class MockREST(MockRESTBase):
         for end_p in self.endpoints:
 
             if str(end_p["path"]) == in_path:
-
                 for rsp_method in end_p["methods"]:
 
                     if rsp_method["method"] == method_name:
@@ -228,8 +227,7 @@ class MockREST(MockRESTBase):
                             try:
                                 return rsp_method["responses"][filter_key]
                             except KeyError:
-                                return rsp_method["responses"]["default"]
-
+                                pass
 
                         return rsp_method["result"]
 
