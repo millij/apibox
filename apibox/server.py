@@ -114,4 +114,4 @@ def launch_flask_server(port, mock_rest, shut_down=False):
         #  return str(method.result)
 
     if not shut_down:
-        app.run(debug=True, port=port)
+        app.run(debug=True, host='0.0.0.0', port=port)
